@@ -1,0 +1,8 @@
+.sticky-header.fixed .logo {
+    max-width: 6.1rem;
+}
+
+.home-slide.banner {
+    position: relative;
+    overflow: hidden;
+}

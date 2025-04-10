@@ -14,6 +14,9 @@
                             <div id="product-container" class="row gy-4">
 
                             </div>
+                            <div class="view_more">
+                                <a href="all-products.php text-primary">View More</a>
+                            </div>
                         </div>
 
                         
@@ -368,7 +371,7 @@
       const card = `
         <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
           <div class="product-card bg-white">
-            <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-2 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
+            <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
             <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
               <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
               <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>

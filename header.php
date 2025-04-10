@@ -64,7 +64,7 @@
                                 <li class="active">
                                     <a href="index.php">Home</a>
                                 </li>
-                                <li class="active">
+                                <li>
                                     <a href="all-products.php">All Products</a>
                                 </li>
                                 <li class="d-none d-xxl-block">

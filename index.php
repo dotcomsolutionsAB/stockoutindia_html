@@ -330,8 +330,8 @@
        
 <script>
     const apiUrl = `<?php echo BASE_URL; ?>/get_products`;
-    // const token = localStorage.getItem("authtoken");
-    const token = '100|MLh8ulMfLjjkcHPsUZ9WVI9xRb9B41oOdtm6cFOyed6e6744';
+    const token = localStorage.getItem("authtoken");
+    // const token = '100|MLh8ulMfLjjkcHPsUZ9WVI9xRb9B41oOdtm6cFOyed6e6744';
 
     async function fetchProducts() {
         // const token = localStorage.getItem("authtoken");
@@ -367,7 +367,7 @@
         container.innerHTML += `<div class="w-100"></div>`; // line break for new row
       }
 
-      const image = product.image?.[0] || "https://via.placeholder.com/200";
+      const image = product.image?.[0] || "uploads/placeholder.png";
       const card = `
         <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
           <div class="product-card bg-white">

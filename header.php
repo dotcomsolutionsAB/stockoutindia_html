@@ -6,16 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Porto - Bootstrap eCommerce Template</title>
-
-    <meta name="keywords" content="HTML5 Template" />
-    <meta name="description" content="Porto - Bootstrap eCommerce Template">
-    <meta name="author" content="SW-THEMES">
-
+    <title>StockOut</title>
+    <meta name="description" content="StockOut">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
-
-
     <script>
         WebFontConfig = {
             google: { families: [ 'Open+Sans:300,400,600,700,800', 'Poppins:200,300,400,500,600,700,800', 'Oswald:300,600,700', 'Playfair+Display:700' ] }
@@ -45,16 +39,15 @@
 
     <!-- Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
-        <!-- Bootstrap CSS -->
-        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-        <!-- Font Awesome -->
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+        
     <link rel="stylesheet" href="custom/custom.css">
 </head>
 
 <body>
     <div class="page-wrapper">
+
         <header class="header">
             <div class="header-middle sticky-header">
                 <div class="container">
@@ -69,9 +62,17 @@
                         <nav class="main-nav">
                             <ul class="menu">
                                 <li class="active">
-                                    <a href="demo27.html">Home</a>
+                                    <a href="index.php">Home</a>
                                 </li>
-                                <li class="d-none d-xxl-block"><a href="blog.html">Blog</a></li>
+                                <li class="active">
+                                    <a href="all-products.php">All Products</a>
+                                </li>
+                                <li class="d-none d-xxl-block">
+                                    <a href="all-industries.php">All Industries</a>
+                                </li>
+                                <!-- <li class="d-none d-xxl-block">
+                                    <a href="all-industries.php">All Industries</a>
+                                </li> -->
                                 <li>
                                     <a href="#">Pages</a>
                                     <ul>
@@ -84,32 +85,31 @@
                     </div>
 
                     <div class="header-right">
+                        <!-- Search bar (always visible) -->
                         <div class="header-icon header-search header-search-inline header-search-category w-lg-max text-right d-none d-sm-block">
                             <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
-                            <form action=" #" method="get">
-                                <div class="header-search-wrapper">
-                                    <input type="search" class="form-control" name="q" id="q"
-                                        placeholder="I'm searching for..." required>
-                                    <div class="select-custom font2">
-                                        <select id="cat" name="cat">
-                                            <option value="">All Categories</option>
-                                            <option value="4">Fashion</option>
-                                            <option value="12">- Women</option>
-                                            <option value="13">- Men</option>
-                                        </select>
-                                    </div>
-                                    <button class="btn icon-magnifier" title="search" type="submit"></button>
+                            <form action="#" method="get">
+                            <div class="header-search-wrapper">
+                                <input type="search" class="form-control" name="q" id="q" placeholder="I'm searching for..." required>
+                                <div class="select-custom font2">
+                                <select id="cat" name="cat">
+                                    <option value="">All Categories</option>
+                                    <option value="4">Fashion</option>
+                                    <option value="12">- Women</option>
+                                    <option value="13">- Men</option>
+                                </select>
                                 </div>
+                                <button class="btn icon-magnifier" title="search" type="submit"></button>
+                            </div>
                             </form>
                         </div>
 
-                        <a href="cart.php" class="header-icon">
-                            <i class="minicart-icon line-height-1"></i>
-                        </a>
-                        <a href="profile.php" class="header-icon">
-                            <i class="icon-user-2 line-height-1"></i>
-                        </a>
+                        <!-- Auth-based icons -->
+                        <div id="header-auth-icons" class="flex gap-3 items-center">
+                            <!-- JS will inject links here -->
+                        </div>
                     </div>
+
                 </div>
             </div>
 
@@ -152,4 +152,40 @@
                     </div><!-- End .info-box -->
                 </div><!-- End .owl-carousel -->
             </div>
-        </header><!-- End .header -->
+        </header>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const iconsWrapper = document.getElementById("header-auth-icons");
+    const authToken = localStorage.getItem("authToken");
+
+    if (authToken) {
+      iconsWrapper.innerHTML = `
+        <a href="cart.php" class="header-icon">
+          <i class="minicart-icon line-height-1"></i>
+        </a>
+        <a href="pages/profile.php" class="header-icon">
+          <i class="icon-user-2 line-height-1"></i>
+        </a>
+        <a href="#" class="header-icon" onclick="logoutUser()" title="Logout">
+          Logout
+        </a>
+      `;
+    } else {
+      iconsWrapper.innerHTML = `
+        <a href="login.php" class="header-icon">
+          <i class="icon-user-2 line-height-1"></i>
+        </a>
+      `;
+    }
+  });
+
+  function logoutUser() {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user_id");
+    localStorage.removeItem("role");
+    localStorage.removeItem("username");
+    localStorage.removeItem("name");
+
+    window.location.href = "login.php";
+  }
+</script>

@@ -223,4 +223,22 @@
   }
 
 
-  
+  /* Product Detail page */
+  .product_page{
+    height: 300px;
+    width: 400px;
+    /* background: aqua; */
+  }
+  .product_page img{
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+  }
+
+  .instagram-box{
+    background: url(https://www.stockoutindia.com/assets/img/home-bg.jpg);
+    background-size: cover;
+    background-attachment: fixed;
+    height: 148px;
+    width: 100%;
+  }

@@ -227,49 +227,55 @@
 
         products.forEach(product => {
             const image = product.image?.[0] || 'placeholder.jpg';
-            container.innerHTML += `
-            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
-                <div class="product-card bg-white">
-                    <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
-                        <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
-                        <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
-                    </div>
-                    <div class="image_box">
-                        <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
-                    </div>
-                    <hr class="my-0">
-                    <div class="card-body pt-2 pb-1 px-3">                
-                        <div class="left_side_body">
-                            <h6 class="text-success fw-bold">
-                                ${product.product_name.length > 30 
-                                    ? product.product_name.substring(0, 27) + '...' 
-                                    : product.product_name}
-                            </h6>
-                            <p class="p_user fw-semibold mb0">Dealer: 
-                                ${product.user?.name 
-                                    ? (product.user.name.length > 15 
-                                        ? product.user.name.substring(0, 12) + '...' 
-                                        : product.user.name)
-                                    : "N/A"}
-                            </p>
+            const productLink = `pages/product_detail.php?name=${product.product_name}`;
 
-                            <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
+            container.innerHTML += `
+                <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+                    <div class="product-card bg-white">
+                        <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
+                            <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
+                            <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
                         </div>
-                        <div class="right_side_body">
-                            <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
-                            <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+                        <div class="image_box">
+                            <a href="${productLink}">
+                                <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
+                            </a>
+                        </div>
+                        <hr class="my-0">
+                        <div class="card-body pt-2 pb-1 px-3">                
+                            <div class="left_side_body">
+                                <a href="${productLink}">
+                                    <h6 class="text-success fw-bold">
+                                        ${product.product_name.length > 30 
+                                            ? product.product_name.substring(0, 27) + '...' 
+                                            : product.product_name}
+                                    </h6>
+                                </a>
+                                <p class="p_user fw-semibold mb0">Dealer: 
+                                    ${product.user?.name 
+                                        ? (product.user.name.length > 15 
+                                            ? product.user.name.substring(0, 12) + '...' 
+                                            : product.user.name)
+                                        : "N/A"}
+                                </p>
+
+                                <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
+                            </div>
+                            <div class="right_side_body">
+                                <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
+                                <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+                            </div>
+                        </div>
+                        <div class="d-flex bottom-btns global_page_card">
+                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </button>
+                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
+                                <i class="fa-solid fa-phone"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="d-flex bottom-btns global_page_card">
-                        <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
-                            <i class="fa-brands fa-whatsapp"></i>
-                        </button>
-                        <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
-                            <i class="fa-solid fa-phone"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>`;
+                </div>`;
         });
     }
 

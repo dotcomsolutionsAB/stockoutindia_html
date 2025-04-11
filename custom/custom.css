@@ -8,7 +8,7 @@
 }
 
 /* home page products */
-.product-card {
+  .product-card {
     width: 280px;
     font-family: sans-serif;
     position: relative;
@@ -129,3 +129,83 @@
     border-radius: 40px;
   }
 /* End home page products */
+
+/* Universel Set Css */
+  .section-title {
+    margin-bottom: 1.7rem;
+  }
+  .minipopup-box{
+    display: none;
+  }
+  
+/* End Universel Css */
+
+/* Header Icon */
+  .header_icon {
+    transition: none;
+  }
+  .header_icon:not(:last-child) {
+    margin-right: 1.7rem;
+  }
+  .header_icon i {
+    font-size: 2rem;
+  }
+
+  /* End Header Icon */
+
+  /* Industry Page */
+  .Subindustries-body{
+    height: 130vh;
+    overflow-y: scroll;
+  }
+  .disabled-sub {
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
+}
+  .cat-list-industry{
+    padding-top: 65px !important;
+    /* background: aliceblue; */
+    padding-left: 5px;
+    padding-right:5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 130vh;
+    overflow-y: scroll;
+  }
+  .cat-list-industry li a{
+    /* background: #ede5e5; */
+    color: black;
+  }
+  .cat-list-industry li a{
+    margin-bottom: 0rem;
+    padding: 10px 10px;
+    height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 15px;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: #be1312;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    border: 1px solid #be1312;
+  }
+  .active-industry{
+    width: 100%;
+    height: 100%;
+    background-color: #be1312 !important;
+    color: #fff !important;
+    font-weight: 600;
+  }
+
+  .product-default a {
+    color: inherit;
+    white-space: normal;
+  }

@@ -65,10 +65,10 @@
                                     <a href="index.php">Home</a>
                                 </li>
                                 <li>
-                                    <a href="all-products.php">All Products</a>
-                                </li>
-                                <li class="d-none d-xxl-block">
-                                    <a href="all-industries.php">All Industries</a>
+                                    <a href="pages/all-products.php">All Products</a>
+                                </li>                                
+                                <li>
+                                    <a href="pages/all-industries.php">All Industries</a>
                                 </li>
                                 <!-- <li class="d-none d-xxl-block">
                                     <a href="all-industries.php">All Industries</a>
@@ -160,20 +160,20 @@
 
     if (authToken) {
       iconsWrapper.innerHTML = `
-        <a href="cart.php" class="header-icon">
-          <i class="minicart-icon line-height-1"></i>
+        <a href="pages/my-product.php" class="header_icon">
+            <i class="fas fa-shopping-basket"></i>
+        </a>        
+        <a href="pages/profile.php" class="header_icon">
+          <i class="fas fa-user-edit"></i>
         </a>
-        <a href="pages/profile.php" class="header-icon">
-          <i class="icon-user-2 line-height-1"></i>
-        </a>
-        <a href="#" class="header-icon" onclick="logoutUser()" title="Logout">
-          Logout
+        <a href="#" class="header_icon" onclick="logoutUser()" title="Logout">
+          <i class="fas fa-sign-out-alt"></i>
         </a>
       `;
     } else {
       iconsWrapper.innerHTML = `
-        <a href="login.php" class="header-icon">
-          <i class="icon-user-2 line-height-1"></i>
+        <a href="login.php" class="header_icon">Login
+          <i class="fas fa-sign-in-alt"></i>
         </a>
       `;
     }

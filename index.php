@@ -6,7 +6,7 @@
   <?php include("inc_files/slider_section.php"); ?>
 
   <?php include("inc_files/home_page_products.php"); ?>
-
+<!-- 
   <div class="banners-section mb-4">
     <div class="row row-sm">
       <div class="col-md-4">
@@ -20,7 +20,7 @@
       <div class="col-md-8">
         <div class="banner banner2 h-100"
           style="background: #101010 no-repeat center/cover url(uploads/banner/banner2.jpg);">
-          <!-- <h4 class="text-light text-uppercase mb-0 appear-animate"
+          <h4 class="text-light text-uppercase mb-0 appear-animate"
                                 data-animation-name="fadeInUpShorter" data-animation-delay="100">Get Ready</h4>
                             <h2 class="d-inline-block align-middle text-uppercase m-b-3 appear-animate"
                                 data-animation-name="fadeInUpShorter" data-animation-delay="300">20% off</h2><a
@@ -28,228 +28,12 @@
                                 class="btn btn-dark btn-lg align-middle m-b-3 appear-animate d-none d-sm-inline-block"
                                 data-animation-name="fadeInUpShorter" data-animation-delay="300">Shop All Sale</a>
                             <h3 class="heading-border appear-animate" data-animation-name="fadeInUpShorter"
-                                data-animation-delay="500">BIKES</h3> -->
+                                data-animation-delay="500">BIKES</h3>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
-  <section class="trendy-section mb-2">
-    <div class="container">
-      <h2 class="section-title appear-animate" data-animation-name="fadeInUpShorter" data-animation-delay="200">Trending
-        Accessories</h2>
-
-      <div class="row appear-animate" data-animation-name="fadeInUpShorter" data-animation-delay="200">
-        <div class="products-slider 5col owl-carousel owl-theme" data-owl-options="{
-                            'margin': 0
-                        }">
-          <div class="product-default">
-            <figure>
-              <a href="demo27-product.html">
-                <img src="assets/images//demoes/demo27/products/product-2.jpg" width="280" height="280" alt="product">
-              </a>
-              <div class="label-group">
-                <div class="product-label label-hot">HOT</div>
-                <div class="product-label label-sale">-13%</div>
-              </div>
-            </figure>
-            <div class="product-details">
-              <div class="category-list">
-                <a href="category.html" class="product-category">Category</a>
-              </div>
-              <h3 class="product-title">
-                <a href="demo27-product.html">Porto Fashion Bike</a>
-              </h3>
-              <div class="ratings-container">
-                <div class="product-ratings">
-                  <span class="ratings" style="width:80%"></span><!-- End .ratings -->
-                  <span class="tooltiptext tooltip-top"></span>
-                </div><!-- End .product-ratings -->
-              </div><!-- End .product-container -->
-              <div class="price-box">
-                <span class="old-price">$299.0</span>
-                <span class="product-price">$259.0</span>
-              </div><!-- End .price-box -->
-              <div class="product-action">
-                <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i class="icon-heart"></i></a>
-                <a href="demo27-product.html" class="btn-icon btn-add-cart product-type-simple"><i
-                    class="icon-shopping-cart"></i><span>ADD TO CART</span></a>
-                <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View"><i
-                    class="fas fa-external-link-alt"></i></a>
-              </div>
-            </div><!-- End .product-details -->
-          </div>
-          <div class="product-default">
-            <figure>
-              <a href="demo27-product.html">
-                <img src="assets/images//demoes/demo27/products/product-7.jpg" width="280" height="280" alt="product">
-              </a>
-              <div class="label-group">
-                <div class="product-label label-hot">HOT</div>
-              </div>
-            </figure>
-            <div class="product-details">
-              <div class="category-list">
-                <a href="category.html" class="product-category">Category</a>
-              </div>
-              <h3 class="product-title">
-                <a href="demo27-product.html">Bike Kit</a>
-              </h3>
-              <div class="ratings-container">
-                <div class="product-ratings">
-                  <span class="ratings" style="width:80%"></span><!-- End .ratings -->
-                  <span class="tooltiptext tooltip-top"></span>
-                </div><!-- End .product-ratings -->
-              </div><!-- End .product-container -->
-              <div class="price-box">
-                <span class="product-price">$55.0</span>
-              </div><!-- End .price-box -->
-              <div class="product-action">
-                <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i class="icon-heart"></i></a>
-                <a href="demo27-product.html" class="btn-icon btn-add-cart product-type-simple"><i
-                    class="icon-shopping-cart"></i><span>ADD TO CART</span></a>
-                <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View"><i
-                    class="fas fa-external-link-alt"></i></a>
-              </div>
-            </div><!-- End .product-details -->
-          </div>
-          <div class="product-default">
-            <figure>
-              <a href="demo27-product.html">
-                <img src="assets/images//demoes/demo27/products/product-8.jpg" width="280" height="280" alt="product">
-              </a>
-              <div class="label-group">
-                <div class="product-label label-sale">-17%</div>
-              </div>
-            </figure>
-            <div class="product-details">
-              <div class="category-list">
-                <a href="category.html" class="product-category">Category</a>
-              </div>
-              <h3 class="product-title">
-                <a href="demo27-product.html">Bike Glasses</a>
-              </h3>
-              <div class="ratings-container">
-                <div class="product-ratings">
-                  <span class="ratings" style="width:0%"></span><!-- End .ratings -->
-                  <span class="tooltiptext tooltip-top"></span>
-                </div><!-- End .product-ratings -->
-              </div><!-- End .product-container -->
-              <div class="price-box">
-                <span class="old-price">$59.0</span>
-                <span class="product-price">$49.0</span>
-              </div><!-- End .price-box -->
-              <div class="product-action">
-                <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i class="icon-heart"></i></a>
-                <a href="demo27-product.html" class="btn-icon btn-add-cart product-type-simple"><i
-                    class="icon-shopping-cart"></i><span>ADD TO CART</span></a>
-                <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View"><i
-                    class="fas fa-external-link-alt"></i></a>
-              </div>
-            </div><!-- End .product-details -->
-          </div>
-          <div class="product-default">
-            <figure>
-              <a href="demo27-product.html">
-                <img src="assets/images//demoes/demo27/products/product-9.jpg" width="280" height="280" alt="product">
-              </a>
-              <div class="label-group">
-                <div class="product-label label-hot">HOT</div>
-              </div>
-            </figure>
-            <div class="product-details">
-              <div class="category-list">
-                <a href="category.html" class="product-category">Category</a>
-              </div>
-              <h3 class="product-title">
-                <a href="demo27-product.html">Bike Frames</a>
-              </h3>
-              <div class="ratings-container">
-                <div class="product-ratings">
-                  <span class="ratings" style="width:60%"></span><!-- End .ratings -->
-                  <span class="tooltiptext tooltip-top"></span>
-                </div><!-- End .product-ratings -->
-              </div><!-- End .product-container -->
-              <div class="price-box">
-                <span class="product-price">$599.0</span>
-              </div><!-- End .price-box -->
-              <div class="product-action">
-                <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i class="icon-heart"></i></a>
-                <a href="demo27-product.html" class="btn-icon btn-add-cart"><i
-                    class="fa fa-arrow-right"></i><span>SELECT OPTIONS</span></a>
-                <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View"><i
-                    class="fas fa-external-link-alt"></i></a>
-              </div>
-            </div><!-- End .product-details -->
-          </div>
-          <div class="product-default">
-            <figure>
-              <a href="demo27-product.html">
-                <img src="assets/images//demoes/demo27/products/product-10.jpg" width="280" height="280" alt="product">
-              </a>
-            </figure>
-            <div class="product-details">
-              <div class="category-list">
-                <a href="category.html" class="product-category">Category</a>
-              </div>
-              <h3 class="product-title">
-                <a href="demo27-product.html">Bike Chain</a>
-              </h3>
-              <div class="ratings-container">
-                <div class="product-ratings">
-                  <span class="ratings" style="width:80%"></span><!-- End .ratings -->
-                  <span class="tooltiptext tooltip-top"></span>
-                </div><!-- End .product-ratings -->
-              </div><!-- End .product-container -->
-              <div class="price-box">
-                <span class="product-price">$39.0</span>
-              </div><!-- End .price-box -->
-              <div class="product-action">
-                <a href="wishlist.html" class="btn-icon-wish" title="wishlist"><i class="icon-heart"></i></a>
-                <a href="demo27-product.html" class="btn-icon btn-add-cart"><i
-                    class="fa fa-arrow-right"></i><span>SELECT OPTIONS</span></a>
-                <a href="ajax/product-quick-view.html" class="btn-quickview" title="Quick View"><i
-                    class="fas fa-external-link-alt"></i></a>
-              </div>
-            </div><!-- End .product-details -->
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-xl-6 mb-2">
-          <div class="banner banner3 d-flex flex-wrap align-items-center bg-gray h-100 appear-animate"
-            data-animation-name="fadeInRightShorter" data-animation-delay="100">
-            <div class="col-sm-4 text-center">
-              <h3 class="font5 mb-0">Summer Sale</h3>
-              <h2 class="text-uppercase mb-0">20% off</h2>
-            </div>
-            <div class="col-sm-4">
-              <img src="assets/images/demoes/demo27/banners/banner-3.jpg" alt="banner" width="232" height="124">
-            </div>
-            <div class="col-sm-4 text-center">
-              <a href="demo27-shop.html" class="btn btn-dark">Shop All Sale</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-6 mb-2">
-          <div class="banner banner4 d-flex flex-wrap align-items-center bg-primary h-100 appear-animate"
-            data-animation-name="fadeInRightShorter" data-animation-delay="400">
-            <div class="col-sm-4 text-center">
-              <h3 class="font5 text-white mb-0">Flash Sale</h3>
-              <h2 class="text-uppercase text-white mb-0">30% off</h2>
-            </div>
-            <div class="col-sm-4">
-              <img src="assets/images/demoes/demo27/banners/banner-4.jpg" alt="banner" width="232" height="124">
-            </div>
-            <div class="col-sm-4 text-center">
-              <a href="demo27-shop.html" class="btn btn-light">Shop All Sale</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 </main>
 <!-- End Home Pages -->
 
@@ -301,16 +85,20 @@
                 <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
                 </div>
                 <div class="image_box">
+                  <a href="pages/product_detail.php?name=${product.product_name}">
                     <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
+                  </a>
                 </div>
                 <hr class="my-0">
                 <div class="card-body pt-2 pb-1 px-3">                
                     <div class="left_side_body">
+                      <a href="pages/product_detail.php?name=${product.product_name}">
                         <h6 class="text-success fw-bold">
                             ${product.product_name.length > 30 
                                 ? product.product_name.substring(0, 27) + '...' 
                                 : product.product_name}
                         </h6>
+                      </a>
                         <p class="p_user fw-semibold mb0">Dealer: 
                             ${product.user?.name 
                                 ? (product.user.name.length > 15 

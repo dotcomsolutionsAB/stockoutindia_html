@@ -230,7 +230,6 @@
             container.innerHTML += `
             <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
                 <div class="product-card bg-white">
-                    <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
                     <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
                         <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
                         <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
@@ -241,13 +240,24 @@
                     <hr class="my-0">
                     <div class="card-body pt-2 pb-1 px-3">                
                         <div class="left_side_body">
-                            <h6 class="text-success fw-bold">${product.product_name}</h6>
-                            <p class="p_user fw-semibold mb0">Dealer: ${product.user?.name || "N/A"}</p>
+                            <h6 class="text-success fw-bold">
+                                ${product.product_name.length > 30 
+                                    ? product.product_name.substring(0, 27) + '...' 
+                                    : product.product_name}
+                            </h6>
+                            <p class="p_user fw-semibold mb0">Dealer: 
+                                ${product.user?.name 
+                                    ? (product.user.name.length > 15 
+                                        ? product.user.name.substring(0, 12) + '...' 
+                                        : product.user.name)
+                                    : "N/A"}
+                            </p>
+
                             <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
                         </div>
                         <div class="right_side_body">
-                            <span class="badge bg-secondary text-white">Qty: <strong>${product.offer_quantity}</strong></span>
-                            <span class="badge bg-warning text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+                            <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
+                            <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
                         </div>
                     </div>
                     <div class="d-flex bottom-btns global_page_card">

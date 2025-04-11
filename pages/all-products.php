@@ -118,10 +118,9 @@
                             </div> -->
                         </div><!-- End .row -->
 
-                        <nav class="toolbox toolbox-pagination mb-0">
-                            <div class="toolbox-item toolbox-show">
+                        <nav class="toolbox toolbox-pagination mb-0 d-flex justify-content-between align-items-center flex-wrap">
+                            <div class="toolbox-item toolbox-show d-flex align-items-center gap-2">
                                 <label class="mt-0">Show:</label>
-
                                 <div class="select-custom">
                                     <select name="count" class="form-control">
                                         <option value="12">12</option>
@@ -129,25 +128,12 @@
                                         <option value="28">28</option>
                                         <option value="56">56</option>
                                     </select>
+                                </div>
+                            </div>
 
-                                </div><!-- End .select-custom -->
-                            </div><!-- End .toolbox-item -->
-
-                            <ul class="pagination toolbox-item">
-                                <li class="page-item disabled">
-                                    <a class="page-link page-link-btn" href="#"><i class="icon-angle-left"></i></a>
-                                </li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><span class="page-link">...</span></li>
-                                <li class="page-item">
-                                    <a class="page-link page-link-btn" href="#"><i class="icon-angle-right"></i></a>
-                                </li>
-                            </ul>
+                            <ul class="pagination toolbox-item d-flex flex-wrap" style="margin: 0;"></ul>
                         </nav>
+
                     </div><!-- End .col-lg-9 -->
 
                     <div class="sidebar-overlay"></div>
@@ -424,20 +410,25 @@
     let totalRecord = 0;
 
     // INIT
-    document.addEventListener('DOMContentLoaded', async () => {
-        await fetchIndustries();
-        await fetchSubIndustries();
-        await fetchStates();
-        await fetchCities();
-        fetchProducts();
-        document.querySelector("select[name='count']").value = limit;
+    document.addEventListener('DOMContentLoaded', () => {
+        // After filters load:
+        fetchIndustries()
+            .then(fetchSubIndustries)
+            .then(fetchStates)
+            .then(fetchCities)
+            .then(fetchProducts);
+
+        // 👇 Add this inside DOMContentLoaded to listen to dropdown
+        const countSelect = document.querySelector("select[name='count']");
+        if (countSelect) {
+            countSelect.addEventListener("change", (e) => {
+                limit = parseInt(e.target.value);
+                offset = 0;
+                fetchProducts();
+            });
+        }
     });
 
-    document.querySelector("select[name='count']").addEventListener('change', function () {
-        limit = parseInt(this.value);
-        offset = 0;
-        fetchProducts();
-    });
 
     // FILTER LOADERS STEP BY STEP
     async function fetchIndustries() {
@@ -545,7 +536,7 @@
         container.innerHTML = '';
 
         products.forEach(product => {
-            const image = product.image?.[0] || 'default.jpg';
+            const image = product.image?.[0] || '../uploads/placeholder.png';
             container.innerHTML += `
             <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
                 <div class="product-card bg-white">
@@ -583,7 +574,12 @@
         const currentPage = offset / limit + 1;
         let paginationHTML = '';
 
-        paginationHTML += `<li class="page-item ${offset === 0 ? 'disabled' : ''}">
+        if (totalPages <= 1) {
+            document.querySelector('.pagination.toolbox-item').innerHTML = '';
+            return;
+        }
+
+        paginationHTML += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
             <a class="page-link page-link-btn" href="#" onclick="goToPage(${currentPage - 1})"><i class="icon-angle-left"></i></a>
         </li>`;
 
@@ -597,10 +593,11 @@
             <a class="page-link page-link-btn" href="#" onclick="goToPage(${currentPage + 1})"><i class="icon-angle-right"></i></a>
         </li>`;
 
-        document.querySelector('.toolbox-pagination ul.pagination').innerHTML = paginationHTML;
+        document.querySelector('.pagination.toolbox-item').innerHTML = paginationHTML;
     }
-
     function goToPage(page) {
+        const totalPages = Math.ceil(totalRecord / limit);
+        if (page < 1 || page > totalPages) return;
         offset = (page - 1) * limit;
         fetchProducts();
     }

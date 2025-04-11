@@ -84,7 +84,7 @@
                         </nav>
 
                         <div class="row">
-                            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+                            <!-- <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
                                 <div class="product-card bg-white">
                                     <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
                                     <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
@@ -115,7 +115,7 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div><!-- End .row -->
 
                         <nav class="toolbox toolbox-pagination mb-0">
@@ -125,9 +125,11 @@
                                 <div class="select-custom">
                                     <select name="count" class="form-control">
                                         <option value="12">12</option>
-                                        <option value="24">24</option>
-                                        <option value="36">36</option>
+                                        <option value="20">20</option>
+                                        <option value="28">28</option>
+                                        <option value="56">56</option>
                                     </select>
+
                                 </div><!-- End .select-custom -->
                             </div><!-- End .toolbox-item -->
 
@@ -203,87 +205,87 @@
             </div>
         </main><!-- End .main -->
 <!-- End All products Pages -->
-<script>
+
+<!-- <script>
     const BASE = "<?php echo BASE_URL; ?>";
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchFilters();
-        fetchProducts();
-    });
-
-    function fetchFilters() {
-        fetch(`${BASE}/industry`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    const data = Array.isArray(res.data) ? res.data : [res.data];
-                    const container = document.getElementById('industry-list');
-                    container.innerHTML = '';
-                    data.forEach(ind => {
-                        container.innerHTML += `<label><input type="checkbox" name="industry[]" value="${ind.id}"> ${ind.name}</label>`;
-                    });
-                }
-            });
-
-        fetch(`${BASE}/sub_industry`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    const container = document.getElementById('sub_industry-list');
-                    container.innerHTML = '';
-                    res.data.forEach(sub => {
-                        container.innerHTML += `<label><input type="checkbox" name="sub_industry[]" value="${sub.id}"> ${sub.name}</label>`;
-                    });
-                }
-            });
-
-        fetch(`${BASE}/states`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    const container = document.getElementById('state-list');
-                    container.innerHTML = '';
-                    res.data.forEach(state => {
-                        container.innerHTML += `<label><input type="checkbox" name="state[]" value="${state.id}"> ${state.name}</label>`;
-                    });
-                }
-            });
-
-        fetch(`${BASE}/cities`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    const container = document.getElementById('city-list');
-                    container.innerHTML = '';
-                    res.data.forEach(city => {
-                        container.innerHTML += `<label><input type="checkbox" name="city[]" value="${city.name}"> ${city.name}</label>`;
-                    });
-                }
-            });
-    }
-</script>
-
-<script>
     let filters = {
         industry: [],
         sub_industry: [],
         state: [],
         city: []
     };
-    let limit = 15;
+    let limit = 12;
     let offset = 0;
+    let totalRecord = 0;
 
-    function getSelected(name) {
-        return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
+    // INIT
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchIndustries();
+        await fetchSubIndustries();
+        await fetchStates();
+        await fetchCities();
+        fetchProducts();
+    });
+
+    // FILTER LOADERS STEP BY STEP
+    async function fetchIndustries() {
+        const res = await fetch(`${BASE}/industry`);
+        const json = await res.json();
+        if (json.success) {
+            const data = Array.isArray(json.data) ? json.data : [json.data];
+            const container = document.getElementById('industry-list');
+            container.innerHTML = '';
+            data.forEach(ind => {
+                container.innerHTML += `<label><input type="checkbox" name="industry[]" value="${ind.id}"> ${ind.name}</label>`;
+            });
+        }
     }
 
-    function applyFilters() {
+    async function fetchSubIndustries() {
+        const res = await fetch(`${BASE}/sub_industry`);
+        const json = await res.json();
+        if (json.success) {
+            const container = document.getElementById('sub_industry-list');
+            container.innerHTML = '';
+            json.data.forEach(sub => {
+                container.innerHTML += `<label><input type="checkbox" name="sub_industry[]" value="${sub.id}"> ${sub.name}</label>`;
+            });
+        }
+    }
+
+    async function fetchStates() {
+        const res = await fetch(`${BASE}/states`);
+        const json = await res.json();
+        if (json.success) {
+            const container = document.getElementById('state-list');
+            container.innerHTML = '';
+            json.data.forEach(state => {
+                container.innerHTML += `<label><input type="checkbox" name="state[]" value="${state.id}"> ${state.name}</label>`;
+            });
+        }
+    }
+
+    async function fetchCities() {
+        const res = await fetch(`${BASE}/cities`);
+        const json = await res.json();
+        if (json.success) {
+            const container = document.getElementById('city-list');
+            container.innerHTML = '';
+            json.data.forEach(city => {
+                container.innerHTML += `<label><input type="checkbox" name="city[]" value="${city.name}"> ${city.name}</label>`;
+            });
+        }
+    }
+
+    // MAIN PRODUCT FETCH
+    function fetchProducts() {
         const payload = {
-            industry: getSelected('industry').join(','),
-            sub_industry: getSelected('sub_industry').join(','),
-            state_id: getSelected('state').join(','),
-            city: getSelected('city').join(','),
-            limit: limit,
-            offset: offset
+            industry: filters.industry.join(","),
+            sub_industry: filters.sub_industry.join(","),
+            state_id: filters.state.join(","),
+            city: filters.city.join(","),
+            limit,
+            offset
         };
 
         const token = localStorage.getItem('authToken');
@@ -298,60 +300,12 @@
         .then(res => res.json())
         .then(res => {
             if (res.success) {
+                totalRecord = res.total_record || 0;
                 renderProducts(res.data);
+                renderPagination();
             }
         })
-        .catch(err => console.error("Fetch error", err));
-    }
-
-    function resetFilters() {
-        filters = { industry: [], sub_industry: [], state: [], city: [] };
-        document.querySelectorAll('.widget-body input[type="checkbox"]').forEach(c => c.checked = false);
-        offset = 0;
-        fetchProducts();
-    }
-
-    function selectAll(type) {
-        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = true);
-    }
-
-    function clearAll(type) {
-        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = false);
-    }
-
-    function filterList(type) {
-        const input = event.target.value.toLowerCase();
-        const items = document.querySelectorAll(`#${type}-list label`);
-        items.forEach(item => {
-            item.style.display = item.textContent.toLowerCase().includes(input) ? 'block' : 'none';
-        });
-    }
-
-    function fetchProducts() {
-        const payload = {
-            industry: filters.industry.join(","),
-            sub_industry: filters.sub_industry.join(","),
-            state_id: filters.state.join(","),
-            city: filters.city.join(","),
-            limit: limit,
-            offset: offset
-        };
-
-        const token = localStorage.getItem('authToken');
-        fetch(`<?php echo BASE_URL; ?>/product/get_products`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(token && { 'Authorization': `Bearer ${token}` })
-            },
-            body: JSON.stringify(payload)
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (res.success) {
-                renderProducts(res.data);
-            }
-        }).catch(err => console.log("Product Fetch Error", err));
+        .catch(err => console.log("Product Fetch Error", err));
     }
 
     function renderProducts(products) {
@@ -360,7 +314,7 @@
 
         products.forEach(product => {
             const image = product.image?.[0] || 'default.jpg';
-            const html = `
+            container.innerHTML += `
             <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
                 <div class="product-card bg-white">
                     <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
@@ -389,13 +343,305 @@
                     </div>
                 </div>
             </div>`;
-            container.innerHTML += html;
         });
     }
 
-    // Call once on page load
-    document.addEventListener('DOMContentLoaded', fetchProducts);
+    // PAGINATION
+    function renderPagination() {
+        const totalPages = Math.ceil(totalRecord / limit);
+        const currentPage = offset / limit + 1;
+        let paginationHTML = '';
+
+        paginationHTML += `<li class="page-item ${offset === 0 ? 'disabled' : ''}">
+            <a class="page-link page-link-btn" href="#" onclick="goToPage(${currentPage - 1})"><i class="icon-angle-left"></i></a>
+        </li>`;
+
+        for (let i = 1; i <= totalPages; i++) {
+            paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+            </li>`;
+        }
+
+        paginationHTML += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link page-link-btn" href="#" onclick="goToPage(${currentPage + 1})"><i class="icon-angle-right"></i></a>
+        </li>`;
+
+        document.querySelector('.toolbox-pagination ul.pagination').innerHTML = paginationHTML;
+    }
+
+    function goToPage(page) {
+        offset = (page - 1) * limit;
+        fetchProducts();
+    }
+
+    // FILTER HELPERS
+    function getSelected(name) {
+        return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
+    }
+
+    function applyFilters() {
+        filters.industry = getSelected('industry');
+        filters.sub_industry = getSelected('sub_industry');
+        filters.state = getSelected('state');
+        filters.city = getSelected('city');
+        offset = 0;
+        fetchProducts();
+    }
+
+    function resetFilters() {
+        filters = { industry: [], sub_industry: [], state: [], city: [] };
+        document.querySelectorAll('.widget-body input[type="checkbox"]').forEach(c => c.checked = false);
+        offset = 0;
+        fetchProducts();
+    }
+
+    function selectAll(type) {
+        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = true);
+    }
+
+    function clearAll(type) {
+        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = false);
+    }
+
+    function filterList(type) {
+        const input = event.target.value.toLowerCase();
+        const items = document.querySelectorAll(`#${type}-list label`);
+        items.forEach(item => {
+            item.style.display = item.textContent.toLowerCase().includes(input) ? 'block' : 'none';
+        });
+    }
+</script> -->
+<script>
+    const BASE = "<?php echo BASE_URL; ?>";
+    let filters = {
+        industry: [],
+        sub_industry: [],
+        state: [],
+        city: []
+    };
+    let limit = 12;
+    let offset = 0;
+    let totalRecord = 0;
+
+    // INIT
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchIndustries();
+        await fetchSubIndustries();
+        await fetchStates();
+        await fetchCities();
+        fetchProducts();
+        document.querySelector("select[name='count']").value = limit;
+    });
+
+    document.querySelector("select[name='count']").addEventListener('change', function () {
+        limit = parseInt(this.value);
+        offset = 0;
+        fetchProducts();
+    });
+
+    // FILTER LOADERS STEP BY STEP
+    async function fetchIndustries() {
+        const res = await fetch(`${BASE}/industry`);
+        const json = await res.json();
+        if (json.success) {
+            const data = Array.isArray(json.data) ? json.data : [json.data];
+            const container = document.getElementById('industry-list');
+            container.innerHTML = '';
+            data.forEach(ind => {
+                container.innerHTML += `<label><input type="checkbox" name="industry[]" value="${ind.id}"> ${ind.name}</label>`;
+            });
+        }
+    }
+
+    async function fetchSubIndustries() {
+        const res = await fetch(`${BASE}/sub_industry`);
+        const json = await res.json();
+        if (json.success) {
+            const container = document.getElementById('sub_industry-list');
+            container.innerHTML = '';
+            json.data.forEach(sub => {
+                container.innerHTML += `<label><input type="checkbox" name="sub_industry[]" value="${sub.id}"> ${sub.name}</label>`;
+            });
+        }
+    }
+
+    async function fetchStates() {
+        const res = await fetch(`${BASE}/states`);
+        const json = await res.json();
+        if (json.success) {
+            const container = document.getElementById('state-list');
+            container.innerHTML = '';
+            json.data.forEach(state => {
+                container.innerHTML += `<label><input type="checkbox" name="state[]" value="${state.id}"> ${state.name}</label>`;
+            });
+        }
+    }
+
+    async function fetchCities() {
+        const res = await fetch(`${BASE}/cities`);
+        const json = await res.json();
+        if (json.success) {
+            const container = document.getElementById('city-list');
+            container.innerHTML = '';
+            json.data.forEach(city => {
+                container.innerHTML += `<label><input type="checkbox" name="city[]" value="${city.name}"> ${city.name}</label>`;
+            });
+        }
+    }
+
+    // MAIN PRODUCT FETCH
+    function fetchProducts() {
+        showSkeletonLoader();
+        const payload = {
+            industry: filters.industry.join(","),
+            sub_industry: filters.sub_industry.join(","),
+            state_id: filters.state.join(","),
+            city: filters.city.join(","),
+            limit,
+            offset
+        };
+
+        const token = localStorage.getItem('authToken');
+        fetch(`${BASE}/product/get_products`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { 'Authorization': `Bearer ${token}` })
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (res.success) {
+                totalRecord = res.total_record || 0;
+                renderProducts(res.data);
+                renderPagination();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        })
+        .catch(err => console.log("Product Fetch Error", err));
+    }
+
+    function showSkeletonLoader() {
+        const container = document.querySelector('.row.main-content .row');
+        container.innerHTML = '';
+        for (let i = 0; i < limit; i++) {
+            container.innerHTML += `
+                <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+                    <div class="product-card bg-white p-3 placeholder-glow" style="width: 100%; min-height: 350px;">
+                        <div class="placeholder w-100" style="height: 200px;"></div>
+                        <div class="mt-2">
+                            <span class="placeholder col-7"></span>
+                            <span class="placeholder col-4"></span>
+                            <span class="placeholder col-6"></span>
+                        </div>
+                    </div>
+                </div>`;
+        }
+    }
+
+    function renderProducts(products) {
+        const container = document.querySelector('.row.main-content .row');
+        container.innerHTML = '';
+
+        products.forEach(product => {
+            const image = product.image?.[0] || 'default.jpg';
+            container.innerHTML += `
+            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+                <div class="product-card bg-white">
+                    <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
+                    <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
+                        <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
+                        <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
+                    </div>
+                    <div class="image_box">
+                        <img loading="lazy" src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
+                    </div>
+                    <hr class="my-0">
+                    <div class="card-body pt-2 pb-1 px-3">
+                        <div class="left_side_body">
+                            <h6 class="text-success fw-bold">${product.product_name}</h6>
+                            <p class="p_user fw-semibold mb0">Dealer: ${product.user?.name || "N/A"}</p>
+                            <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
+                        </div>
+                        <div class="right_side_body">
+                            <span class="badge bg-secondary text-white">Qty: <strong>${product.offer_quantity}</strong></span>
+                            <span class="badge bg-warning text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+                        </div>
+                    </div>
+                    <div class="d-flex bottom-btns index_page_card">
+                        <button class="btn btn-success w-50 rounded-0 rounded-bottom-start"><i class="fa-brands fa-whatsapp"></i></button>
+                        <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end"><i class="fa-solid fa-phone"></i></button>
+                    </div>
+                </div>
+            </div>`;
+        });
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(totalRecord / limit);
+        const currentPage = offset / limit + 1;
+        let paginationHTML = '';
+
+        paginationHTML += `<li class="page-item ${offset === 0 ? 'disabled' : ''}">
+            <a class="page-link page-link-btn" href="#" onclick="goToPage(${currentPage - 1})"><i class="icon-angle-left"></i></a>
+        </li>`;
+
+        for (let i = 1; i <= totalPages; i++) {
+            paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+            </li>`;
+        }
+
+        paginationHTML += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link page-link-btn" href="#" onclick="goToPage(${currentPage + 1})"><i class="icon-angle-right"></i></a>
+        </li>`;
+
+        document.querySelector('.toolbox-pagination ul.pagination').innerHTML = paginationHTML;
+    }
+
+    function goToPage(page) {
+        offset = (page - 1) * limit;
+        fetchProducts();
+    }
+
+    function getSelected(name) {
+        return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
+    }
+
+    function applyFilters() {
+        filters.industry = getSelected('industry');
+        filters.sub_industry = getSelected('sub_industry');
+        filters.state = getSelected('state');
+        filters.city = getSelected('city');
+        offset = 0;
+        fetchProducts();
+    }
+
+    function resetFilters() {
+        filters = { industry: [], sub_industry: [], state: [], city: [] };
+        document.querySelectorAll('.widget-body input[type="checkbox"]').forEach(c => c.checked = false);
+        offset = 0;
+        fetchProducts();
+    }
+
+    function selectAll(type) {
+        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = true);
+    }
+
+    function clearAll(type) {
+        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = false);
+    }
+
+    function filterList(type) {
+        const input = event.target.value.toLowerCase();
+        const items = document.querySelectorAll(`#${type}-list label`);
+        items.forEach(item => {
+            item.style.display = item.textContent.toLowerCase().includes(input) ? 'block' : 'none';
+        });
+    }
 </script>
+
 
 
 <?php include("../footer.php") ?>

@@ -137,6 +137,18 @@
   .minipopup-box{
     display: none;
   }
+  .global_page .card-body{
+    min-height: 100px !important;
+    padding: 2rem 1.5rem;
+    border-top: 0;
+    border-radius: 0;
+    border-top: 3px solid #be1312;
+    display: flex;
+    justify-content: space-between;
+  }
+  .global_page_card i{
+    font-size: 30px !important;
+  }
   
 /* End Universel Css */
 
@@ -209,3 +221,6 @@
     color: inherit;
     white-space: normal;
   }
+
+
+  

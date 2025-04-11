@@ -4,7 +4,7 @@
 <?php include("../configs/auth_check.php"); ?>
 
 <!-- All products Pages -->
-        <main class="main">
+        <main class="main products_page global_page">
 
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
@@ -40,10 +40,8 @@
                                     </svg>
                                     <span>Filter</span>
                                 </a>
-
-                                <div class="toolbox-item toolbox-sort">
+                                <!-- <div class="toolbox-item toolbox-sort">
                                     <label>Sort By:</label>
-
                                     <div class="select-custom">
                                         <select name="orderby" class="form-control">
                                             <option value="menu_order" selected="selected">Default sorting</option>
@@ -53,13 +51,11 @@
                                             <option value="price">Sort by price: low to high</option>
                                             <option value="price-desc">Sort by price: high to low</option>
                                         </select>
-                                    </div><!-- End .select-custom -->
-
-
-                                </div><!-- End .toolbox-item -->
+                                    </div>
+                                </div> -->
                             </div><!-- End .toolbox-left -->
 
-                            <div class="toolbox-right">
+                            <!-- <div class="toolbox-right">
                                 <div class="toolbox-item toolbox-show">
                                     <label>Show:</label>
 
@@ -69,8 +65,8 @@
                                             <option value="24">24</option>
                                             <option value="36">36</option>
                                         </select>
-                                    </div><!-- End .select-custom -->
-                                </div><!-- End .toolbox-item -->
+                                    </div>
+                                </div>
 
                                 <div class="toolbox-item layout-modes">
                                     <a href="category.html" class="layout-btn btn-grid active" title="Grid">
@@ -79,12 +75,11 @@
                                     <a href="category-list.html" class="layout-btn btn-list" title="List">
                                         <i class="icon-mode-list"></i>
                                     </a>
-                                </div><!-- End .layout-modes -->
-                            </div><!-- End .toolbox-right -->
+                                </div>
+                            </div> -->
                         </nav>
-
-                        <div class="row">
-                            <!-- <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+                        <!-- <div class="row" id="product-list">
+                            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
                                 <div class="product-card bg-white">
                                     <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
                                     <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
@@ -115,22 +110,24 @@
                                         </button>
                                     </div>
                                 </div>
-                            </div> -->
-                        </div><!-- End .row -->
+                            </div>
+                        </div> -->
 
+                        <div class="row" id="product-list"></div>
+                        <!-- HTML Section -->
                         <nav class="toolbox toolbox-pagination mb-0 d-flex justify-content-between align-items-center flex-wrap">
                             <div class="toolbox-item toolbox-show d-flex align-items-center gap-2">
                                 <label class="mt-0">Show:</label>
                                 <div class="select-custom">
-                                    <select name="count" class="form-control">
-                                        <option value="12">12</option>
-                                        <option value="20">20</option>
-                                        <option value="28">28</option>
-                                        <option value="56">56</option>
-                                    </select>
+                                <select id="product-count" class="form-control">
+                                    <option value="12">12</option>
+                                    <option value="20">20</option>
+                                    <option value="28">28</option>
+                                    <option value="56">56</option>
+                                </select>
+
                                 </div>
                             </div>
-
                             <ul class="pagination toolbox-item d-flex flex-wrap" style="margin: 0;"></ul>
                         </nav>
 
@@ -140,26 +137,7 @@
                     <aside class="sidebar-shop col-lg-3 order-lg-first mobile-sidebar">
                         <div class="sidebar-wrapper">
                            <!-- FILTER SIDEBAR -->
-                            <div class="widget">
-                                <h3 class="widget-title">Industries</h3>
-                                <input type="text" class="form-control mb-2" placeholder="Search industries..." onkeyup="filterList('industry')">
-                                <div class="mb-2">
-                                    <button class="btn btn-sm btn-outline-success" onclick="selectAll('industry')">Select All</button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="clearAll('industry')">Clear</button>
-                                </div>
-                                <div class="widget-body" id="industry-list" style="max-height: 200px; overflow-y: auto;"></div>
-                            </div>
-
-                            <div class="widget">
-                                <h3 class="widget-title">Sub Industries</h3>
-                                <input type="text" class="form-control mb-2" placeholder="Search sub-industries..." onkeyup="filterList('sub_industry')">
-                                <div class="mb-2">
-                                    <button class="btn btn-sm btn-outline-success" onclick="selectAll('sub_industry')">Select All</button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="clearAll('sub_industry')">Clear</button>
-                                </div>
-                                <div class="widget-body" id="sub_industry-list" style="max-height: 200px; overflow-y: auto;"></div>
-                            </div>
-
+                            
                             <div class="widget">
                                 <h3 class="widget-title">States</h3>
                                 <input type="text" class="form-control mb-2" placeholder="Search states..." onkeyup="filterList('state')">
@@ -167,22 +145,7 @@
                                     <button class="btn btn-sm btn-outline-success" onclick="selectAll('state')">Select All</button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="clearAll('state')">Clear</button>
                                 </div>
-                                <div class="widget-body" id="state-list" style="max-height: 200px; overflow-y: auto;"></div>
-                            </div>
-
-                            <div class="widget">
-                                <h3 class="widget-title">Cities</h3>
-                                <input type="text" class="form-control mb-2" placeholder="Search cities..." onkeyup="filterList('city')">
-                                <div class="mb-2">
-                                    <button class="btn btn-sm btn-outline-success" onclick="selectAll('city')">Select All</button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="clearAll('city')">Clear</button>
-                                </div>
-                                <div class="widget-body" id="city-list" style="max-height: 200px; overflow-y: auto;"></div>
-                            </div>
-
-                            <div class="widget text-center">
-                                <button class="btn btn-danger btn-sm me-2" onclick="resetFilters()">Reset Filters</button>
-                                <button class="btn btn-success btn-sm" onclick="applyFilters()">Apply Filters</button>
+                                <div class="widget-body" id="state-list" style="max-height: 300px; overflow-y: auto;"></div>
                             </div>
 
                         </div><!-- End .sidebar-wrapper -->
@@ -192,87 +155,44 @@
         </main><!-- End .main -->
 <!-- End All products Pages -->
 
-<!-- <script>
+<script>
     const BASE = "<?php echo BASE_URL; ?>";
-    let filters = {
-        industry: [],
-        sub_industry: [],
-        state: [],
-        city: []
-    };
     let limit = 12;
     let offset = 0;
-    let totalRecord = 0;
+    let total = 0;
 
-    // INIT
-    document.addEventListener('DOMContentLoaded', async () => {
-        await fetchIndustries();
-        await fetchSubIndustries();
-        await fetchStates();
-        await fetchCities();
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchFilters();
         fetchProducts();
+        setupEvents();
     });
 
-    // FILTER LOADERS STEP BY STEP
-    async function fetchIndustries() {
-        const res = await fetch(`${BASE}/industry`);
-        const json = await res.json();
-        if (json.success) {
-            const data = Array.isArray(json.data) ? json.data : [json.data];
-            const container = document.getElementById('industry-list');
-            container.innerHTML = '';
-            data.forEach(ind => {
-                container.innerHTML += `<label><input type="checkbox" name="industry[]" value="${ind.id}"> ${ind.name}</label>`;
+    function fetchFilters() {
+        fetch(`${BASE}/states`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    const container = document.getElementById('state-list');
+                    container.innerHTML = '';
+                    res.data.forEach(state => {
+                        container.innerHTML += `<label class="d-block"><input type="checkbox" name="state[]" value="${state.id}" onchange="fetchProducts()"> ${state.name}</label>`;
+                    });
+                }
             });
-        }
     }
 
-    async function fetchSubIndustries() {
-        const res = await fetch(`${BASE}/sub_industry`);
-        const json = await res.json();
-        if (json.success) {
-            const container = document.getElementById('sub_industry-list');
-            container.innerHTML = '';
-            json.data.forEach(sub => {
-                container.innerHTML += `<label><input type="checkbox" name="sub_industry[]" value="${sub.id}"> ${sub.name}</label>`;
-            });
-        }
+    function getSelected(name) {
+        return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
     }
 
-    async function fetchStates() {
-        const res = await fetch(`${BASE}/states`);
-        const json = await res.json();
-        if (json.success) {
-            const container = document.getElementById('state-list');
-            container.innerHTML = '';
-            json.data.forEach(state => {
-                container.innerHTML += `<label><input type="checkbox" name="state[]" value="${state.id}"> ${state.name}</label>`;
-            });
-        }
-    }
-
-    async function fetchCities() {
-        const res = await fetch(`${BASE}/cities`);
-        const json = await res.json();
-        if (json.success) {
-            const container = document.getElementById('city-list');
-            container.innerHTML = '';
-            json.data.forEach(city => {
-                container.innerHTML += `<label><input type="checkbox" name="city[]" value="${city.name}"> ${city.name}</label>`;
-            });
-        }
-    }
-
-    // MAIN PRODUCT FETCH
     function fetchProducts() {
         const payload = {
-            industry: filters.industry.join(","),
-            sub_industry: filters.sub_industry.join(","),
-            state_id: filters.state.join(","),
-            city: filters.city.join(","),
-            limit,
-            offset
+            state_id: getSelected('state').join(','),
+            limit: limit,
+            offset: offset
         };
+
+        console.log("Sent Payload:", payload);
 
         const token = localStorage.getItem('authToken');
         fetch(`${BASE}/product/get_products`, {
@@ -285,21 +205,28 @@
         })
         .then(res => res.json())
         .then(res => {
+            console.log("API Response:", res);
+
             if (res.success) {
-                totalRecord = res.total_record || 0;
-                renderProducts(res.data);
+                renderProducts(res.data || []);
+                total = res.total_record || 0;
                 renderPagination();
             }
         })
-        .catch(err => console.log("Product Fetch Error", err));
+        .catch(err => console.error("Fetch error", err));
     }
 
     function renderProducts(products) {
-        const container = document.querySelector('.row.main-content .row');
-        container.innerHTML = ''; // clear old products
+        const container = document.getElementById('product-list');
+        container.innerHTML = '';
+
+        if (!products.length) {
+            container.innerHTML = `<div class="col-12 text-center py-4">No products found.</div>`;
+            return;
+        }
 
         products.forEach(product => {
-            const image = product.image?.[0] || 'default.jpg';
+            const image = product.image?.[0] || 'placeholder.jpg';
             container.innerHTML += `
             <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
                 <div class="product-card bg-white">
@@ -312,7 +239,7 @@
                         <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
                     </div>
                     <hr class="my-0">
-                    <div class="card-body pt-2 pb-1 px-3">
+                    <div class="card-body pt-2 pb-1 px-3">                
                         <div class="left_side_body">
                             <h6 class="text-success fw-bold">${product.product_name}</h6>
                             <p class="p_user fw-semibold mb0">Dealer: ${product.user?.name || "N/A"}</p>
@@ -323,81 +250,76 @@
                             <span class="badge bg-warning text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
                         </div>
                     </div>
-                    <div class="d-flex bottom-btns index_page_card">
-                        <button class="btn btn-success w-50 rounded-0 rounded-bottom-start"><i class="fa-brands fa-whatsapp"></i></button>
-                        <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end"><i class="fa-solid fa-phone"></i></button>
+                    <div class="d-flex bottom-btns global_page_card">
+                        <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </button>
+                        <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
+                            <i class="fa-solid fa-phone"></i>
+                        </button>
                     </div>
                 </div>
             </div>`;
         });
     }
 
-    // PAGINATION
+    function setupEvents() {
+        const select = document.getElementById('product-count');
+
+        if (select) {
+            console.log("✅ Dropdown found by ID");
+            select.value = limit;
+
+            select.addEventListener('change', function (e) {
+                limit = parseInt(this.value);
+                offset = 0;
+                console.log("✅ LIMIT CHANGED TO:", limit, "OFFSET:", offset);
+                fetchProducts();
+            });
+        } else {
+            console.error("❌ Dropdown with ID 'product-count' not found.");
+        }
+    }
+
     function renderPagination() {
-        const totalPages = Math.ceil(totalRecord / limit);
-        const currentPage = offset / limit + 1;
-        let paginationHTML = '';
+        const totalPages = Math.ceil(total / limit);
+        const pagination = document.querySelector('.pagination');
+        pagination.innerHTML = '';
 
-        paginationHTML += `<li class="page-item ${offset === 0 ? 'disabled' : ''}">
-            <a class="page-link page-link-btn" href="#" onclick="goToPage(${currentPage - 1})"><i class="icon-angle-left"></i></a>
-        </li>`;
+        const currentPage = Math.floor(offset / limit);
 
-        for (let i = 1; i <= totalPages; i++) {
-            paginationHTML += `<li class="page-item ${i === currentPage ? 'active' : ''}">
-                <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+        // Previous Button
+        const prevDisabled = currentPage === 0 ? 'disabled' : '';
+        pagination.innerHTML += `
+            <li class="page-item ${prevDisabled}">
+                <a class="page-link" href="#" onclick="event.preventDefault(); goToPage(${currentPage - 1})">Previous</a>
             </li>`;
+
+        // Numbered Pages
+        for (let i = 0; i < totalPages; i++) {
+            const isActive = (i === currentPage) ? 'active' : '';
+            pagination.innerHTML += `
+                <li class="page-item ${isActive}">
+                    <a class="page-link" href="#" onclick="event.preventDefault(); goToPage(${i})">${i + 1}</a>
+                </li>`;
         }
 
-        paginationHTML += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link page-link-btn" href="#" onclick="goToPage(${currentPage + 1})"><i class="icon-angle-right"></i></a>
-        </li>`;
-
-        document.querySelector('.toolbox-pagination ul.pagination').innerHTML = paginationHTML;
+        // Next Button
+        const nextDisabled = currentPage >= totalPages - 1 ? 'disabled' : '';
+        pagination.innerHTML += `
+            <li class="page-item ${nextDisabled}">
+                <a class="page-link" href="#" onclick="event.preventDefault(); goToPage(${currentPage + 1})">Next</a>
+            </li>`;
     }
 
-    function goToPage(page) {
-        offset = (page - 1) * limit;
+    function goToPage(pageIndex) {
+        offset = pageIndex * limit;
         fetchProducts();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+</script>
 
-    // FILTER HELPERS
-    function getSelected(name) {
-        return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);
-    }
-
-    function applyFilters() {
-        filters.industry = getSelected('industry');
-        filters.sub_industry = getSelected('sub_industry');
-        filters.state = getSelected('state');
-        filters.city = getSelected('city');
-        offset = 0;
-        fetchProducts();
-    }
-
-    function resetFilters() {
-        filters = { industry: [], sub_industry: [], state: [], city: [] };
-        document.querySelectorAll('.widget-body input[type="checkbox"]').forEach(c => c.checked = false);
-        offset = 0;
-        fetchProducts();
-    }
-
-    function selectAll(type) {
-        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = true);
-    }
-
-    function clearAll(type) {
-        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = false);
-    }
-
-    function filterList(type) {
-        const input = event.target.value.toLowerCase();
-        const items = document.querySelectorAll(`#${type}-list label`);
-        items.forEach(item => {
-            item.style.display = item.textContent.toLowerCase().includes(input) ? 'block' : 'none';
-        });
-    }
-</script> -->
-<script>
+<!-- <script>
     const BASE = "<?php echo BASE_URL; ?>";
     let filters = {
         industry: [],
@@ -637,8 +559,5 @@
             item.style.display = item.textContent.toLowerCase().includes(input) ? 'block' : 'none';
         });
     }
-</script>
-
-
-
+</script> -->
 <?php include("../footer.php") ?>

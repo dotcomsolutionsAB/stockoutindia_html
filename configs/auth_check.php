@@ -31,7 +31,7 @@
     const customerPages = [
         "../order-complete.php",
         "../checkout.php",
-        "../profile.php"
+        "../account.php"
     ];
 
     // Check if the user is logged in

@@ -56,7 +56,7 @@
                         <button class="mobile-menu-toggler" type="button">
                             <i class="fas fa-bars"></i>
                         </button>
-                        <a href="demo27.html" class="logo">
+                        <a href="index.php" class="logo">
                             <img src="uploads/logo.jpg" alt="Stock Out" width="111" height="44">
                         </a>
                         <nav class="main-nav">
@@ -73,13 +73,13 @@
                                 <!-- <li class="d-none d-xxl-block">
                                     <a href="all-industries.php">All Industries</a>
                                 </li> -->
-                                <li>
+                                <!-- <li>
                                     <a href="#">Pages</a>
                                     <ul>
                                         <li><a href="wishlist.html">Wishlist</a></li>
                                         <li><a href="cart.html">Shopping Cart</a></li>
                                     </ul>
-                                </li>
+                                </li> -->
                             </ul>
                         </nav>
                     </div>
@@ -92,11 +92,8 @@
                             <div class="header-search-wrapper">
                                 <input type="search" class="form-control" name="q" id="q" placeholder="I'm searching for..." required>
                                 <div class="select-custom font2">
-                                <select id="cat" name="cat">
-                                    <option value="">All Categories</option>
-                                    <option value="4">Fashion</option>
-                                    <option value="12">- Women</option>
-                                    <option value="13">- Men</option>
+                                <select id="industry" name="industry">
+                                    <option value="">All Industries</option>
                                 </select>
                                 </div>
                                 <button class="btn icon-magnifier" title="search" type="submit"></button>
@@ -159,18 +156,12 @@
     const authToken = localStorage.getItem("authToken");
 
     if (authToken) {
-      iconsWrapper.innerHTML = `
-        <a href="pages/my-product.php" class="header_icon">
-            <i class="fas fa-shopping-basket"></i>
-        </a>  
+      iconsWrapper.innerHTML = ` 
         <a href="#" class="header_icon" id="addProductBtn">
             <i class="fas fa-plus-circle"></i>
         </a>      
-        <a href="pages/profile.php" class="header_icon">
+        <a href="pages/account.php" class="header_icon">
           <i class="fas fa-user-edit"></i>
-        </a>
-        <a href="#" class="header_icon" onclick="logoutUser()" title="Logout">
-          <i class="fas fa-sign-out-alt"></i>
         </a>
       `;
     } else {
@@ -194,7 +185,8 @@
 </script>
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<!-- <script>
+
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         const BASE_URL = "https://api.stockoutindia.com/api"; 
         const authToken = localStorage.getItem("authToken");
@@ -203,345 +195,25 @@
         if (!addBtn || !authToken) return;
 
         addBtn.addEventListener("click", async function () {
-            try {
-                // Fetch dropdown data
-                const [unitsRes, industryRes, subIndustryRes] = await Promise.all([
-                    fetch(`${BASE_URL}/product/get_units`, {
-                        headers: { Authorization: authToken }
-                    }).then(r => r.json()),
-                    fetch(`${BASE_URL}/industry`, {
-                        headers: { Authorization: authToken }
-                    }).then(r => r.json()),
-                    fetch(`${BASE_URL}/sub_industry`, {
-                        headers: { Authorization: authToken }
-                    }).then(r => r.json())
-                ]);
-
-                const units = unitsRes.data || [];
-                const industries = industryRes.data || [];
-                const subIndustries = subIndustryRes.data || [];
-
-                let subIndustryOptions = '';
-
-                function updateSubIndustryOptions(selectedIndustryId) {
-                    const filtered = subIndustries.filter(si =>
-                        si.slug.startsWith(`${selectedIndustryId}_`)
-                    );
-                    subIndustryOptions = filtered
-                        .map(si => `<option value="${si.id}">${si.name}</option>`)
-                        .join('');
-                    const subIndustrySelect = document.getElementById('sub_industry');
-                    subIndustrySelect.innerHTML = `<option value="">Select Sub-Industry</option>` + subIndustryOptions;
-                    subIndustrySelect.disabled = filtered.length === 0;
-                }
-
-                const formHtml = `
-                <form id="addProductForm" class="swal2-form" style="text-align:left">
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                        <input name="product_name" class="swal2-input" placeholder="Product Name" required>
-                        <input name="original_price" class="swal2-input" type="number" step="0.01" placeholder="Original Price" required>
-                        <input name="selling_price" class="swal2-input" type="number" step="0.01" placeholder="Selling Price" required>
-                        <input name="offer_quantity" class="swal2-input" type="number" placeholder="Offer Quantity" required>
-                        <input name="minimum_quantity" class="swal2-input" type="number" placeholder="Minimum Quantity" required>
-
-                        <select name="unit" class="swal2-input" required>
-                            <option value="">Select Unit</option>
-                            ${units.map(u => `<option value="${u}">${u}</option>`).join('')}
-                        </select>
-
-                        <select name="industry" id="industry" class="swal2-input" required>
-                            <option value="">Select Industry</option>
-                            ${industries.map(i => `<option value="${i.id}">${i.name}</option>`).join('')}
-                        </select>
-
-                        <select name="sub_industry" id="sub_industry" class="swal2-input" disabled required>
-                            <option value="">Select Sub-Industry</option>
-                        </select>
-
-                        <input name="dimensions" class="swal2-input" placeholder="Dimensions (e.g., 50mm x 20mm x 35mm)">
-                        <input name="city" class="swal2-input" placeholder="City">
-                        <input name="state_id" class="swal2-input" type="number" placeholder="State ID">
-
-                        <textarea name="description" class="swal2-textarea" placeholder="Product Description"></textarea>
-
-                        <label style="margin: 5px 0;">Product Image</label>
-                        <input type="file" name="image" accept="image/*" class="swal2-file">
-                    </div>
-                </form>`;
-
-                await Swal.fire({
-                    title: 'Add Product',
-                    html: formHtml,
-                    confirmButtonText: 'Submit',
-                    confirmButtonColor: '#e3342f',
-                    showCancelButton: true,
-                    didOpen: () => {
-                        const industrySelect = document.getElementById('industry');
-                        industrySelect.addEventListener('change', function () {
-                            updateSubIndustryOptions(this.value);
-                        });
-                    },
-                    preConfirm: async () => {
-                        const form = document.getElementById('addProductForm');
-                        const formData = new FormData(form);
-
-                        const body = {
-                            product_name: formData.get('product_name'),
-                            original_price: parseFloat(formData.get('original_price')),
-                            selling_price: parseFloat(formData.get('selling_price')),
-                            offer_quantity: parseInt(formData.get('offer_quantity')),
-                            minimum_quantity: parseInt(formData.get('minimum_quantity')),
-                            unit: formData.get('unit'),
-                            industry: parseInt(formData.get('industry')),
-                            sub_industry: parseInt(formData.get('sub_industry')),
-                            description: formData.get('description'),
-                            dimensions: formData.get('dimensions'),
-                            city: formData.get('city'),
-                            state_id: parseInt(formData.get('state_id'))
-                            // Image can be handled separately
-                        };
-
-                        try {
-                            const response = await fetch(`${BASE_URL}/product/create`, {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
-                                    Authorization: authToken
-                                },
-                                body: JSON.stringify(body)
-                            });
-
-                            const res = await response.json();
-                            if (!res.success) throw new Error(res.message);
-                            return res;
-                        } catch (error) {
-                            Swal.showValidationMessage(`Failed: ${error.message}`);
-                        }
-                    }
-                }).then(result => {
-                    if (result.isConfirmed && result.value?.success) {
-                        Swal.fire('Success!', result.value.message, 'success');
-                    }
-                });
-            } catch (err) {
-                console.error("Something went wrong loading dropdowns", err);
-                Swal.fire("Error", "Failed to load required data. Try again.", "error");
-            }
-        });
-    });
-</script> -->
-
-<!-- 2nd -->
-<!-- <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const BASE_URL = "https://api.stockoutindia.com/api"; 
-    const authToken = localStorage.getItem("authToken");
-
-    const addBtn = document.getElementById("addProductBtn");
-    if (!addBtn || !authToken) return;
-
-    addBtn.addEventListener("click", async function () {
-        try {
-            const [unitsRes, industryRes, subIndustryRes] = await Promise.all([
-                fetch(`${BASE_URL}/product/get_units`, { headers: { Authorization: authToken } }).then(r => r.json()),
-                fetch(`${BASE_URL}/industry`, { headers: { Authorization: authToken } }).then(r => r.json()),
-                fetch(`${BASE_URL}/sub_industry`, { headers: { Authorization: authToken } }).then(r => r.json())
-            ]);
-
-            const units = unitsRes.data || [];
-            const industries = industryRes.data || [];
-            const subIndustries = subIndustryRes.data || [];
-
-            let subIndustryOptions = '';
-
-            function updateSubIndustryOptions(selectedIndustryId) {
-                const filtered = subIndustries.filter(si =>
-                    si.slug.startsWith(`${selectedIndustryId}_`)
-                );
-                subIndustryOptions = filtered
-                    .map(si => `<option value="${si.id}">${si.name}</option>`)
-                    .join('');
-                const subIndustrySelect = document.getElementById('sub_industry');
-                subIndustrySelect.innerHTML = `<option value="">Select Sub-Industry</option>` + subIndustryOptions;
-                subIndustrySelect.disabled = filtered.length === 0;
-            }
-
             const formHtml = `
             <style>
-                .swal2-form-grid {
-                    display: grid;
-                    grid-template-columns: 1fr 1fr;
-                    gap: 15px;
+                .alert_box_footer{
+                    display: flex    ;
+                    justify-content: space-between;
+                    gap: 10px;
                 }
-                .swal2-form-grid input,
-                .swal2-form-grid select,
-                .swal2-form-grid textarea {
-                    width: 100% !important;
-                    font-size: 14px !important;
-                    padding: 8px 10px;
+                .alert_box_footer textarea{
+                    width: 66%;
+                    margin-top: 15px;
+                    border: 1px solid #cccccc;
                     border-radius: 5px;
-                    border: 1px solid #ccc;
+                    padding: 10px;
                 }
-                .upload-box {
-                    border: 2px dashed #ccc;
-                    padding: 15px;
-                    border-radius: 8px;
-                    text-align: center;
-                    cursor: pointer;
-                    background: #fafafa;
-                    transition: border-color 0.3s;
+                .alert_box_footer textarea{
+                    margin-top: 15px;
+                    margin-right: 30px;
                 }
-                .upload-box:hover {
-                    border-color: #e3342f;
-                }
-                .upload-box i {
-                    font-size: 28px;
-                    margin-bottom: 5px;
-                    color: #e3342f;
-                }
-            </style>
-
-            <form id="addProductForm" class="swal2-form">
-                <div class="swal2-form-grid">
-                    <input name="product_name" placeholder="Product Name" required>
-                    <input name="original_price" type="number" step="0.01" placeholder="Original Price" required>
-                    <input name="selling_price" type="number" step="0.01" placeholder="Selling Price" required>
-                    <input name="offer_quantity" type="number" placeholder="Offer Quantity" required>
-                    <input name="minimum_quantity" type="number" placeholder="Minimum Quantity" required>
-
-                    <select name="unit" required>
-                        <option value="">Select Unit</option>
-                        ${units.map(u => `<option value="${u}">${u}</option>`).join('')}
-                    </select>
-
-                    <select name="industry" id="industry" required>
-                        <option value="">Select Industry</option>
-                        ${industries.map(i => `<option value="${i.id}">${i.name}</option>`).join('')}
-                    </select>
-
-                    <select name="sub_industry" id="sub_industry" disabled required>
-                        <option value="">Select Sub-Industry</option>
-                    </select>
-
-                    <input name="dimensions" placeholder="Dimensions (e.g., 50mm x 20mm x 35mm)">
-                    <input name="city" placeholder="City">
-                    <input name="state_id" type="number" placeholder="State ID">
-                </div>
-
-                <textarea name="description" style="width:100%;margin-top:15px;" rows="3" placeholder="Product Description"></textarea>
-
-                <label for="imageUpload" class="upload-box" style="margin-top: 15px;">
-                    <i class="fas fa-upload"></i><br>
-                    Click to upload Product Image
-                    <input type="file" name="image" accept="image/*" id="imageUpload" style="display:none">
-                </label>
-            </form>`;
-
-            await Swal.fire({
-                title: 'Add Product',
-                html: formHtml,
-                confirmButtonText: 'Submit',
-                confirmButtonColor: '#e3342f',
-                showCancelButton: true,
-                didOpen: () => {
-                    const industrySelect = document.getElementById('industry');
-                    industrySelect.addEventListener('change', function () {
-                        updateSubIndustryOptions(this.value);
-                    });
-
-                    document.querySelector('.upload-box').addEventListener('click', () => {
-                        document.getElementById('imageUpload').click();
-                    });
-                },
-                preConfirm: async () => {
-                    const form = document.getElementById('addProductForm');
-                    const formData = new FormData(form);
-
-                    const body = {
-                        product_name: formData.get('product_name'),
-                        original_price: parseFloat(formData.get('original_price')),
-                        selling_price: parseFloat(formData.get('selling_price')),
-                        offer_quantity: parseInt(formData.get('offer_quantity')),
-                        minimum_quantity: parseInt(formData.get('minimum_quantity')),
-                        unit: formData.get('unit'),
-                        industry: parseInt(formData.get('industry')),
-                        sub_industry: parseInt(formData.get('sub_industry')),
-                        description: formData.get('description'),
-                        dimensions: formData.get('dimensions'),
-                        city: formData.get('city'),
-                        state_id: parseInt(formData.get('state_id'))
-                        // Note: Image still not sent here
-                    };
-
-                    try {
-                        const response = await fetch(`${BASE_URL}/product/create`, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                Authorization: authToken
-                            },
-                            body: JSON.stringify(body)
-                        });
-
-                        const res = await response.json();
-                        if (!res.success) throw new Error(res.message);
-                        return res;
-                    } catch (error) {
-                        Swal.showValidationMessage(`Failed: ${error.message}`);
-                    }
-                }
-            }).then(result => {
-                if (result.isConfirmed && result.value?.success) {
-                    Swal.fire('Success!', result.value.message, 'success');
-                }
-            });
-        } catch (err) {
-            console.error("Something went wrong loading dropdowns", err);
-            Swal.fire("Error", "Failed to load required data. Try again.", "error");
-        }
-    });
-});
-</script> -->
-
-<!-- <script>
-document.addEventListener("DOMContentLoaded", function () {
-    const BASE_URL = "https://api.stockoutindia.com/api"; 
-    const authToken = localStorage.getItem("authToken");
-
-    const addBtn = document.getElementById("addProductBtn");
-    if (!addBtn || !authToken) return;
-
-    addBtn.addEventListener("click", async function () {
-        try {
-            const [unitsRes, industryRes, subIndustryRes] = await Promise.all([
-                fetch(`${BASE_URL}/product/get_units`, { headers: { Authorization: authToken } }).then(r => r.json()),
-                fetch(`${BASE_URL}/industry`, { headers: { Authorization: authToken } }).then(r => r.json()),
-                fetch(`${BASE_URL}/sub_industry`, { headers: { Authorization: authToken } }).then(r => r.json())
-            ]);
-
-            const units = unitsRes.data || [];
-            const industries = industryRes.data || [];
-            const subIndustries = subIndustryRes.data || [];
-
-            let subIndustryOptions = '';
-
-            function updateSubIndustryOptions(selectedIndustryId) {
-                const filtered = subIndustries.filter(si =>
-                    si.slug.startsWith(`${selectedIndustryId}_`)
-                );
-                subIndustryOptions = filtered
-                    .map(si => `<option value="${si.id}">${si.name}</option>`)
-                    .join('');
-                const subIndustrySelect = document.getElementById('sub_industry');
-                subIndustrySelect.innerHTML = `<option value="">Select Sub-Industry</option>` + subIndustryOptions;
-                subIndustrySelect.disabled = filtered.length === 0;
-            }
-
-            const formHtml = `
-            <style>
-                .swal2-popup {
-                    width: 900px !important; /* Wider popup */
-                }
+                .swal2-popup { width: 900px !important; }
                 .swal2-form-grid {
                     display: grid;
                     grid-template-columns: repeat(3, 1fr);
@@ -583,32 +255,37 @@ document.addEventListener("DOMContentLoaded", function () {
                     
                     <input name="offer_quantity" type="number" placeholder="Offer Quantity" required>
                     <input name="minimum_quantity" type="number" placeholder="Minimum Quantity" required>
-                    <select name="unit" required>
-                        <option value="">Select Unit</option>
-                        ${units.map(u => `<option value="${u}">${u}</option>`).join('')}
+                    <select name="unit" id="unit" required>
+                        <option value="">Loading Units...</option>
                     </select>
 
                     <select name="industry" id="industry" required>
-                        <option value="">Select Industry</option>
-                        ${industries.map(i => `<option value="${i.id}">${i.name}</option>`).join('')}
+                        <option value="">Loading Industries...</option>
                     </select>
 
                     <select name="sub_industry" id="sub_industry" disabled required>
                         <option value="">Select Sub-Industry</option>
                     </select>
 
+                    <select name="state_id" id="state_id" required>
+                        <option value="">Loading States...</option>
+                    </select>
+
+                    <select name="city" id="city" disabled required>
+                        <option value="">Select City</option>
+                    </select>
+
                     <input name="dimensions" placeholder="Dimensions (e.g., 50mm x 20mm x 35mm)">
-                    <input name="city" placeholder="City">
-                    <input name="state_id" type="number" placeholder="State ID">
                 </div>
-
-                <textarea name="description" style="width:100%;margin-top:15px;" rows="3" placeholder="Product Description"></textarea>
-
-                <label for="imageUpload" class="upload-box" style="margin-top: 15px;">
-                    <i class="fas fa-upload"></i><br>
-                    Click to upload Product Image
-                    <input type="file" name="image" accept="image/*" id="imageUpload" style="display:none">
-                </label>
+                <div class="alert_box_footer">
+                    <textarea name="description" rows="3" placeholder="Product Description"></textarea>
+                    <label for="imageUpload" class="upload-box">
+                        <i class="fas fa-upload"></i><br>
+                        Click to upload Product Image
+                        <input type="file" name="image" accept="image/*" id="imageUpload" style="display:none">
+                    </label>
+                </div>
+                
             </form>`;
 
             await Swal.fire({
@@ -617,41 +294,178 @@ document.addEventListener("DOMContentLoaded", function () {
                 confirmButtonText: 'Submit',
                 confirmButtonColor: '#e3342f',
                 showCancelButton: true,
-                didOpen: () => {
-                    const industrySelect = document.getElementById('industry');
-                    industrySelect.addEventListener('change', function () {
-                        updateSubIndustryOptions(this.value);
-                    });
-
+                didOpen: async () => {
+                    // Make image clickable
                     document.querySelector('.upload-box').addEventListener('click', () => {
                         document.getElementById('imageUpload').click();
                     });
+
+                    const unitSelect = document.getElementById('unit');
+                    const industrySelect = document.getElementById('industry');
+                    const subIndustrySelect = document.getElementById('sub_industry');
+                    const stateSelect = document.getElementById('state_id');
+                    const citySelect = document.getElementById('city');
+
+                    let subIndustriesAll = [];
+                    let citiesAll = [];
+
+                    // Fetch Units
+                    try {
+                        const res = await fetch(`${BASE_URL}/product/get_units`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                                Accept: 'application/json'
+                            },
+                        });
+                        const units = (await res.json()).data || [];
+                        unitSelect.innerHTML = '<option value="">Select Unit</option>' +
+                            units.map(u => `<option value="${u}">${u}</option>`).join('');
+                    } catch {
+                        unitSelect.innerHTML = '<option value="">Failed to load</option>';
+                    }
+
+                    // Fetch Industries
+                    try {
+                        const res = await fetch(`${BASE_URL}/industry`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                                Accept: 'application/json'
+                            },
+                        });
+                        const industries = (await res.json()).data || [];
+                        industrySelect.innerHTML = '<option value="">Select Industry</option>' +
+                            industries.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
+                    } catch {
+                        industrySelect.innerHTML = '<option value="">Failed to load</option>';
+                    }
+
+                    // Fetch Sub-Industries
+                    try {
+                        const res = await fetch(`${BASE_URL}/sub_industry`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                                Accept: 'application/json'
+                            },
+                        });
+                        subIndustriesAll = (await res.json()).data || [];
+                    } catch {
+                        console.error("Sub-industries failed");
+                    }
+
+                    // Fetch States
+                    try {
+                        const res = await fetch(`${BASE_URL}/states`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                                Accept: 'application/json'
+                            },
+                        });
+                        const states = (await res.json()).data || [];
+                        stateSelect.innerHTML = '<option value="">Select State</option>' +
+                            states.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+                    } catch {
+                        stateSelect.innerHTML = '<option value="">Failed to load</option>';
+                    }
+
+                    // Fetch Cities
+                    try {
+                        const res = await fetch(`${BASE_URL}/cities`, {
+                            headers: {
+                                Authorization: `Bearer ${authToken}`,
+                                Accept: 'application/json'
+                            },
+                        });
+                        citiesAll = (await res.json()).data || [];
+                    } catch {
+                        console.error("Cities failed");
+                    }
+
+                    // Handle Industry → Sub-Industry linkage
+                    industrySelect.addEventListener('change', function () {
+                        const selectedId = this.value;
+                        const filtered = subIndustriesAll.filter(si => si.slug.startsWith(`${selectedId}_`));
+                        subIndustrySelect.disabled = filtered.length === 0;
+                        subIndustrySelect.innerHTML = '<option value="">Select Sub-Industry</option>' +
+                            filtered.map(si => `<option value="${si.id}">${si.name}</option>`).join('');
+                    });
+
+                    // Handle State → City linkage
+                    stateSelect.addEventListener('change', function () {
+                        const selectedStateId = parseInt(this.value);
+                        const selectedStateName = this.options[this.selectedIndex].text;
+                        const filteredCities = citiesAll.filter(c => c.state_name === selectedStateName);
+                        citySelect.disabled = filteredCities.length === 0;
+                        citySelect.innerHTML = '<option value="">Select City</option>' +
+                            filteredCities.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+                    });
                 },
+                // preConfirm: async () => {
+                //     const form = document.getElementById('addProductForm');
+                //     const formData = new FormData(form);
+
+                //     const body = {
+                //         product_name: formData.get('product_name'),
+                //         original_price: parseFloat(formData.get('original_price')),
+                //         selling_price: parseFloat(formData.get('selling_price')),
+                //         offer_quantity: parseInt(formData.get('offer_quantity')),
+                //         minimum_quantity: parseInt(formData.get('minimum_quantity')),
+                //         unit: formData.get('unit'),
+                //         industry: parseInt(formData.get('industry')),
+                //         sub_industry: parseInt(formData.get('sub_industry')),
+                //         state_id: parseInt(formData.get('state_id')),
+                //         city: formData.get('city'),
+                //         description: formData.get('description'),
+                //         dimensions: formData.get('dimensions')
+                //     };
+
+                //     try {
+                //         const response = await fetch(`${BASE_URL}/product`, {
+                //             method: "POST",
+                //             headers: {
+                //                 Authorization: `Bearer ${authToken}`,
+                //                 Accept: 'application/json'
+                //             },
+                //             body: JSON.stringify(body)
+                //         });
+
+                //         const res = await response.json();
+                //         if (!res.success) throw new Error(res.message);
+                //         return res;
+                //     } catch (error) {
+                //         Swal.showValidationMessage(`Failed: ${error.message}`);
+                //     }
+                // }
                 preConfirm: async () => {
-                    const form = document.getElementById('addProductForm');
-                    const formData = new FormData(form);
+                    const getVal = (name) => document.querySelector(`[name="${name}"]`)?.value?.trim() || "";
 
                     const body = {
-                        product_name: formData.get('product_name'),
-                        original_price: parseFloat(formData.get('original_price')),
-                        selling_price: parseFloat(formData.get('selling_price')),
-                        offer_quantity: parseInt(formData.get('offer_quantity')),
-                        minimum_quantity: parseInt(formData.get('minimum_quantity')),
-                        unit: formData.get('unit'),
-                        industry: parseInt(formData.get('industry')),
-                        sub_industry: parseInt(formData.get('sub_industry')),
-                        description: formData.get('description'),
-                        dimensions: formData.get('dimensions'),
-                        city: formData.get('city'),
-                        state_id: parseInt(formData.get('state_id'))
+                        product_name: getVal("product_name"),
+                        original_price: parseFloat(getVal("original_price")),
+                        selling_price: parseFloat(getVal("selling_price")),
+                        offer_quantity: parseInt(getVal("offer_quantity")),
+                        minimum_quantity: parseInt(getVal("minimum_quantity")),
+                        unit: getVal("unit"),
+                        industry: parseInt(getVal("industry")),
+                        sub_industry: parseInt(getVal("sub_industry")),
+                        state_id: parseInt(getVal("state_id")),
+                        city: getVal("city"),
+                        description: getVal("description"),
+                        dimensions: getVal("dimensions")
                     };
 
+                    // basic validation
+                    if (!body.product_name) {
+                        Swal.showValidationMessage("Product Name is required");
+                        return false;
+                    }
+
                     try {
-                        const response = await fetch(`${BASE_URL}/product/create`, {
+                        const response = await fetch(`${BASE_URL}/product`, {
                             method: "POST",
                             headers: {
                                 "Content-Type": "application/json",
-                                Authorization: authToken
+                                Authorization: `Bearer ${authToken}`,
+                                Accept: "application/json"
                             },
                             body: JSON.stringify(body)
                         });
@@ -663,319 +477,16 @@ document.addEventListener("DOMContentLoaded", function () {
                         Swal.showValidationMessage(`Failed: ${error.message}`);
                     }
                 }
+
             }).then(result => {
                 if (result.isConfirmed && result.value?.success) {
-                    Swal.fire('Success!', result.value.message, 'success');
+                    Swal.fire('Success!', result.value.message, 'success').then(() => {
+                        window.location.href = 'pages/my-product.php';
+                    });
                 }
             });
-        } catch (err) {
-            console.error("Something went wrong loading dropdowns", err);
-            Swal.fire("Error", "Failed to load required data. Try again.", "error");
-        }
-    });
-});
-</script> -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const BASE_URL = "https://api.stockoutindia.com/api"; 
-    const authToken = localStorage.getItem("authToken");
 
-    const addBtn = document.getElementById("addProductBtn");
-    if (!addBtn || !authToken) return;
-
-    addBtn.addEventListener("click", async function () {
-        const formHtml = `
-        <style>
-            .alert_box_footer{
-                display: flex    ;
-                justify-content: space-between;
-                gap: 10px;
-            }
-            .alert_box_footer textarea{
-                width: 66%;
-                margin-top: 15px;
-                border: 1px solid #cccccc;
-                border-radius: 5px;
-                padding: 10px;
-            }
-            .alert_box_footer textarea{
-                margin-top: 15px;
-                margin-right: 30px;
-            }
-            .swal2-popup { width: 900px !important; }
-            .swal2-form-grid {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 15px;
-            }
-            .swal2-form-grid input,
-            .swal2-form-grid select,
-            .swal2-form-grid textarea {
-                width: 100% !important;
-                font-size: 14px !important;
-                padding: 8px 10px;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-            }
-            .upload-box {
-                border: 2px dashed #ccc;
-                padding: 15px;
-                border-radius: 8px;
-                text-align: center;
-                cursor: pointer;
-                background: #fafafa;
-                transition: border-color 0.3s;
-            }
-            .upload-box:hover {
-                border-color: #e3342f;
-            }
-            .upload-box i {
-                font-size: 28px;
-                margin-bottom: 5px;
-                color: #e3342f;
-            }
-        </style>
-
-        <form id="addProductForm" class="swal2-form">
-            <div class="swal2-form-grid">
-                <input name="product_name" placeholder="Product Name" required>
-                <input name="original_price" type="number" step="0.01" placeholder="Original Price" required>
-                <input name="selling_price" type="number" step="0.01" placeholder="Selling Price" required>
-                
-                <input name="offer_quantity" type="number" placeholder="Offer Quantity" required>
-                <input name="minimum_quantity" type="number" placeholder="Minimum Quantity" required>
-                <select name="unit" id="unit" required>
-                    <option value="">Loading Units...</option>
-                </select>
-
-                <select name="industry" id="industry" required>
-                    <option value="">Loading Industries...</option>
-                </select>
-
-                <select name="sub_industry" id="sub_industry" disabled required>
-                    <option value="">Select Sub-Industry</option>
-                </select>
-
-                <select name="state_id" id="state_id" required>
-                    <option value="">Loading States...</option>
-                </select>
-
-                <select name="city" id="city" disabled required>
-                    <option value="">Select City</option>
-                </select>
-
-                <input name="dimensions" placeholder="Dimensions (e.g., 50mm x 20mm x 35mm)">
-            </div>
-            <div class="alert_box_footer">
-                <textarea name="description" rows="3" placeholder="Product Description"></textarea>
-                <label for="imageUpload" class="upload-box">
-                    <i class="fas fa-upload"></i><br>
-                    Click to upload Product Image
-                    <input type="file" name="image" accept="image/*" id="imageUpload" style="display:none">
-                </label>
-            </div>
-            
-        </form>`;
-
-        await Swal.fire({
-            title: 'Add Product',
-            html: formHtml,
-            confirmButtonText: 'Submit',
-            confirmButtonColor: '#e3342f',
-            showCancelButton: true,
-            didOpen: async () => {
-                // Make image clickable
-                document.querySelector('.upload-box').addEventListener('click', () => {
-                    document.getElementById('imageUpload').click();
-                });
-
-                const unitSelect = document.getElementById('unit');
-                const industrySelect = document.getElementById('industry');
-                const subIndustrySelect = document.getElementById('sub_industry');
-                const stateSelect = document.getElementById('state_id');
-                const citySelect = document.getElementById('city');
-
-                let subIndustriesAll = [];
-                let citiesAll = [];
-
-                // Fetch Units
-                try {
-                    const res = await fetch(`${BASE_URL}/product/get_units`, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                            Accept: 'application/json'
-                        },
-                    });
-                    const units = (await res.json()).data || [];
-                    unitSelect.innerHTML = '<option value="">Select Unit</option>' +
-                        units.map(u => `<option value="${u}">${u}</option>`).join('');
-                } catch {
-                    unitSelect.innerHTML = '<option value="">Failed to load</option>';
-                }
-
-                // Fetch Industries
-                try {
-                    const res = await fetch(`${BASE_URL}/industry`, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                            Accept: 'application/json'
-                        },
-                    });
-                    const industries = (await res.json()).data || [];
-                    industrySelect.innerHTML = '<option value="">Select Industry</option>' +
-                        industries.map(i => `<option value="${i.id}">${i.name}</option>`).join('');
-                } catch {
-                    industrySelect.innerHTML = '<option value="">Failed to load</option>';
-                }
-
-                // Fetch Sub-Industries
-                try {
-                    const res = await fetch(`${BASE_URL}/sub_industry`, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                            Accept: 'application/json'
-                        },
-                    });
-                    subIndustriesAll = (await res.json()).data || [];
-                } catch {
-                    console.error("Sub-industries failed");
-                }
-
-                // Fetch States
-                try {
-                    const res = await fetch(`${BASE_URL}/states`, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                            Accept: 'application/json'
-                        },
-                    });
-                    const states = (await res.json()).data || [];
-                    stateSelect.innerHTML = '<option value="">Select State</option>' +
-                        states.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-                } catch {
-                    stateSelect.innerHTML = '<option value="">Failed to load</option>';
-                }
-
-                // Fetch Cities
-                try {
-                    const res = await fetch(`${BASE_URL}/cities`, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                            Accept: 'application/json'
-                        },
-                    });
-                    citiesAll = (await res.json()).data || [];
-                } catch {
-                    console.error("Cities failed");
-                }
-
-                // Handle Industry → Sub-Industry linkage
-                industrySelect.addEventListener('change', function () {
-                    const selectedId = this.value;
-                    const filtered = subIndustriesAll.filter(si => si.slug.startsWith(`${selectedId}_`));
-                    subIndustrySelect.disabled = filtered.length === 0;
-                    subIndustrySelect.innerHTML = '<option value="">Select Sub-Industry</option>' +
-                        filtered.map(si => `<option value="${si.id}">${si.name}</option>`).join('');
-                });
-
-                // Handle State → City linkage
-                stateSelect.addEventListener('change', function () {
-                    const selectedStateId = parseInt(this.value);
-                    const selectedStateName = this.options[this.selectedIndex].text;
-                    const filteredCities = citiesAll.filter(c => c.state_name === selectedStateName);
-                    citySelect.disabled = filteredCities.length === 0;
-                    citySelect.innerHTML = '<option value="">Select City</option>' +
-                        filteredCities.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
-                });
-            },
-            // preConfirm: async () => {
-            //     const form = document.getElementById('addProductForm');
-            //     const formData = new FormData(form);
-
-            //     const body = {
-            //         product_name: formData.get('product_name'),
-            //         original_price: parseFloat(formData.get('original_price')),
-            //         selling_price: parseFloat(formData.get('selling_price')),
-            //         offer_quantity: parseInt(formData.get('offer_quantity')),
-            //         minimum_quantity: parseInt(formData.get('minimum_quantity')),
-            //         unit: formData.get('unit'),
-            //         industry: parseInt(formData.get('industry')),
-            //         sub_industry: parseInt(formData.get('sub_industry')),
-            //         state_id: parseInt(formData.get('state_id')),
-            //         city: formData.get('city'),
-            //         description: formData.get('description'),
-            //         dimensions: formData.get('dimensions')
-            //     };
-
-            //     try {
-            //         const response = await fetch(`${BASE_URL}/product`, {
-            //             method: "POST",
-            //             headers: {
-            //                 Authorization: `Bearer ${authToken}`,
-            //                 Accept: 'application/json'
-            //             },
-            //             body: JSON.stringify(body)
-            //         });
-
-            //         const res = await response.json();
-            //         if (!res.success) throw new Error(res.message);
-            //         return res;
-            //     } catch (error) {
-            //         Swal.showValidationMessage(`Failed: ${error.message}`);
-            //     }
-            // }
-            preConfirm: async () => {
-                const getVal = (name) => document.querySelector(`[name="${name}"]`)?.value?.trim() || "";
-
-                const body = {
-                    product_name: getVal("product_name"),
-                    original_price: parseFloat(getVal("original_price")),
-                    selling_price: parseFloat(getVal("selling_price")),
-                    offer_quantity: parseInt(getVal("offer_quantity")),
-                    minimum_quantity: parseInt(getVal("minimum_quantity")),
-                    unit: getVal("unit"),
-                    industry: parseInt(getVal("industry")),
-                    sub_industry: parseInt(getVal("sub_industry")),
-                    state_id: parseInt(getVal("state_id")),
-                    city: getVal("city"),
-                    description: getVal("description"),
-                    dimensions: getVal("dimensions")
-                };
-
-                // basic validation
-                if (!body.product_name) {
-                    Swal.showValidationMessage("Product Name is required");
-                    return false;
-                }
-
-                try {
-                    const response = await fetch(`${BASE_URL}/product`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${authToken}`,
-                            Accept: "application/json"
-                        },
-                        body: JSON.stringify(body)
-                    });
-
-                    const res = await response.json();
-                    if (!res.success) throw new Error(res.message);
-                    return res;
-                } catch (error) {
-                    Swal.showValidationMessage(`Failed: ${error.message}`);
-                }
-            }
-
-        }).then(result => {
-            if (result.isConfirmed && result.value?.success) {
-                Swal.fire('Success!', result.value.message, 'success').then(() => {
-                    window.location.href = 'pages/my-product.php';
-                });
-            }
         });
-
     });
-});
 </script>
 

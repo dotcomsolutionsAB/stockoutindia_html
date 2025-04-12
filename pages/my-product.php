@@ -1,14 +1,11 @@
-<base href="../">
-<?php include("../header.php") ?>
-<?php include("../configs/config_static_data.php"); ?> 
-<?php include("../configs/auth_check.php"); ?>
+
 <!-- Home Pages -->
 <main class="main my_product_page">
 
     <section class="popular-products">
-        <div class="container mt-4">
+        <div class="contnr">
             <h2 class="section-title appear-animate" data-animation-name="fadeInUpShorter" data-animation-delay="200">My Products</h2>
-            <div class="container py-2">
+            <div class="contnrr">
                 <div id="product-container" class="row gy-4 appear-animate" data-animation-name="fadeInUpShorter" data-animation-delay="200">
 
                 </div>
@@ -114,4 +111,3 @@
   fetchProducts(); // Auto-run on load
 </script>
 
-<?php include("../footer.php") ?>

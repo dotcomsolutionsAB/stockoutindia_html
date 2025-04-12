@@ -1,7 +1,9 @@
 .sticky-header.fixed .logo {
     max-width: 6.1rem;
 }
-
+.logo img{
+  padding: 10px 0px;
+}
 .home-slide.banner {
     position: relative;
     overflow: hidden;
@@ -40,6 +42,11 @@
     justify-content: center;
     align-items: center;
   }
+  .image_box a{
+    display: flex;
+    height:100%;
+    width:100%
+  }
   .product-card hr {
     margin: 0;
   }
@@ -73,6 +80,9 @@
   }
   .left_side_body{
     width:80%;
+  }
+  .left_side_body a{
+    text-decoration: none;
   }
   .left_side_body h6{
     font-size: 14px;
@@ -243,6 +253,136 @@
     width: 100%;
   }
 
+  /* Account page */
+  .account_page {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+  }
+  .acc-tab-active {
+    background: linear-gradient(45deg, #be1312, #f54848ad);
+    color: #ffffff !important;
+  }
+  .acc-sidebar {
+    width: 220px;
+    background-color: #ffffff;
+    padding: 20px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  .acc-title {
+    margin-bottom: 30px;
+    font-size: 22px;
+    color: #333;
+  }
+  
+  .acc-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    text-align: left;
+    font-size: 16px;
+    color: #333;
+    border-radius: 4px;
+  }
+  
+  .acc-btn:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .acc-logout {
+    background-color: #ffe5e5;
+    color: #c00;
+  }
+  
+  .acc-main {
+    flex: 1;
+    padding: 40px;
+  }
+  
+  .acc-tab-content {
+    display: none;
+  }
+  
+  .acc-tab-content.acc-active {
+    display: block;
+  }
+  
+  .acc-heading {
+    font-size: 26px;
+    margin-bottom: 20px;
+  } 
 
+  /*  */
+  .acc-user-info-box {
+    max-width: 100%;
+    padding: 25px;
+    background: #ffffff;
+    border-radius: 8px;
+    /* box-shadow: 0 0 10px rgba(0,0,0,0.08); */
+    margin-bottom: 40px;
+  }
+  
+  .acc-user-title {
+    font-size: 22px;
+    margin-bottom: 25px;
+    color: #b30000; /* red primary */
+  }
+  
+  .acc-user-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .acc-user-group {
+    flex: 1;
+    min-width: 250px;
+  }
+  
+  .acc-user-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #b30000;
+  }
+  
+  .acc-user-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d66;
+    border-radius: 5px;
+    font-size: 15px;
+  }
+  
+  .acc-user-input:focus {
+    outline: none;
+    border-color: #cc0000;
+    box-shadow: 0 0 5px rgba(204, 0, 0, 0.4);
+  }
+  
+  .acc-user-btn {
+    background-color: #cc0000;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .acc-user-btn:hover {
+    background-color: #a80000;
+  }
+  
+  
+  /* End Account Page */
+  
   /* Add Product Popup */
   

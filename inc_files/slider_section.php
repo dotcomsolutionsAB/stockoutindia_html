@@ -1,5 +1,5 @@
 <section class="intro-section">
-    <div class="container">
+    <div class="connn">
         <div class="home-slider owl-carousel owl-theme">
             <div class="home-slide banner">
                 <img src="uploads/banner/banner1.jpg" class="img-fluid w-100" alt="Banner 1">

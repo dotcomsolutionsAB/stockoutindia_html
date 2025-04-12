@@ -3,7 +3,7 @@
 
                 <div class="instagram-box bg-dark">
                     <div class="row m-0 align-items-center" style="background: #00000099;">
-                        <div class="instagram-follow col-md-4 col-lg-3 d-flex align-items-center">
+                        <div class="instagram-follow col-md-4 col-lg-4 d-flex align-items-center">
                             <div class="info-box">
                                 <i class="fab fa-instagram text-white mr-4"></i>
                                 <div class="info-box-content">
@@ -13,22 +13,22 @@
                             </div>
                         </div>
 
-                        <div class="instagram-follow col-md-4 col-lg-3 d-flex align-items-center">
+                        <div class="instagram-follow col-md-4 col-lg-4 d-flex align-items-center">
                             <div class="info-box">
-                                <i class="fab fa-instagram text-white mr-4"></i>
+                                <i class="fas fa-shopping-cart text-white mr-4"></i>
                                 <div class="info-box-content">
-                                    <h4 class="text-white line-height-1">Follow Us on Instagram</h4>
-                                    <p class="line-height-1">@stockoutIndia</p>
+                                    <h4 class="text-white line-height-1">Buy Product(s)</h4>
+                                    <p class="line-height-1">Are you looking to buy products at under market cost? Explore now</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="instagram-follow col-md-4 col-lg-3 d-flex align-items-center">
+                        <div class="instagram-follow col-md-4 col-lg-4 d-flex align-items-center">
                             <div class="info-box">
-                                <i class="fab fa-instagram text-white mr-4"></i>
+                                <i class="fas fa-store text-white mr-4"></i>
                                 <div class="info-box-content">
-                                    <h4 class="text-white line-height-1">Follow Us on Instagram</h4>
-                                    <p class="line-height-1">@stockoutIndia</p>
+                                    <h4 class="text-white line-height-1">Sell Product(s)</h4>
+                                    <p class="line-height-1">Are you a seller? List your dead stock here.</p>
                                 </div>
                             </div>
                         </div>
@@ -121,16 +121,15 @@
                                 <h4 class="widget-title">Features</h4>
 
                                 <ul class="links">
-                                    <li><a href="#">Powerful Admin Panel</a></li>
-                                    <li><a href="#">Mobile &amp; Retina Optimized</a></li>
-                                    <li><a href="#">Super Fast HTML Template</a></li>
+                                    <li><a href="#">Buy Product</a></li>
+                                    <li><a href="#">Sell Your Product</a></li>
                                 </ul>
                             </div><!-- End .widget -->
                         </div><!-- End .col-lg-3 -->
                     </div><!-- End .row -->
                 </div>
                 <div class="footer-bottom">
-                    <p class="footer-copyright text-lg-center mb-0">&copy; Porto eCommerce. 2021. All Rights
+                    <p class="footer-copyright text-lg-center mb-0">&copy; StockOut India. 2025. All Rights
                         Reserved
                     </p>
                 </div><!-- End .footer-bottom -->

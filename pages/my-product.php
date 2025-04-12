@@ -1,6 +1,6 @@
 
 <!-- Home Pages -->
-<main class="main my_product_page">
+<main class="main my_product_page global_page">
 
     <section class="popular-products">
         <div class="contnr">
@@ -80,18 +80,32 @@
               </a>
             </div>
             <hr class="my-0">
-            <div class="card-body pt-2 pb-1 px-3">
-              <div class="left_side_body">
-                <a href="${productLink}">
-                  <h6 class="text-success fw-bold">${product.product_name}</h6>
-                </a>
-                <p class="p_user fw-semibold mb0">Dealer: ${product.user?.name || "N/A"}</p>
-                <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
-              </div>
-              <div class="right_side_body">
-                <span class="badge bg-secondary text-white">Qty: <strong>${product.offer_quantity}</strong></span>
-                <span class="badge bg-warning text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
-              </div>
+            <div class="card-body pt-2 pb-1 px-3"> 
+                <div class="upper_content">      
+                    <div class="left_side_body">
+                        <a href="${productLink}">
+                            <h6 class="text-success fw-bold">
+                                ${product.product_name.length > 30 
+                                    ? product.product_name.substring(0, 27) + '...' 
+                                    : product.product_name}
+                            </h6>
+                        </a>
+                    </div>
+                    <div class="right_side_body">
+                        <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
+                        <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+                    </div>
+                </div>  
+                <div class="lower_content">
+                    <p class="p_user fw-semibold mb0">Dealer: 
+                        ${product.user?.name 
+                            ? (product.user.name.length > 15 
+                                ? product.user.name.substring(0, 12) + '...' 
+                                : product.user.name)
+                            : "N/A"}
+                    </p>
+                    <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
+                </div>                          
             </div>
             <div class="d-flex bottom-btns index_page_card">
               <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">

@@ -3,12 +3,13 @@
 
                 <div class="instagram-box bg-dark">
                     <div class="row m-0 align-items-center" style="background: #00000099;">
+                        
                         <div class="instagram-follow col-md-4 col-lg-4 d-flex align-items-center">
                             <div class="info-box">
                                 <i class="fab fa-instagram text-white mr-4"></i>
                                 <div class="info-box-content">
                                     <h4 class="text-white line-height-1">Follow Us on Instagram</h4>
-                                    <p class="line-height-1">@stockoutIndia</p>
+                                    <p class="line-height-1">@Stockoutindia</p>
                                 </div>
                             </div>
                         </div>
@@ -60,9 +61,9 @@
                         </div>
                         <div class="footer-right text-lg-right">
                             <div class="social-icons my-3">
-                                <a href="#" class="social-icon social-facebook icon-facebook" target="_blank"></a>
-                                <a href="#" class="social-icon social-twitter icon-twitter" target="_blank"></a>
-                                <a href="#" class="social-icon social-linkedin fab fa-linkedin-in" target="_blank"></a>
+                                <a href="@Stockoutindia" class="social-icon social-facebook icon-facebook" target="_blank"></a>
+                                <a href="@Stockoutindia" class="social-icon social-twitter icon-twitter" target="_blank"></a>
+                                <a href="@Stockoutindia" class="social-icon social-linkedin fab fa-linkedin-in" target="_blank"></a>
                             </div><!-- End .social-icons -->
                         </div>
                     </div>
@@ -72,7 +73,7 @@
                 <div class="footer-middle">
                     <div class="row">
                         <div class="col-lg-3">
-                            <a href="demo27.html"><img src="uploads/stockout_logo.png" alt="Logo" class="logo"></a>
+                            <a href="index.php"><img src="uploads/stockout_logo.png" alt="Logo" class="logo"></a>
 
                             <!-- <p class="footer-desc">Lorem ipsum dolor sit amet, consectetur adipis.</p> -->
 
@@ -152,9 +153,9 @@
             <span class="mobile-menu-close"><i class="fa fa-times"></i></span>
             <nav class="mobile-nav">
                 <ul class="mobile-menu">
-                    <li><a href="demo27.html">Home</a></li>
+                    <li><a href="index.php">Home</a></li>
                     <li>
-                        <a href="demo27-shop.html">Categories</a>
+                        <a href="pages/all-industries.php">Industries</a>
                         <ul>
                             <li><a href="category.html">Full Width Banner</a></li>
                             <li><a href="category-banner-boxed-slider.html">Boxed Slider Banner</a></li>
@@ -176,7 +177,7 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="demo27-product.html">Products</a>
+                        <a href="pages/all-products">Products</a>
                         <ul>
                             <li>
                                 <a href="#" class="nolink">PRODUCT PAGES</a>
@@ -295,30 +296,18 @@
 
     <div class="sticky-navbar">
         <div class="sticky-info">
-            <a href="demo27.html">
+            <a href="index.php">
                 <i class="icon-home"></i>Home
             </a>
         </div>
         <div class="sticky-info">
-            <a href="demo27-shop.html" class="">
-                <i class="icon-bars"></i>Categories
+            <a href="pages/all-industries.php" class="">
+                <i class="icon-bars"></i>Industries
             </a>
         </div>
         <div class="sticky-info">
-            <a href="wishlist.html" class="">
-                <i class="icon-wishlist-2"></i>Wishlist
-            </a>
-        </div>
-        <div class="sticky-info">
-            <a href="login.html" class="">
+            <a href="pages/account.php" class="">
                 <i class="icon-user-2"></i>Account
-            </a>
-        </div>
-        <div class="sticky-info">
-            <a href="cart.html" class="">
-                <i class="icon-shopping-cart position-relative">
-                    <span class="cart-count badge-circle">3</span>
-                </i>Cart
             </a>
         </div>
     </div>

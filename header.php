@@ -65,10 +65,10 @@
                                     <a href="index.php">Home</a>
                                 </li>
                                 <li>
-                                    <a href="pages/all-products.php">All Products</a>
+                                    <a href="pages/all-products.php">Products</a>
                                 </li>                                
                                 <li>
-                                    <a href="pages/all-industries.php">All Industries</a>
+                                    <a href="pages/all-industries.php">Industries</a>
                                 </li>
                                 <!-- <li class="d-none d-xxl-block">
                                     <a href="all-industries.php">All Industries</a>

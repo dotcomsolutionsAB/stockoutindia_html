@@ -10,6 +10,8 @@
     <meta name="description" content="StockOut">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         WebFontConfig = {
             google: { families: [ 'Open+Sans:300,400,600,700,800', 'Poppins:200,300,400,500,600,700,800', 'Oswald:300,600,700', 'Playfair+Display:700' ] }
@@ -194,7 +196,7 @@
 </script>
 
 <!-- For Add Product -->
-<script>
+<!-- <script>
     document.getElementById("addProductBtn").addEventListener("click", async function () {
         const authToken = localStorage.getItem("authToken");
         const BASE_URL = "<?php echo BASE_URL; ?>";
@@ -309,4 +311,4 @@
             }
         });
     });
-</script>
+</script> -->

@@ -19,7 +19,7 @@
     </div><!-- End .container -->
     <section class="similar_product_section" id="similar_product_section">
       <h2 class="similar_title">Similar Products from this Seller</h2>
-      <div class="similar_product_grid" id="similar_product_grid">
+      <div class="row g-4" id="similar_product_grid">
         <!-- Product cards will appear here -->
       </div>
     </section>
@@ -93,37 +93,81 @@
         });
 </script>
 <script>
-    function loadSimilarProducts(currentProduct, userId) {
-        fetch(BASE_URL, {
-            method: "POST",
-            headers: headers,
-            body: JSON.stringify({ search: "" }) // No search term; get all from dealer
-        })
-            .then(res => res.json())
-            .then(result => {
-                if (result.success) {
-                    const sameSellerProducts = result.data
-                        .filter(p => p.user?.name === currentProduct.user?.name && p.product_name !== currentProduct.product_name)
-                        .slice(0, 4); // limit to 4
+function loadSimilarProducts(currentProduct, userId) {
+  fetch(BASE_URL, {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify({ search: "" }) // get all
+  })
+  .then(res => res.json())
+  .then(result => {
+    if (result.success) {
+      const sameSellerProducts = result.data
+        .filter(p => p.user?.name === currentProduct.user?.name && p.product_name !== currentProduct.product_name)
+        .slice(0, 4);
 
-                    if (sameSellerProducts.length > 0) {
-                        const cardsHTML = sameSellerProducts.map(p => `
-              <div class="similar_card">
-                <img src="${p.image?.[0] || ''}" class="similar_card_img" alt="${p.product_name}">
-                <h3 class="similar_card_title">${p.product_name}</h3>
-                <p class="similar_card_price">₹ ${p.selling_price}/${p.unit}</p>
-                <a href="product_detail.php?name=${encodeURIComponent(p.product_name)}" class="similar_card_link">View Details</a>
+      if (sameSellerProducts.length > 0) {
+        const cardsHTML = sameSellerProducts.map(product => {
+          const productLink = `product_detail.php?name=${encodeURIComponent(product.product_name)}`;
+          const image = product.image?.[0] || 'uploads/placeholder.png';
+
+          return `
+          <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+            <div class="product-card bg-white">
+              <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
+                <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
+                <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
               </div>
-            `).join('');
+              <div class="image_box">
+                <a href="${productLink}">
+                  <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
+                </a>
+              </div>
+              <hr class="my-0">
+              <div class="card-body pt-2 pb-1 px-3">
+                <div class="left_side_body">
+                  <a href="${productLink}">
+                    <h6 class="text-success fw-bold">
+                      ${product.product_name.length > 30 
+                        ? product.product_name.substring(0, 27) + '...' 
+                        : product.product_name}
+                    </h6>
+                  </a>
+                  <p class="p_user fw-semibold mb0">Dealer: 
+                    ${product.user?.name 
+                      ? (product.user.name.length > 15 
+                        ? product.user.name.substring(0, 12) + '...' 
+                        : product.user.name)
+                      : "N/A"}
+                  </p>
+                  <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
+                </div>
+                <div class="right_side_body">
+                  <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
+                  <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+                </div>
+              </div>
+              <div class="d-flex bottom-btns global_page_card">
+                <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
+                  <i class="fa-brands fa-whatsapp"></i>
+                </button>
+                <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
+                  <i class="fa-solid fa-phone"></i>
+                </button>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
 
-                        document.getElementById('similar_product_grid').innerHTML = cardsHTML;
-                    } else {
-                        document.getElementById('similar_product_section').style.display = 'none';
-                    }
-                }
-            });
+        document.getElementById('similar_product_grid').innerHTML = cardsHTML;
+      } else {
+        document.getElementById('similar_product_section').style.display = 'none';
+      }
     }
+  });
+}
 </script>
+
 <?php include("footer.php") ?>
 <style>
   .similar_product_section {

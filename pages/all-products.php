@@ -226,7 +226,7 @@
         }
 
         products.forEach(product => {
-            const image = product.image?.[0] || 'placeholder.jpg';
+            const image = product.image?.[0] || 'uploads/placeholder.png';
             const productLink = `pages/product_detail.php?name=${product.product_name}`;
 
             container.innerHTML += `
@@ -242,15 +242,23 @@
                             </a>
                         </div>
                         <hr class="my-0">
-                        <div class="card-body pt-2 pb-1 px-3">                
-                            <div class="left_side_body">
-                                <a href="${productLink}">
-                                    <h6 class="text-success fw-bold">
-                                        ${product.product_name.length > 30 
-                                            ? product.product_name.substring(0, 27) + '...' 
-                                            : product.product_name}
-                                    </h6>
-                                </a>
+                        <div class="card-body pt-2 pb-1 px-3"> 
+                            <div class="upper_content">      
+                                <div class="left_side_body">
+                                    <a href="${productLink}">
+                                        <h6 class="text-success fw-bold">
+                                            ${product.product_name.length > 30 
+                                                ? product.product_name.substring(0, 27) + '...' 
+                                                : product.product_name}
+                                        </h6>
+                                    </a>
+                                </div>
+                                <div class="right_side_body">
+                                    <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
+                                    <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+                                </div>
+                            </div>  
+                            <div class="lower_content">
                                 <p class="p_user fw-semibold mb0">Dealer: 
                                     ${product.user?.name 
                                         ? (product.user.name.length > 15 
@@ -258,13 +266,8 @@
                                             : product.user.name)
                                         : "N/A"}
                                 </p>
-
                                 <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
-                            </div>
-                            <div class="right_side_body">
-                                <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
-                                <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
-                            </div>
+                            </div>                          
                         </div>
                         <div class="d-flex bottom-btns global_page_card">
                             <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">

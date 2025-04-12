@@ -1,123 +1,90 @@
 <base href="../">
 <?php include("../header.php") ?>
-<?php include("../configs/config_static_data.php"); ?> 
+<?php include("../configs/config_static_data.php"); ?>
 
-        <main class="main">
-            <nav aria-label="breadcrumb" class="breadcrumb-nav">
-                <div class="container">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
-                        <li class="breadcrumb-item"><a href="#">Products</a></li>
-                    </ol>
-                </div>
-            </nav>
+<main class="main">
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="../index.php">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Products</a></li>
+            </ol>
+        </div>
+    </nav>
 
-            <div class="container">
-                <div class="product-single-container product-single-default">
-                    <div class="row">
-                        <div class="col-lg-5 col-md-6 product-single-gallery">
-                            <div class="product-slider-container">
-                                <div class="product-single-carousel owl-carousel owl-theme show-nav-hover">
-                                    <div class="product-item product_page">
-                                        <img class="product-single_image"
-                                            src=""
-                                            width="468" height="468" alt="product" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="container">
+        <section class="product_detail_section" id="product_detail_container">
+            <!-- Content will be populated dynamically -->
+        </section>
+    </div><!-- End .container -->
 
-                        <div class="col-lg-7 col-md-6 product-single-details">
-                            <h1 class="product-title">...</h1>
+</main>
 
-                            <hr class="short-divider">
-
-                            <div class="price-box">
-                                <del class="old-price"><span>₹0.00</span></del>
-                                <span class="product-price">₹0.00</span>
-                            </div>
-
-                            <div class="product-desc">
-                                <p>Loading description...</p>
-                            </div>
-
-                            <ul class="single-info-list">
-                                <li>
-                                    SKU: <strong>Loading...</strong>
-                                </li>
-                            </ul>
-
-                            <div class="product-action mt-3">
-                                <div class="product-single-qty">
-                                    <input class="horizontal-quantity form-control" type="text" value="1">
-                                </div>
-                                <a href="javascript:;" class="btn btn-dark add-cart mr-2" title="Add to Cart">Add to Cart</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div><!-- End .container -->
-        </main><!-- End .main -->
-<!-- ✅ SCRIPT SECTION -->
 <script>
-    const BASE = "<?php echo BASE_URL; ?>";
+    // Get the "name" from URL param
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchName = decodeURIComponent(urlParams.get('name') || '').trim();
 
-    // Get ?name=ProductName from URL
-    function getQueryParam(param) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
+    // API config
+    const BASE_URL = "<?php echo BASE_URL; ?>/product/get_products";
+    const authToken = localStorage.getItem("authToken");
+
+    // Request headers
+    const headers = {
+        "Content-Type": "application/json"
+    };
+    if (authToken) {
+        headers["Authorization"] = `Bearer ${authToken}`;
     }
 
-    async function loadProductDetails() {
-        const productName = getQueryParam('name');
-        if (!productName) {
-            alert("Product not found!");
-            return;
-        }
+    // Make API call
+    fetch(BASE_URL, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({ search: searchName })
+    })
+        .then(res => res.json())
+        .then(result => {
+            if (result.success && result.data.length > 0) {
+                // Priority 1: exact match
+                const matchedProduct = result.data.find(p => p.product_name === searchName) || result.data[0];
 
-        const token = localStorage.getItem('authToken');
-        const payload = { search: productName };
+                const html = `
+        <div class="product_image_box">
+            <img src="${matchedProduct.image?.[0] || 'uploads/placeholder.png'}" alt="${matchedProduct.product_name}" class="product_image">
+        </div>
 
-        try {
-            const res = await fetch(`${BASE}/product/get_products`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    ...(token && { Authorization: `Bearer ${token}` })
-                },
-                body: JSON.stringify(payload)
-            });
+        <div class="product_info">
+            <h2 class="product_title">${matchedProduct.product_name}</h2>
+            ${matchedProduct.original_price ? `<p class="product_price_old">₹ ${matchedProduct.original_price}/${matchedProduct.unit}</p>` : ''}
+            <p class="product_price_new">₹ ${matchedProduct.selling_price}/${matchedProduct.unit}</p>
 
-            const data = await res.json();
-            if (!data.success || !Array.isArray(data.data)) {
-                alert("Unable to load product.");
-                return;
+            <p class="product_min_order">Min Order: ${matchedProduct.minimum_quantity} ${matchedProduct.unit}</p>
+            ${matchedProduct.original_price ? `<p class="product_offer_highlight">${Math.round(((matchedProduct.original_price - matchedProduct.selling_price) / matchedProduct.original_price) * 100)}% Lower Than the Original Price</p>` : ''}
+            <p class="product_stock_status">${matchedProduct.status === 'sold' ? 'Sold Out' : 'Available in stock'}</p>
+            <p class="product_dealer_name">Dealer name: ${matchedProduct.user?.name || 'N/A'}</p>
+
+            <div class="product_icons">
+            ${matchedProduct.user?.phone ? `<a href="https://wa.me/${matchedProduct.user.phone.replace('+', '')}" target="_blank"><i class="fab fa-whatsapp"></i></a>` : ''}
+            ${matchedProduct.user?.phone ? `<a href="tel:${matchedProduct.user.phone}"><i class="fas fa-phone-alt"></i></a>` : ''}
+            </div>
+
+            <div class="product_description">
+            <h3>About</h3>
+            <p>${matchedProduct.description || 'No description available.'}</p>
+            </div>
+        </div>
+        `;
+
+                document.getElementById('product_detail_container').innerHTML = html;
+            } else {
+                document.getElementById('product_detail_container').innerHTML = '<p style="padding:20px">Product not found.</p>';
             }
-
-            const product = data.data.find(p => p.product_name === productName);
-            if (!product) {
-                alert("Product not found.");
-                return;
-            }
-
-            renderProduct(product);
-        } catch (error) {
+        })
+        .catch(error => {
             console.error("Fetch error:", error);
-        }
-    }
-
-    function renderProduct(product) {
-        document.querySelector(".product-title").innerText = product.product_name;
-        document.querySelector(".product-single_image").src = product.image?.[0] || "uploads/placeholder.png";
-        // document.querySelector(".product-single-image").setAttribute("data-zoom-image", product.image?.[0] || "uploads/placeholder.png");
-        document.querySelector(".product-price").innerText = `₹${product.selling_price}`;
-        document.querySelector(".old-price span").innerText = `₹${product.original_price}`;
-        document.querySelector(".product-desc p").innerText = product.description || "No description available.";
-        document.querySelector(".single-info-list strong").innerText = product.id || "N/A";
-    }
-
-    document.addEventListener("DOMContentLoaded", loadProductDetails);
+            document.getElementById('product_detail_container').innerHTML = '<p style="padding:20px">Failed to load product details.</p>';
+        });
 </script>
 
 <?php include("../footer.php") ?>

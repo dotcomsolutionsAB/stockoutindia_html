@@ -8,7 +8,7 @@
 
         </div>
         <div class="view_more">
-          <a href="all-products.php">View More</a>
+          <a href="pages/all-products.php">View More</a>
         </div>
       </div>
     </div>

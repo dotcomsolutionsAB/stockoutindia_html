@@ -36,7 +36,7 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    
     <!-- Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <!-- Font Awesome -->
@@ -162,7 +162,10 @@
       iconsWrapper.innerHTML = `
         <a href="pages/my-product.php" class="header_icon">
             <i class="fas fa-shopping-basket"></i>
-        </a>        
+        </a>    
+        <a href="#" class="header_icon" id="addProductBtn">
+            <i class="fas fa-plus-circle"></i>
+        </a>    
         <a href="pages/profile.php" class="header_icon">
           <i class="fas fa-user-edit"></i>
         </a>
@@ -188,4 +191,122 @@
 
     window.location.href = "login.php";
   }
+</script>
+
+<!-- For Add Product -->
+<script>
+    document.getElementById("addProductBtn").addEventListener("click", async function () {
+        const authToken = localStorage.getItem("authToken");
+        const BASE_URL = "<?php echo BASE_URL; ?>";
+
+        // Fetch dropdown data
+        const [unitsRes, industryRes, subIndustryRes] = await Promise.all([
+            fetch(`${BASE_URL}/product/get_units`, { headers: { Authorization: authToken } }).then(r => r.json()),
+            fetch(`${BASE_URL}/industry`, { headers: { Authorization: authToken } }).then(r => r.json()),
+            fetch(`${BASE_URL}/sub_industry`, { headers: { Authorization: authToken } }).then(r => r.json())
+        ]);
+
+        const units = unitsRes.data || [];
+        const industries = industryRes.data || [];
+        const subIndustries = subIndustryRes.data || [];
+
+        let subIndustryOptions = '';
+
+        function updateSubIndustryOptions(selectedIndustryId) {
+            subIndustryOptions = subIndustries
+                .filter(si => si.slug.startsWith(selectedIndustryId + "_"))
+                .map(si => `<option value="${si.id}">${si.name}</option>`)
+                .join('');
+            document.getElementById('sub_industry').innerHTML = subIndustryOptions;
+            document.getElementById('sub_industry').disabled = false;
+        }
+
+        const formHtml = `
+        <form id="addProductForm" class="swal2-form" style="text-align:left">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <input name="product_name" class="swal2-input" placeholder="Product Name" required>
+                <input name="original_price" class="swal2-input" type="number" step="0.01" placeholder="Original Price" required>
+                <input name="selling_price" class="swal2-input" type="number" step="0.01" placeholder="Selling Price" required>
+                <input name="offer_quantity" class="swal2-input" type="number" placeholder="Offer Quantity" required>
+                <input name="minimum_quantity" class="swal2-input" type="number" placeholder="Minimum Quantity" required>
+
+                <select name="unit" class="swal2-input" required>
+                    <option value="">Select Unit</option>
+                    ${units.map(u => `<option value="${u}">${u}</option>`).join('')}
+                </select>
+
+                <select name="industry" id="industry" class="swal2-input" required>
+                    <option value="">Select Industry</option>
+                    ${industries.map(i => `<option value="${i.id}">${i.name}</option>`).join('')}
+                </select>
+
+                <select name="sub_industry" id="sub_industry" class="swal2-input" disabled required>
+                    <option value="">Select Sub-Industry</option>
+                </select>
+
+                <input name="dimensions" class="swal2-input" placeholder="Dimensions (e.g., 50mm x 20mm x 35mm)">
+                <input name="city" class="swal2-input" placeholder="City">
+                <input name="state_id" class="swal2-input" type="number" placeholder="State ID">
+
+                <textarea name="description" class="swal2-textarea" placeholder="Product Description"></textarea>
+
+                <label style="margin: 5px 0;">Product Image</label>
+                <input type="file" name="image" accept="image/*" class="swal2-file">
+            </div>
+        </form>`;
+
+        await Swal.fire({
+            title: 'Add Product',
+            html: formHtml,
+            confirmButtonText: 'Submit',
+            confirmButtonColor: '#e3342f', // red
+            showCancelButton: true,
+            didOpen: () => {
+                document.getElementById('industry').addEventListener('change', function () {
+                    updateSubIndustryOptions(this.value);
+                });
+            },
+            preConfirm: async () => {
+                const form = document.getElementById('addProductForm');
+                const formData = new FormData(form);
+
+                const body = {
+                    product_name: formData.get('product_name'),
+                    original_price: parseFloat(formData.get('original_price')),
+                    selling_price: parseFloat(formData.get('selling_price')),
+                    offer_quantity: parseInt(formData.get('offer_quantity')),
+                    minimum_quantity: parseInt(formData.get('minimum_quantity')),
+                    unit: formData.get('unit'),
+                    industry: parseInt(formData.get('industry')),
+                    sub_industry: parseInt(formData.get('sub_industry')),
+                    description: formData.get('description'),
+                    dimensions: formData.get('dimensions'),
+                    city: formData.get('city'),
+                    state_id: parseInt(formData.get('state_id')),
+                    // Optional: Add image base64 if needed
+                };
+
+                try {
+                    const response = await fetch(`${BASE_URL}/product/create`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: authToken
+                        },
+                        body: JSON.stringify(body)
+                    });
+
+                    const res = await response.json();
+                    if (!res.success) throw new Error(res.message);
+                    return res;
+                } catch (error) {
+                    Swal.showValidationMessage(`Failed: ${error.message}`);
+                }
+            }
+        }).then(result => {
+            if (result.isConfirmed && result.value?.success) {
+                Swal.fire('Success!', result.value.message, 'success');
+            }
+        });
+    });
 </script>

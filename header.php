@@ -86,7 +86,7 @@
 
                     <div class="header-right">
                         <!-- Search bar (always visible) -->
-                        <div class="header-icon header-search header-search-inline header-search-category w-lg-max text-right d-none d-sm-block">
+                        <!-- <div class="header-icon header-search header-search-inline header-search-category w-lg-max text-right d-none d-sm-block">
                             <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
                             <form action="#" method="get">
                             <div class="header-search-wrapper">
@@ -99,7 +99,28 @@
                                 <button class="btn icon-magnifier" title="search" type="submit"></button>
                             </div>
                             </form>
+                        </div> -->
+                        <div class="header-icon header-search header-search-inline header-search-category w-lg-max text-right d-none d-sm-block position-relative">
+                            <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
+
+                            <form id="searchForm" action="search_page.php" method="GET">
+                                <div class="header-search-wrapper">
+                                <input type="search" class="form-control" name="q" id="q" placeholder="I'm searching for..." autocomplete="off" >
+                                
+                                <div class="select-custom font2">
+                                    <select id="industry" name="industry">
+                                    <option value="">All Industries</option>
+                                    </select>
+                                </div>
+                                
+                                <button class="btn icon-magnifier" title="search" type="submit"></button>
+                                </div>
+
+                                <!-- Live results -->
+                                <div id="liveResults" class="position-absolute bg-white border shadow w-100" style="z-index:9999; display: none;"></div>
+                            </form>
                         </div>
+
 
                         <!-- Auth-based icons -->
                         <div id="header-auth-icons" class="flex gap-3 items-center">
@@ -156,10 +177,7 @@
     const authToken = localStorage.getItem("authToken");
 
     if (authToken) {
-      iconsWrapper.innerHTML = ` 
-        <a href="#" class="header_icon" id="addProductBtn">
-            <i class="fas fa-plus-circle"></i>
-        </a>      
+      iconsWrapper.innerHTML = `     
         <a href="pages/account.php" class="header_icon">
           <i class="fas fa-user-edit"></i>
         </a>
@@ -488,6 +506,75 @@
             });
 
         });
+    });
+</script>
+
+<script>
+    const BASE_URL = "https://api.stockoutindia.com/api";
+    const authToken = localStorage.getItem("authToken");
+
+    const headers = {
+        "Content-Type": "application/json"
+    };
+    if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
+
+    // Load industry dropdown
+    fetch(`${BASE_URL}/industry`, { method: "GET", headers })
+        .then(res => res.json())
+        .then(result => {
+            if (result.success) {
+                const industrySelect = document.getElementById("industry");
+                result.data.forEach(item => {
+                    const opt = document.createElement("option");
+                    opt.value = item.id;
+                    opt.textContent = item.name;
+                    industrySelect.appendChild(opt);
+                });
+            }
+        });
+
+    // Live search logic
+    let typingTimer;
+    document.getElementById("q").addEventListener("input", function () {
+        const query = this.value.trim();
+        const resultBox = document.getElementById("liveResults");
+        clearTimeout(typingTimer);
+
+        if (query.length > 2) {
+            typingTimer = setTimeout(() => {
+                fetch(`${BASE_URL}/product/get_products`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({ search: query, limit: 5, offset: 0 })
+                })
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.success && result.data.length > 0) {
+                            const html = result.data.slice(0, 5).map(product => `
+                <div class="px-3 py-2 border-bottom">
+                  <a href="pages/product_detail.php?name=${encodeURIComponent(product.product_name)}" class="text-dark d-block">
+                    ${product.product_name}
+                  </a>
+                </div>
+              `).join('');
+                            resultBox.innerHTML = html;
+                            resultBox.style.display = 'block';
+                        } else {
+                            resultBox.innerHTML = '<div class="px-3 py-2 text-muted">No products found.</div>';
+                            resultBox.style.display = 'block';
+                        }
+                    });
+            }, 400);
+        } else {
+            resultBox.style.display = 'none';
+        }
+    });
+
+    // Hide suggestions on outside click
+    document.addEventListener("click", (e) => {
+        if (!document.getElementById("searchForm").contains(e.target)) {
+            document.getElementById("liveResults").style.display = "none";
+        }
     });
 </script>
 

@@ -177,7 +177,10 @@
     const authToken = localStorage.getItem("authToken");
 
     if (authToken) {
-      iconsWrapper.innerHTML = `     
+      iconsWrapper.innerHTML = ` 
+        <a href="#" class="header_icon" id="addProductBtn">
+            <i class="fas fa-plus-circle"></i>
+        </a>      
         <a href="pages/account.php" class="header_icon">
           <i class="fas fa-user-edit"></i>
         </a>

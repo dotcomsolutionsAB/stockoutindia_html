@@ -1,6 +1,6 @@
 <script>
     // Fetch stored authentication details
-    const authToken = localStorage.getItem("authToken");
+    const auths = localStorage.getItem("authToken");
     const userRole = localStorage.getItem("role");
 
     // Get the current page URL
@@ -35,7 +35,7 @@
     ];
 
     // Check if the user is logged in
-    if (!authToken) {
+    if (!auths) {
         // Redirect to login page if not authenticated
         window.location.href = "index.php";
     } else {

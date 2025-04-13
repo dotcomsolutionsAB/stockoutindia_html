@@ -178,18 +178,15 @@
     const authToken = localStorage.getItem("authToken");
 
     if (authToken) {
-      iconsWrapper.innerHTML = ` 
-        <a href="#" class="header_icon" id="addProductBtn">
-            <i class="fas fa-plus-circle"></i>
-        </a>      
+      iconsWrapper.innerHTML = `      
         <a href="pages/account.php" class="header_icon">
           <i class="fas fa-user-edit"></i>
         </a>
       `;
     } else {
       iconsWrapper.innerHTML = `
-        <a href="login.php" class="header_icon">Login
-          <i class="fas fa-sign-in-alt"></i>
+        <a href="login.php" class="header_icon">
+          <i class="fas fa-user"></i>
         </a>
       `;
     }
@@ -197,7 +194,9 @@
 </script>
 
 
-
+<!-- <a href="#" class="header_icon" id="addProductBtn">
+    <i class="fas fa-plus-circle"></i>
+</a> 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const BASE_URL = "https://api.stockoutindia.com/api"; 
@@ -500,7 +499,7 @@
 
         });
     });
-</script>
+</script> -->
 
 <script>
     const BASE_URL = "https://api.stockoutindia.com/api";

@@ -6,10 +6,26 @@
             <section class="account_page">
                 <div class="acc-sidebar">
                     <h2 class="acc-title">Account</h2>
-                    <button id="tab-profile" class="acc-btn" onclick="showAccTab('profile')">Profile</button>
-                    <button id="tab-products" class="acc-btn" onclick="showAccTab('products')">My Products</button>
-                    <button id="tab-configarations" class="acc-btn" onclick="showAccTab('configarations')">Configurations</button>
-                    <button class="acc-btn acc-logout" onclick="accLogout()">Logout</button>
+                    <button id="tab-profile" class="acc-btn" onclick="showAccTab('profile')">
+                      <i class="fas fa-user-circle"></i>
+                      Profile
+                    </button>
+                    <button id="tab-products" class="acc-btn" onclick="showAccTab('products')">
+                      <i class="fas fa-boxes"></i>
+                      My Products
+                    </button>
+                    <button id="tab-addProducts" class="acc-btn" onclick="showAccTab('addProducts')">
+                      <i class="fas fa-plus-circle"></i>
+                      Add Products
+                    </button>
+                    <button id="tab-configurations" class="acc-btn" onclick="showAccTab('configurations')">
+                      <i class="fas fa-user-circle"></i>
+                      Configurations
+                    </button>
+                    <button class="acc-btn acc-logout" onclick="accLogout()">
+                      <i class="fas fa-sign-out-alt"></i>
+                      Logout
+                    </button>
                 </div>
 
                 <div class="acc-main">
@@ -19,6 +35,10 @@
 
                     <div id="acc-productsTab" class="acc-tab-content">
                         <?php include("my-product_section.php"); ?>
+                    </div>
+
+                    <div id="acc-addProductsTab" class="acc-tab-content">
+                        <?php include("add-product_section.php"); ?>
                     </div>
 
                     <div id="acc-configurationsTab" class="acc-tab-content">
@@ -46,7 +66,7 @@
     }
     // Set default tab on load
     document.addEventListener("DOMContentLoaded", function () {
-        showAccTab('profile');
+        showAccTab('products');
     });
   function accLogout() {
     localStorage.removeItem("authToken");

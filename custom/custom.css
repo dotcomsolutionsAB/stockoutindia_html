@@ -597,6 +597,66 @@
     background-color: #a80000;
   }
   
+  /* add product section */
+  .product-form-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    /* border: 1px solid #ddd; */
+    background-color: #fff;
+  }
+
+  .add-product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+  }
+
+  .add-product-grid input,
+  .add-product-grid select,
+  .add-product-grid textarea {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #be1312;
+  }
+
+  .alert_box_footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+  }
+
+  .alert_box_footer textarea {
+    width: 66%;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  .upload-box {
+    border: 2px dashed #ccc;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+    background: #fafafa;
+    transition: border-color 0.3s;
+    width: 30%;
+  }
+
+  .upload-box:hover {
+    border-color: #e3342f;
+  }
+
+  .upload-box i {
+    font-size: 28px;
+    margin-bottom: 5px;
+    color: #e3342f;
+  }
   
   /* End Account Page */
   

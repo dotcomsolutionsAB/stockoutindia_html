@@ -31,21 +31,21 @@
     const searchName = decodeURIComponent(urlParams.get('name') || '').trim();
 
     // API config
-    const BASE_URL = "<?php echo BASE_URL; ?>/product/get_products";
-    const authToken = localStorage.getItem("authToken");
+    const url= "<?php echo BASE_URL; ?>/product/get_products";
+    const token = localStorage.getItem("authToken");
 
     // Request headers
-    const headers = {
+    const header = {
         "Content-Type": "application/json"
     };
-    if (authToken) {
-        headers["Authorization"] = `Bearer ${authToken}`;
+    if (token) {
+        header["Authorization"] = `Bearer ${token}`;
     }
 
     // Make API call
-    fetch(BASE_URL, {
+    fetch(url, {
         method: "POST",
-        headers: headers,
+        headers: header,
         body: JSON.stringify({ search: searchName })
     })
         .then(res => res.json())
@@ -94,7 +94,7 @@
 </script>
 <script>
     function loadSimilarProducts(currentProduct, userId) {
-        fetch(BASE_URL, {
+        fetch(url, {
             method: "POST",
             headers: headers,
             body: JSON.stringify({ search: "" }) // get all

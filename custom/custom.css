@@ -291,14 +291,14 @@
   .product_title {
     font-size: 20px;
     font-weight: bold;
-    color: #b30000;
+    color: #be1312;
     margin-bottom: 10px;
     position: relative;
   }
   
   /* .product_title::before {
     content: '•';
-    color: #b30000;
+    color: #be1312;
     font-size: 24px;
     margin-right: 5px;
   } */
@@ -312,7 +312,7 @@
   
   .product_price_new {
     font-size: 22px;
-    color: #b30000;
+    color: #be1312;
     font-weight: bold;
     margin: 5px 0 10px;
   }
@@ -352,14 +352,14 @@
   }
   
   .product_icons i {
-    color: #b30000;
-    font-size: 18px;
+    color: #be1312;
+    font-size: 35px;
   }
   
   .product_description h3 {
     font-size: 16px;
     margin-bottom: 5px;
-    color: #b30000;
+    color: #be1312;
   }
   
   .product_description p {
@@ -405,7 +405,7 @@
   .similar_title {
     font-size: 20px;
     margin-bottom: 20px;
-    color: #b30000;
+    color: #be1312;
   }
 
   .similar_product_grid {
@@ -436,7 +436,7 @@
   }
 
   .similar_card_price {
-    color: #b30000;
+    color: #be1312;
     font-weight: bold;
     margin-bottom: 10px;
   }
@@ -444,7 +444,7 @@
   .similar_card_link {
     display: inline-block;
     padding: 6px 12px;
-    background-color: #b30000;
+    background-color: #be1312;
     color: white;
     font-size: 14px;
     border-radius: 5px;
@@ -547,7 +547,7 @@
   .acc-user-title {
     font-size: 22px;
     margin-bottom: 25px;
-    color: #b30000; /* red primary */
+    color: #be1312; /* red primary */
   }
   
   .acc-user-row {
@@ -566,7 +566,7 @@
     display: block;
     font-weight: bold;
     margin-bottom: 6px;
-    color: #b30000;
+    color: #be1312;
   }
   
   .acc-user-input {

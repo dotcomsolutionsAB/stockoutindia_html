@@ -71,7 +71,7 @@
 
                         <div class="product_icons">
                         ${matchedProduct.user?.phone ? `<a href="https://wa.me/${matchedProduct.user.phone.replace('+', '')}" target="_blank"><i class="fab fa-whatsapp"></i></a>` : ''}
-                        ${matchedProduct.user?.phone ? `<a href="tel:${matchedProduct.user.phone}"><i class="fas fa-phone-alt"></i></a>` : ''}
+                        ${matchedProduct.user?.phone ? `<a href="tel:${matchedProduct.user.phone}"><i class="fas fa-phone"></i></a>` : ''}
                         </div>
 
                         <div class="product_description">

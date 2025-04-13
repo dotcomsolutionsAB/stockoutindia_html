@@ -17,7 +17,7 @@
 <!-- End Home Pages -->
 
 <script>
-  const BASE_URL = "<?php echo BASE_URL; ?>";
+  // const BASE_URL = "";
   // const authToken = localStorage.getItem("authtoken");
   const userId = localStorage.getItem("user_id");
 
@@ -36,7 +36,7 @@
     });
 
     try {
-      const response = await fetch(`${BASE_URL}/product/get_products`, {
+      const response = await fetch(`<?php echo BASE_URL; ?>/product/get_products`, {
         method: "POST",
         headers,
         body

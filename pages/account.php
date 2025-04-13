@@ -8,21 +8,17 @@
                     <h2 class="acc-title">Account</h2>
                     <button id="tab-profile" class="acc-btn" onclick="showAccTab('profile')">Profile</button>
                     <button id="tab-products" class="acc-btn" onclick="showAccTab('products')">My Products</button>
-                    <!-- <button id="tab-addProducts" class="acc-btn" onclick="showAccTab('addProducts')">Add Products</button> -->
-                    <button id="tab-configurations" class="acc-btn" onclick="showAccTab('configurations')">Configurations</button>
+                    <button id="tab-configarations" class="acc-btn" onclick="showAccTab('configarations')">Configurations</button>
                     <button class="acc-btn acc-logout" onclick="accLogout()">Logout</button>
                 </div>
 
                 <div class="acc-main">
                     <div id="acc-profileTab" class="acc-tab-content acc-active">
-                        <?php include("profile.php"); ?>
+                        <?php include("profile_section.php"); ?>
                     </div>
 
                     <div id="acc-productsTab" class="acc-tab-content">
-                        <?php include("my-product.php"); ?>
-                    </div>
-                    <div id="acc-addProducts" class="acc-tab-content">
-
+                        <?php include("my-product_section.php"); ?>
                     </div>
 
                     <div id="acc-configurationsTab" class="acc-tab-content">
@@ -33,6 +29,10 @@
 
 		</main><!-- End .main -->
 <script>
+//   function showAccTab(tabId) {
+//     document.querySelectorAll('.acc-tab-content').forEach(tab => tab.classList.remove('acc-active'));
+//     document.getElementById('acc-' + tabId + 'Tab').classList.add('acc-active');
+//   }
     function showAccTab(tabId) {
         // Hide all tab contents
         document.querySelectorAll('.acc-tab-content').forEach(tab => tab.classList.remove('acc-active'));
@@ -79,8 +79,4 @@
     alert('Account information updated successfully!');
   }
 </script>
-
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <?php include("../footer.php") ?>

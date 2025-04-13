@@ -36,7 +36,8 @@
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Owl Carousel JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <!-- Font Awesome -->
@@ -193,20 +194,9 @@
       `;
     }
   });
-
-  function logoutUser() {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user_id");
-    localStorage.removeItem("role");
-    localStorage.removeItem("username");
-    localStorage.removeItem("name");
-
-    window.location.href = "login.php";
-  }
 </script>
 
-<!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -503,7 +493,7 @@
             }).then(result => {
                 if (result.isConfirmed && result.value?.success) {
                     Swal.fire('Success!', result.value.message, 'success').then(() => {
-                        window.location.href = 'pages/my-product.php';
+                        window.location.href = 'pages/account.php';
                     });
                 }
             });

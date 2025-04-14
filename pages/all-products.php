@@ -294,7 +294,7 @@
     function handleWhatsApp(_, isDisabled) {
         if (isDisabled) return showLoginAlert();
 
-        const staticNumber = "918597148785"; // no '+' in wa.me links
+        const staticNumber = "917019616007"; // no '+' in wa.me links
         const message = "Hi";
         window.open(`https://wa.me/${staticNumber}?text=${encodeURIComponent(message)}`, '_blank');
     }

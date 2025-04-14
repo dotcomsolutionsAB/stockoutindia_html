@@ -1,5 +1,30 @@
         <footer class="footer font2">
             <div class="footer-top">
+            <a href="https://wa.me/917019616007" target="_blank" class="whatsapp-sticky" title="Chat on WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            
+            <style>
+                .whatsapp-sticky {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    background-color: #25D366;
+                    color: white;
+                    font-size: 16px;
+                    font-weight: bold;
+                    padding: 12px 20px;
+                    border-radius: 50px;
+                    text-decoration: none;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                    z-index: 999;
+                    transition: background-color 0.3s ease;
+                }
+
+                .whatsapp-sticky:hover {
+                    background-color: #1ebe5d;
+                }
+            </style>
 
                 <div class="instagram-box bg-dark">
                     <div class="row m-0 align-items-center" style="background: #00000099;">
@@ -108,10 +133,10 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <ul class="links">
-                                            <li><a href="#">FAQs</a></li>
-                                            <li><a href="#">Privacy Polict</a></li>
-                                            <li><a href="#">Refund Polict</a></li>
-                                            <li><a href="#">Terms & Conditions</a></li>
+                                            <li><a href="pages/faq.php">FAQs</a></li>
+                                            <li><a href="pages/privacy-policy.php">Privacy Policy</a></li>
+                                            <li><a href="pages/refund-policy.php">Refund Policy</a></li>
+                                            <li><a href="pages/terms-condition.php">Terms & Conditions</a></li>
                                         </ul>
                                     </div>
                                 </div>

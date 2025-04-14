@@ -1,15 +1,33 @@
-.sticky-header.fixed .logo {
-    max-width: 6.1rem;
-}
-.logo img{
-  padding: 10px 0px;
-}
-.home-slide.banner {
-    position: relative;
-    overflow: hidden;
-}
-
-/* home page products */
+  .sticky-header.fixed .logo {
+      max-width: 6.1rem;
+  }
+  .logo img{
+    padding: 10px 0px;
+  }
+  .home-slide.banner {
+      position: relative;
+      overflow: hidden;
+  }
+  .result_box{
+    z-index: 9999;
+    display: block;
+    background: #f4f4f4;
+    border-radius: 15px;
+    margin-top: 2px;
+  }
+  .bar_result{
+    height: 50px;
+    border-radius: 20px;
+    background: #f4f4f4;
+    width: 34vw;
+    display: flex;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 5px;
+  }
+  /* home page products */
   .product-card {
     width: 280px;
     font-family: sans-serif;
@@ -657,7 +675,7 @@
     margin-bottom: 5px;
     color: #e3342f;
   }
-  
+
   /* End Account Page */
   
   /* Add Product Popup */

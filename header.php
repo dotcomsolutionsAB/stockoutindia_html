@@ -118,7 +118,9 @@
                                 </div>
 
                                 <!-- Live results -->
-                                <div id="liveResults" class="position-absolute bg-white border shadow w-100" style="z-index:9999; display: none;"></div>
+                                <div id="liveResults" class="position-absolute result_box" style="z-index:9999; display: none;">
+
+                                </div>
                             </form>
                         </div>
 
@@ -543,7 +545,7 @@
                     .then(result => {
                         if (result.success && result.data.length > 0) {
                             const html = result.data.slice(0, 5).map(product => `
-                <div class="px-3 py-2 border-bottom">
+                <div class="bar_result border-bottom">
                   <a href="pages/product_detail.php?name=${encodeURIComponent(product.product_name)}" class="text-dark d-block">
                     ${product.product_name}
                   </a>

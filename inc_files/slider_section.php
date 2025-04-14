@@ -1,4 +1,4 @@
-<section class="intro-section">
+<section class="intro-section slider_section_home">
     <div class="connn">
         <div class="home-slider owl-carousel owl-theme">
             <div class="home-slide banner">

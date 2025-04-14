@@ -158,12 +158,28 @@
       const form = e.target;
       const getVal = (name) => form[name]?.value?.trim() || "";
 
+      const original_price = parseFloat(getVal("original_price"));
+      const selling_price = parseFloat(getVal("selling_price"));
+      const offer_quantity = parseInt(getVal("offer_quantity"));
+      const minimum_quantity = parseInt(getVal("minimum_quantity"));
+
+      // ✅ Custom Validations
+      if (selling_price >= original_price) {
+        alert("❌ Selling Price must be less than Original Price.");
+        return;
+      }
+
+      if (offer_quantity >= minimum_quantity) {
+        alert("❌ Offer Quantity must be less than Minimum Quantity.");
+        return;
+      }
+
       const body = {
         product_name: getVal("product_name"),
-        original_price: parseFloat(getVal("original_price")),
-        selling_price: parseFloat(getVal("selling_price")),
-        offer_quantity: parseInt(getVal("offer_quantity")),
-        minimum_quantity: parseInt(getVal("minimum_quantity")),
+        original_price,
+        selling_price,
+        offer_quantity,
+        minimum_quantity,
         unit: getVal("unit"),
         industry: parseInt(getVal("industry")),
         sub_industry: parseInt(getVal("sub_industry")),

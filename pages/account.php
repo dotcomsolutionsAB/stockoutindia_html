@@ -18,9 +18,9 @@
                       <i class="fas fa-plus-circle"></i>
                       Add Products
                     </button>
-                    <button id="tab-configurations" class="acc-btn" onclick="showAccTab('configurations')">
+                    <button id="tab-orderHistory" class="acc-btn" onclick="showAccTab('orderHistory')">
                       <i class="fas fa-user-circle"></i>
-                      Configurations
+                      Order History
                     </button>
                     <button class="acc-btn acc-logout" onclick="accLogout()">
                       <i class="fas fa-sign-out-alt"></i>
@@ -41,8 +41,8 @@
                         <?php include("add-product_section.php"); ?>
                     </div>
 
-                    <div id="acc-configurationsTab" class="acc-tab-content">
-                        <h3>Configure Your Datas</h3>
+                    <div id="acc-orderHistoryTab" class="acc-tab-content">
+                        <h3>Order History</h3>
                     </div>
                 </div>
             </section>
@@ -86,7 +86,6 @@
     document.getElementById('id').value = localStorage.getItem('user_id') || '';
     document.getElementById('role').value = localStorage.getItem('role') || '';
     document.getElementById('username').value = localStorage.getItem('username') || '';
-    document.getElementById('token').value = localStorage.getItem('token') || '';
   });
 
   // Update localStorage from input values
@@ -95,7 +94,6 @@
     localStorage.setItem('id', document.getElementById('user_id').value);
     localStorage.setItem('role', document.getElementById('role').value);
     localStorage.setItem('username', document.getElementById('username').value);
-    localStorage.setItem('token', document.getElementById('token').value);
     alert('Account information updated successfully!');
   }
 </script>

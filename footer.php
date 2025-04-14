@@ -37,7 +37,7 @@
                     </div>
                 </div>
 
-                <div class="container">
+                <!-- <div class="container">
                     <div class="widget-newsletter d-lg-flex align-items-center flex-wrap">
                         <div class="footer-left d-md-flex flex-wrap align-items-center mr-5">
                             <div class="info-box w-auto mr-5 my-3">
@@ -64,10 +64,11 @@
                                 <a href="@Stockoutindia" class="social-icon social-facebook icon-facebook" target="_blank"></a>
                                 <a href="@Stockoutindia" class="social-icon social-twitter icon-twitter" target="_blank"></a>
                                 <a href="@Stockoutindia" class="social-icon social-linkedin fab fa-linkedin-in" target="_blank"></a>
-                            </div><!-- End .social-icons -->
+                            </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
+
             </div>
             <div class="container">
                 <div class="footer-middle">
@@ -90,10 +91,10 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="links">
-                                            <li><a href="#">My Profile</a></li>
-                                            <li><a href="#">My Products</a></li>
-                                            <li><a href="#">My Inventory</a></li>
-                                            <li><a href="#">My Favorites</a></li>
+                                            <li><a href="pages/account.php">Profile</a></li>
+                                            <li><a href="pages/all-products.php">Products</a></li>
+                                            <li><a href="pages/all-industries.php">Industries</a></li>
+                                            <li><a href="#">Wishlist</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -117,7 +118,7 @@
                             </div><!-- End .widget -->
                         </div><!-- End .col-lg-3 -->
 
-                        <div class="col-lg-3">
+                        <!-- <div class="col-lg-3">
                             <div class="widget text-lg-right">
                                 <h4 class="widget-title">Features</h4>
 
@@ -125,9 +126,9 @@
                                     <li><a href="#">Buy Product</a></li>
                                     <li><a href="#">Sell Your Product</a></li>
                                 </ul>
-                            </div><!-- End .widget -->
-                        </div><!-- End .col-lg-3 -->
-                    </div><!-- End .row -->
+                            </div>
+                        </div>
+                    </div> -->
                 </div>
                 <div class="footer-bottom">
                     <p class="footer-copyright text-lg-center mb-0">&copy; StockOut India. 2025. All Rights
@@ -331,5 +332,8 @@
     <!-- Main JS File -->
     <script src="assets/js/main.min.js"></script>
 </body>
+<style>
 
+
+</style>
 </html>

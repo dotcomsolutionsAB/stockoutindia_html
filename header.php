@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>StockOut</title>
+    <title>Stockout India</title>
     <meta name="description" content="StockOut">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
@@ -108,11 +108,11 @@
                                 <div class="header-search-wrapper">
                                 <input type="search" class="form-control" name="q" id="q" placeholder="I'm searching for..." autocomplete="off" >
                                 
-                                <div class="select-custom font2">
+                                <!-- <div class="select-custom font2">
                                     <select id="industry" name="industry">
                                     <option value="">All Industries</option>
                                     </select>
-                                </div>
+                                </div> -->
                                 
                                 <button class="btn icon-magnifier" title="search" type="submit"></button>
                                 </div>
@@ -513,19 +513,19 @@
     if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
 
     // Load industry dropdown
-    fetch(`${BASE_URL}/industry`, { method: "GET", headers })
-        .then(res => res.json())
-        .then(result => {
-            if (result.success) {
-                const industrySelect = document.getElementById("industry");
-                result.data.forEach(item => {
-                    const opt = document.createElement("option");
-                    opt.value = item.id;
-                    opt.textContent = item.name;
-                    industrySelect.appendChild(opt);
-                });
-            }
-        });
+    // fetch(`${BASE_URL}/industry`, { method: "GET", headers })
+    //     .then(res => res.json())
+    //     .then(result => {
+    //         if (result.success) {
+    //             const industrySelect = document.getElementById("industry");
+    //             result.data.forEach(item => {
+    //                 const opt = document.createElement("option");
+    //                 opt.value = item.id;
+    //                 opt.textContent = item.name;
+    //                 industrySelect.appendChild(opt);
+    //             });
+    //         }
+    //     });
 
     // Live search logic
     let typingTimer;
@@ -536,7 +536,7 @@
 
         if (query.length > 2) {
             typingTimer = setTimeout(() => {
-                fetch(`${BASE_URL}/product/get_products`, {
+                fetch(`${BASE_URL}/get_products`, {
                     method: "POST",
                     headers,
                     body: JSON.stringify({ search: query, limit: 5, offset: 0 })

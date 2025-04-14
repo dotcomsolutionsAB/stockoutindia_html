@@ -1,8 +1,6 @@
 <base href="../">
 <?php include("../header.php") ?>
-<?php include("../configs/config_static_data.php"); ?> 
-<?php include("../configs/auth_check.php"); ?>
-
+<?php include("../configs/config_static_data.php"); ?>
 <!-- All products Pages -->
         <main class="main products_page global_page">
 
@@ -186,39 +184,46 @@
     }
 
     function fetchProducts() {
+        const token = localStorage.getItem("authToken");
+        const endpoint = token
+            ? `${BASE}/product/get_products`
+            : `${BASE}/get_products`;
+
         const payload = {
-            state_id: getSelected('state').join(','),
+            state_id: getSelected('state').join(','),  // Use your selection helper
             limit: limit,
             offset: offset
         };
 
         console.log("Sent Payload:", payload);
 
-        const token = localStorage.getItem('authToken');
-        fetch(`${BASE}/product/get_products`, {
-            method: 'POST',
+        fetch(endpoint, {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                ...(token && { 'Authorization': `Bearer ${token}` })
+                "Content-Type": "application/json",
+                ...(token && { "Authorization": `Bearer ${token}` })
             },
             body: JSON.stringify(payload)
         })
-        .then(res => res.json())
-        .then(res => {
-            console.log("API Response:", res);
-
-            if (res.success) {
-                renderProducts(res.data || []);
-                total = res.total_record || 0;
-                renderPagination();
-            }
-        })
-        .catch(err => console.error("Fetch error", err));
+            .then(res => res.json())
+            .then(res => {
+                console.log("API Response:", res);
+                if (res.success) {
+                    renderProducts(res.data || []);
+                    total = res.total_record || 0;
+                    renderPagination();
+                } else {
+                    alert("Failed to fetch products.");
+                }
+            })
+            .catch(err => console.error("Fetch error", err));
     }
 
     function renderProducts(products) {
         const container = document.getElementById('product-list');
         container.innerHTML = '';
+
+        const isDisabled = !authToken;
 
         if (!products.length) {
             container.innerHTML = `<div class="col-12 text-center py-4">No products found.</div>`;
@@ -228,6 +233,8 @@
         products.forEach(product => {
             const image = product.image?.[0] || 'uploads/placeholder.png';
             const productLink = `pages/product_detail.php?name=${product.product_name}`;
+            const phone = product.user?.mobile || '';
+            const whatsapp = product.user?.whatsapp || phone;
 
             container.innerHTML += `
                 <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
@@ -270,10 +277,12 @@
                             </div>                          
                         </div>
                         <div class="d-flex bottom-btns global_page_card">
-                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
+                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start ${!authToken ? 'disabled-btn' : ''}" 
+                                onclick="handleWhatsApp('${whatsapp}', ${!authToken})">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </button>
-                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
+                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${!authToken ? 'disabled-btn' : ''}" 
+                                onclick="handleCall('${phone}', ${!authToken})">
                                 <i class="fa-solid fa-phone"></i>
                             </button>
                         </div>
@@ -281,6 +290,39 @@
                 </div>`;
         });
     }
+
+    function handleWhatsApp(_, isDisabled) {
+        if (isDisabled) return showLoginAlert();
+
+        const staticNumber = "918597148785"; // no '+' in wa.me links
+        const message = "Hi";
+        window.open(`https://wa.me/${staticNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    function handleCall(_, isDisabled) {
+        if (isDisabled) return showLoginAlert();
+
+        const staticNumber = "+918597148785";
+        window.location.href = `tel:${staticNumber}`;
+    }
+
+    function showLoginAlert() {
+        Swal.fire({
+            title: "Login Required",
+            text: "You need to be logged user.",
+            icon: "warning",
+            confirmButtonText: "Login",
+            showCancelButton: true,
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "login.php"; // replace with your actual login page
+            }
+        });
+    }
+
 
     function setupEvents() {
         const select = document.getElementById('product-count');

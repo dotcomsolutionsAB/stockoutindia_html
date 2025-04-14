@@ -1,5 +1,3 @@
-
-// <!-- slider auto play code  -->
 $(document).ready(function(){
     $('.home-slider').owlCarousel({
         items: 1,
@@ -8,8 +6,13 @@ $(document).ready(function(){
         autoplay: true,
         autoplayTimeout: 4000,
         autoplayHoverPause: true,
-        dots: true,
-        nav: false
+        dots: false,          // ❌ disable dots
+        nav: true,            // ✅ enable navigation arrows
+        navText: [            // ✅ customize arrow icons
+            '<i class="fa fa-chevron-left"></i>',
+            '<i class="fa fa-chevron-right"></i>'
+        ]
     });
 });
+
 

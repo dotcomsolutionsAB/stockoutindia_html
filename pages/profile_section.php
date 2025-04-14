@@ -7,8 +7,8 @@
       <input type="text" id="name" class="acc-user-input" />
     </div>
     <div class="acc-user-group">
-      <label for="id">ID</label>
-      <input type="text" id="id" class="acc-user-input" />
+      <label for="username">Username</label>
+      <input type="text" id="username" class="acc-user-input" />
     </div>
     <div class="acc-user-group">
       <label for="role">Role</label>
@@ -17,13 +17,12 @@
   </div>
 
   <div class="acc-user-row">
-    <div class="acc-user-group">
-      <label for="username">Username</label>
-      <input type="text" id="username" class="acc-user-input" />
+    <div class="acc-user-group" hidden>
+      <label for="id">ID</label>
+      <input type="text" id="id" class="acc-user-input" />
     </div>
     <div class="acc-user-group">
-      <label for="token">Token</label>
-      <input type="text" id="token" class="acc-user-input" />
+      <!-- Empty for layout balance -->
     </div>
     <div class="acc-user-group">
       <!-- Empty for layout balance -->

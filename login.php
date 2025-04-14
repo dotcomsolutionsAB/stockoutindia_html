@@ -74,11 +74,7 @@
                  class="w-full border border-gray-400 px-3 py-2 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-red-500" /> -->
 
           <div class="flex justify-between items-center mb-4 text-sm">
-            <label class="flex items-center">
-              <input type="checkbox" class="mr-2">
-              Remember Me
-            </label>
-            <a href="#" class="text-red-600 font-semibold hover:underline">Forgot Your Password?</a>
+            <a href="forget-password.php" class="text-red-600 font-semibold hover:underline">Forgot Your Password?</a>
           </div>
 
           <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">

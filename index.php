@@ -44,95 +44,294 @@
 
   async function fetchProducts() {
     const token = localStorage.getItem("authtoken");
-    // const token = '100|MLh8ulMfLjjkcHPsUZ9WVI9xRb9B41oOdtm6cFOyed6e6744';
 
     const headers = {
       "Content-Type": "application/json"
     };
+    let endpoint = "<?php echo BASE_URL; ?>/get_products";
+
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
+      endpoint = "<?php echo BASE_URL; ?>/product/get_products";
     }
 
-    const response = await fetch("<?php echo BASE_URL; ?>/get_products", {
-      method: "POST",
-      headers: headers
+    const body = JSON.stringify({
+      limit: 12,
+      offset: 0
     });
 
-    const result = await response.json();
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: headers,
+        body: body
+      });
 
-    if (result.success) {
-      renderProducts(result.data.slice(0, 10)); // Only show first 15
-    } else {
-      alert("Failed to fetch products");
+      const result = await response.json();
+
+      if (result.success) {
+        renderProducts(result.data.slice(0, 12));
+      } else {
+        alert("Failed to fetch products");
+      }
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      alert("An error occurred while fetching products.");
     }
   }
 
+  // function renderProducts(products) {
+  //   const container = document.getElementById("product-container");
+  //   container.innerHTML = ""; // Clear existing cards
+
+  //   products.forEach((product, index) => {
+  //     if (index % 4 === 0) {
+  //       container.innerHTML += `<div class="w-100"></div>`; // line break for new row
+  //     }
+
+  //     const image = product.image?.[0] || "uploads/placeholder.png";
+  //     const productLink = `pages/product_detail.php?name=${product.product_name}`;
+  //     const card = `
+  //           <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+  //             <div class="product-card bg-white">
+  //                 <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
+  //                 <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
+  //                 <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
+  //                 </div>
+  //                 <div class="image_box">
+  //                   <a href="${productLink}">
+  //                     <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
+  //                   </a>
+  //                 </div>
+  //                 <hr class="my-0">
+  //                 <div class="card-body pt-2 pb-1 px-3"> 
+  //                   <div class="upper_content">      
+  //                       <div class="left_side_body">
+  //                           <a href="${productLink}">
+  //                               <h6 class="text-success fw-bold">
+  //                                   ${product.product_name.length > 30 
+  //                                       ? product.product_name.substring(0, 27) + '...' 
+  //                                       : product.product_name}
+  //                               </h6>
+  //                           </a>
+  //                       </div>
+  //                       <div class="right_side_body">
+  //                           <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
+  //                           <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+  //                       </div>
+  //                   </div>  
+  //                   <div class="lower_content">
+  //                       <p class="p_user fw-semibold mb0">Dealer: 
+  //                           ${product.user?.name 
+  //                               ? (product.user.name.length > 15 
+  //                                   ? product.user.name.substring(0, 12) + '...' 
+  //                                   : product.user.name)
+  //                               : "N/A"}
+  //                       </p>
+  //                       <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
+  //                   </div>                          
+  //                 </div>
+  //                 <div class="d-flex bottom-btns index_page_card">
+  //                 <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
+  //                     <i class="fa-brands fa-whatsapp"></i>
+  //                 </button>
+  //                 <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
+  //                     <i class="fa-solid fa-phone"></i>
+  //                 </button>
+  //                 </div>
+  //             </div>
+  //           </div>
+  //       `;
+  //     container.innerHTML += card;
+  //   });
+  // }
+
+  // function renderProducts(products) {
+  //   const container = document.getElementById("product-container");
+  //   container.innerHTML = ""; // Clear existing cards
+
+  //   const tokken = localStorage.getItem("authToken"); // check auth token
+  //   const isDisabled = !tokken; // true if no token
+
+  //   products.forEach((product, index) => {
+  //       if (index % 4 === 0) {
+  //           container.innerHTML += `<div class="w-100"></div>`; // line break
+  //       }
+
+  //       const image = product.image?.[0] || "uploads/placeholder.png";
+  //       const productLink = `pages/product_detail.php?name=${product.product_name}`;
+
+  //       const card = `
+  //           <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+  //             <div class="product-card bg-white">
+  //                 <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
+  //                     <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
+  //                     <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
+  //                 </div>
+  //                 <div class="image_box">
+  //                     <a href="${productLink}">
+  //                         <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
+  //                     </a>
+  //                 </div>
+  //                 <hr class="my-0">
+  //                 <div class="card-body pt-2 pb-1 px-3"> 
+  //                     <div class="upper_content">      
+  //                         <div class="left_side_body">
+  //                             <a href="${productLink}">
+  //                                 <h6 class="text-success fw-bold">
+  //                                     ${product.product_name.length > 30 
+  //                                         ? product.product_name.substring(0, 27) + '...' 
+  //                                         : product.product_name}
+  //                                 </h6>
+  //                             </a>
+  //                         </div>
+  //                         <div class="right_side_body">
+  //                             <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
+  //                             <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+  //                         </div>
+  //                     </div>  
+  //                     <div class="lower_content">
+  //                         <p class="p_user fw-semibold mb0">Dealer: 
+  //                             ${product.user?.name 
+  //                                 ? (product.user.name.length > 15 
+  //                                     ? product.user.name.substring(0, 12) + '...' 
+  //                                     : product.user.name)
+  //                                 : "N/A"}
+  //                         </p>
+  //                         <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
+  //                     </div>                          
+  //                 </div>
+  //                 <div class="d-flex bottom-btns index_page_card">
+  //                     <button class="btn btn-success w-50 rounded-0 rounded-bottom-start" ${isDisabled ? 'disabled' : ''}>
+  //                         <i class="fa-brands fa-whatsapp"></i>
+  //                     </button>
+  //                     <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end" ${isDisabled ? 'disabled' : ''}>
+  //                         <i class="fa-solid fa-phone"></i>
+  //                     </button>
+  //                 </div>
+  //             </div>
+  //           </div>
+  //       `;
+
+  //       container.innerHTML += card;
+  //   });
+  // }
+
+
   function renderProducts(products) {
     const container = document.getElementById("product-container");
-    container.innerHTML = ""; // Clear existing cards
+    container.innerHTML = "";
+
+    const authToken = localStorage.getItem("authToken");
+    const isDisabled = !authToken;
 
     products.forEach((product, index) => {
-      if (index % 4 === 0) {
-        container.innerHTML += `<div class="w-100"></div>`; // line break for new row
-      }
+        if (index % 4 === 0) {
+            container.innerHTML += `<div class="w-100"></div>`;
+        }
 
-      const image = product.image?.[0] || "uploads/placeholder.png";
-      const productLink = `pages/product_detail.php?name=${product.product_name}`;
-      const card = `
+        const image = product.image?.[0] || "uploads/placeholder.png";
+        const productLink = `pages/product_detail.php?name=${product.product_name}`;
+        const phone = product.user?.mobile || '';
+        const whatsapp = product.user?.whatsapp || phone;
+
+        const card = `
             <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
-            <div class="product-card bg-white">
-                <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
-                <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
-                <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
-                </div>
-                <div class="image_box">
-                  <a href="${productLink}">
-                    <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
-                  </a>
-                </div>
-                <hr class="my-0">
-                <div class="card-body pt-2 pb-1 px-3"> 
-                  <div class="upper_content">      
-                      <div class="left_side_body">
-                          <a href="${productLink}">
-                              <h6 class="text-success fw-bold">
-                                  ${product.product_name.length > 30 
-                                      ? product.product_name.substring(0, 27) + '...' 
-                                      : product.product_name}
-                              </h6>
-                          </a>
-                      </div>
-                      <div class="right_side_body">
-                          <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
-                          <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
-                      </div>
-                  </div>  
-                  <div class="lower_content">
-                      <p class="p_user fw-semibold mb0">Dealer: 
-                          ${product.user?.name 
-                              ? (product.user.name.length > 15 
-                                  ? product.user.name.substring(0, 12) + '...' 
-                                  : product.user.name)
-                              : "N/A"}
-                      </p>
-                      <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
-                  </div>                          
-                </div>
-                <div class="d-flex bottom-btns index_page_card">
-                <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </button>
-                <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
-                    <i class="fa-solid fa-phone"></i>
-                </button>
-                </div>
-            </div>
+              <div class="product-card bg-white">
+                  <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
+                      <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
+                      <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
+                  </div>
+                  <div class="image_box">
+                      <a href="${productLink}">
+                          <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
+                      </a>
+                  </div>
+                  <hr class="my-0">
+                  <div class="card-body pt-2 pb-1 px-3"> 
+                      <div class="upper_content">      
+                          <div class="left_side_body">
+                              <a href="${productLink}">
+                                  <h6 class="text-success fw-bold">
+                                      ${product.product_name.length > 30 
+                                          ? product.product_name.substring(0, 27) + '...' 
+                                          : product.product_name}
+                                  </h6>
+                              </a>
+                          </div>
+                          <div class="right_side_body">
+                              <span class="badge badge text-secondary">Qty: <strong>${product.offer_quantity}</strong></span>
+                              <span class="badge badge text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
+                          </div>
+                      </div>  
+                      <div class="lower_content">
+                          <p class="p_user fw-semibold mb0">Dealer: 
+                              ${product.user?.name 
+                                  ? (product.user.name.length > 15 
+                                      ? product.user.name.substring(0, 12) + '...' 
+                                      : product.user.name)
+                                  : "N/A"}
+                          </p>
+                          <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
+                      </div>                          
+                  </div>
+                  <div class="d-flex bottom-btns index_page_card">
+                      <button 
+                          class="btn btn-success w-50 rounded-0 rounded-bottom-start ${!authToken ? 'disabled-btn' : ''}" 
+                          onclick="handleWhatsApp('${whatsapp}', ${!authToken})">
+                          <i class="fa-brands fa-whatsapp"></i>
+                      </button>
+                      <button 
+                          class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${!authToken ? 'disabled-btn' : ''}" 
+                          onclick="handleCall('${phone}', ${!authToken})">
+                          <i class="fa-solid fa-phone"></i>
+                      </button>
+                  </div>
+
+              </div>
             </div>
         `;
-      container.innerHTML += card;
+
+        container.innerHTML += card;
     });
+  }
+
+  function handleWhatsApp(_, isDisabled) {
+      if (isDisabled) return showLoginAlert();
+
+      const staticNumber = "918597148785"; // no '+' in wa.me links
+      const message = "Hi";
+      window.open(`https://wa.me/${staticNumber}?text=${encodeURIComponent(message)}`, '_blank');
+  }
+
+  function handleCall(_, isDisabled) {
+      if (isDisabled) return showLoginAlert();
+
+      const staticNumber = "+918597148785";
+      window.location.href = `tel:${staticNumber}`;
+  }
+
+  function showLoginAlert() {
+      Swal.fire({
+          title: "Login Required",
+          text: "You need to be logged user.",
+          icon: "warning",
+          confirmButtonText: "Login",
+          showCancelButton: true,
+          cancelButtonText: "Cancel",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33"
+      }).then((result) => {
+          if (result.isConfirmed) {
+              window.location.href = "login.php"; // replace with your actual login page
+          }
+      });
   }
 
   fetchProducts(); // Call on page load
 </script>
 <?php include("footer.php") ?>
+
+<style>
+
+</style>

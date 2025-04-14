@@ -13,7 +13,7 @@
     </nav>
     <section class="terms_conditions">
         <div class="container py-5">
-            <h1 class="mb-4">Terms & Conditions</h1>
+            <h2 class="mb-4">Terms & Conditions</h2>
             <p><strong>Effective Date:</strong> 01-06-2024</p>
 
             <p>By using Stockout, you agree to comply with the following terms and conditions.</p>

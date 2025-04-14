@@ -13,7 +13,7 @@
     </nav>
     <section class="privacy_policy">
         <div class="container py-5">
-            <h1 class="mb-4">Privacy Policy</h1>
+            <h2 class="mb-4">Privacy Policy</h2>
             <p><strong>Effective Date:</strong> 01-06-2024</p>
 
             <p>Stockout is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store, and protect your information when you use our platform.</p>

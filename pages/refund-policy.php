@@ -13,7 +13,7 @@
     </nav>
     <section class="refund_policy">
         <div class="container py-5">
-            <h1 class="mb-4">Refund Policy</h1>
+            <h2 class="mb-4">Refund Policy</h2>
             <p><strong>Effective Date:</strong> 01-06-2024</p>
 
             <p>At Stockout, we strive to provide a seamless experience for sellers and buyers. Please read our refund policy carefully before listing a product.</p>

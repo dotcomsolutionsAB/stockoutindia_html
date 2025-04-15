@@ -98,7 +98,7 @@
             <div class="container">
                 <div class="footer-middle">
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-3 foot_ques">
                             <a href="index.php"><img src="uploads/stockout_logo.png" alt="Logo" class="logo"></a>
 
                             <!-- <p class="footer-desc">Lorem ipsum dolor sit amet, consectetur adipis.</p> -->

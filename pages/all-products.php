@@ -232,7 +232,7 @@
 
         products.forEach(product => {
             const image = product.image?.[0] || 'uploads/placeholder.png';
-            const productLink = `pages/product_detail.php?name=${product.product_name}`;
+            const productLink = `pages/product_detail.php?id=${product.id}`;
             const phone = product.user?.mobile || '';
             const whatsapp = product.user?.whatsapp || phone;
 
@@ -322,7 +322,6 @@
             }
         });
     }
-
 
     function setupEvents() {
         const select = document.getElementById('product-count');

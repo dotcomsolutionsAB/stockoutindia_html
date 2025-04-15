@@ -104,9 +104,9 @@
                         <div class="header-icon header-search header-search-inline header-search-category w-lg-max text-right d-none d-sm-block position-relative">
                             <a href="#" class="search-toggle" role="button"><i class="icon-magnifier"></i></a>
 
-                            <form id="searchForm" action="search_page.php" method="GET">
+                            <form id="searchForm" action="" method="GET">
                                 <div class="header-search-wrapper">
-                                <input type="search" class="form-control" name="q" id="q" placeholder="I'm searching for..." autocomplete="off" >
+                                <input type="search" class="form-control" name="id" id="q" placeholder="I'm searching for..." autocomplete="off" >
                                 
                                 <!-- <div class="select-custom font2">
                                     <select id="industry" name="industry">
@@ -503,7 +503,7 @@
     });
 </script> -->
 
-<script>
+<!-- <script>
     const BASE_URL = "https://api.stockoutindia.com/api";
     const authToken = localStorage.getItem("authToken");
 
@@ -545,12 +545,12 @@
                     .then(result => {
                         if (result.success && result.data.length > 0) {
                             const html = result.data.slice(0, 5).map(product => `
-                <div class="bar_result border-bottom">
-                  <a href="pages/product_detail.php?name=${encodeURIComponent(product.product_name)}" class="text-dark d-block">
-                    ${product.product_name}
-                  </a>
-                </div>
-              `).join('');
+                                <div class="bar_result border-bottom">
+                                <a href="pages/product_detail.php?id=${encodeURIComponent(product.id)}" class="text-dark d-block">
+                                    ${product.product_name}
+                                </a>
+                                </div>
+                            `).join('');
                             resultBox.innerHTML = html;
                             resultBox.style.display = 'block';
                         } else {
@@ -568,6 +568,91 @@
     document.addEventListener("click", (e) => {
         if (!document.getElementById("searchForm").contains(e.target)) {
             document.getElementById("liveResults").style.display = "none";
+        }
+    });
+</script> -->
+<script>
+    const BASE_URL = "https://api.stockoutindia.com/api";
+    const authToken = localStorage.getItem("authToken");
+
+    const headers = {
+        "Content-Type": "application/json"
+    };
+    if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
+
+    const inputField = document.getElementById("q");
+    const resultBox = document.getElementById("liveResults");
+    let typingTimer;
+
+    // Live search logic
+    inputField.addEventListener("input", function () {
+        const query = this.value.trim();
+        clearTimeout(typingTimer);
+
+        if (query.length > 2) {
+            typingTimer = setTimeout(() => {
+                fetch(`${BASE_URL}/get_products`, {
+                    method: "POST",
+                    headers,
+                    body: JSON.stringify({ search: query, limit: 5, offset: 0 })
+                })
+                    .then(res => res.json())
+                    .then(result => {
+                        if (result.success && result.data.length > 0) {
+                            const html = result.data.map(product => `
+                                <div class="bar_result border-bottom">
+                                    <a href="pages/product_detail.php?id=${encodeURIComponent(product.id)}" class="text-dark d-block">
+                                        ${product.product_name}
+                                    </a>
+                                </div>
+                            `).join('');
+                            resultBox.innerHTML = html;
+                            resultBox.style.display = 'block';
+                        } else {
+                            resultBox.innerHTML = '<div class="px-3 py-2 text-muted">No products found.</div>';
+                            resultBox.style.display = 'block';
+                        }
+                    });
+            }, 400);
+        } else {
+            resultBox.style.display = 'none';
+        }
+    });
+
+    // Handle submit on search button
+    document.getElementById("searchForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        const query = inputField.value.trim();
+        if (query.length === 0) return;
+
+        const endpoint = authToken
+            ? `${BASE_URL}/product/get_products`
+            : `${BASE_URL}/get_products`;
+
+        fetch(endpoint, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({ search: query, limit: 1, offset: 0 })
+        })
+            .then(res => res.json())
+            .then(result => {
+                if (result.success && result.data.length > 0) {
+                    const productId = result.data[0].id;
+                    window.location.href = `pages/product_detail.php?id=${productId}`;
+                } else {
+                    alert("No matching product found.");
+                }
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                alert("Something went wrong while searching.");
+            });
+    });
+
+    // Hide live results on outside click
+    document.addEventListener("click", (e) => {
+        if (!document.getElementById("searchForm").contains(e.target)) {
+            resultBox.style.display = "none";
         }
     });
 </script>

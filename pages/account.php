@@ -42,7 +42,7 @@
                     </div>
 
                     <div id="acc-orderHistoryTab" class="acc-tab-content">
-                        <h3>Order History</h3>
+                        <?php include("order_history_section.php"); ?>
                     </div>
                 </div>
             </section>

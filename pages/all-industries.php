@@ -210,19 +210,20 @@
                 col.innerHTML = `
                     <div class="product-default left-details product-widget ${isDisabled}">
                         <figure>
-                            <a href="${isDisabled ? 'javascript:void(0);' : '#'}">
+                            <a href="${isDisabled ? 'javascript:void(0);' : `pages/filter-products.php?sub_industry=${sub.id}`}">
                                 <img src="${sub.image || 'uploads/placeholder.png'}" width="75" height="75" alt="${sub.name}">
                             </a>
                         </figure>
                         <div class="product-details">
                             <h3 class="product-title">
-                                <a href="${isDisabled ? 'javascript:void(0);' : '#'}">${sub.name}</a>
+                                <a href="${isDisabled ? 'javascript:void(0);' : `pages/filter-products.php?sub_industry=${sub.id}`}">${sub.name}</a>
                             </h3>                                                
                             <div class="price-box">
                                 <span class="product-price"> ${sub.product_count} Product(s)</span>
                             </div>
                         </div>                        
                     </div>
+
                 `;
                 subIndustryGrid.appendChild(col);
             });

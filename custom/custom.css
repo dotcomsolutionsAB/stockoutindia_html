@@ -716,7 +716,93 @@
     color: #e3342f;
   }
 
+
+  /* Order List*/
+    .payment_section {
+      background: #f9f9f9;
+      padding: 30px 20px;
+      font-family: Arial, sans-serif;
+    }
+    .payment_title {
+      text-align: left;
+      color: #be1312;
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+    .payment_container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      /* max-width: 1000px; */
+      margin: 0 auto;
+    }
+    .payment_card {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(179, 0, 0, 0.2);
+      padding: 15px;
+      gap: 15px;
+      transition: transform 0.3s ease;
+    }
+    .payment_card:hover {
+      transform: translateY(-3px);
+    }
+    .div_img{
+      width: 80px;
+      height: 80px;
+      border-radius: 10px;
+      border: 2px solid #be1312;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .payment_image {
+      width: 100%;
+      height: 100%;
+      /* border-radius: 50%; */
+      /* border: 2px solid #be1312; */
+      object-fit: cover;
+    }
+    .payment_details {
+      flex: 1;
+    }
+    .payment_order,
+    .payment_amount,
+    .payment_status,
+    .payment_date {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #333;
+    }
+    .payment_status_tag {
+      font-size: 13px;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .payment_status_tag.success {
+      background-color: #ffd6d6;
+      color: #be1312;
+    }
+    @media (max-width: 500px) {
+      .payment_card {
+        flex-direction: column;
+        text-align: center;
+      }
+      .payment_image {
+        margin-bottom: 10px;
+      }
+    }
+  /* End Order List */
+
+  
+
   /* End Account Page */
   
+
+
   /* Add Product Popup */
   

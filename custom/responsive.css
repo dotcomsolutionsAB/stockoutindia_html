@@ -1,5 +1,14 @@
 @media (max-width: 520px) {
     .logo {
-        max-width: 40px !important;
+        max-width: 50px !important;
+    }
+    .logo img {
+        padding: 0px;
+    }
+    .mobile-menu-toggler .fa-bars{
+        font-size: 25px;
+    }
+    .fa-user-edit{
+        font-size: 25px !important;
     }
 }

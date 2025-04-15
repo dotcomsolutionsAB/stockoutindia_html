@@ -65,6 +65,27 @@
 
       const image = product.image?.[0] || "uploads/placeholder.png";
       const productLink = `pages/product_detail.php?name=${product.product_name}`;
+      const isInactive = product.status === "in-active";
+
+      const actionButtons = isInactive
+      ? `
+        <div class="d-flex bottom-btns index_page_card">
+          <button class="pays btn btn-danger w-100 rounded-0 rounded-bottom" onclick="location.href='pages/make-payment.php?product_id=${product.id}'">
+            <i class="fa-solid fa-credit-card"></i>
+            <span class="make_pay"> Make Payment </span>
+          </button>
+        </div>
+      `
+      : `
+        <div class="d-flex bottom-btns index_page_card">
+          <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
+            <i class="fa-brands fa-whatsapp"></i>
+          </button>
+          <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
+            <i class="fa-solid fa-phone"></i>
+          </button>
+        </div>
+      `;
 
       const card = `
         <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
@@ -119,14 +140,7 @@
                     </div>
                 </div>                          
             </div>
-            <div class="d-flex bottom-btns index_page_card">
-              <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
-                <i class="fa-brands fa-whatsapp"></i>
-              </button>
-              <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
-                <i class="fa-solid fa-phone"></i>
-              </button>
-            </div>
+            ${actionButtons}
           </div>
         </div>
       `;
@@ -136,9 +150,6 @@
 
   fetchProducts(); // Auto-run on load
 </script>
-
-
-<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
 
 <script>
   const Token = localStorage.getItem("authToken");

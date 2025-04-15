@@ -798,6 +798,23 @@
     }
   /* End Order List */
 
+  .pays{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    background: #2f64c4 !important;
+    color: #fff !important;
+    border: 2px solid #2f64c4;
+  }
+  .pays:hover {
+    background: #c8d1e3 !important;
+    color: #000 !important;
+    border: 2px solid #c8d1e3;
+  }
+  .make_pay{
+    font-size: 16px;
+  }
   
 
   /* End Account Page */

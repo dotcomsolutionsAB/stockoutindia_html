@@ -60,7 +60,7 @@
 
     products.forEach((product, index) => {
       if (index % 4 === 0) {
-        container.innerHTML += `<div class="w-100"></div>`;
+        container.insertAdjacentHTML("beforeend", `<div class="w-100"></div>`);
       }
 
       const image = product.image?.[0] || "uploads/placeholder.png";
@@ -68,25 +68,26 @@
       const isInactive = product.status === "in-active";
 
       const actionButtons = isInactive
-      ? `
-        <div class="d-flex bottom-btns index_page_card">
-          <button class="pays btn btn-danger w-100 rounded-0 rounded-bottom" onclick="location.href='pages/make-payment.php?product_id=${product.id}'">
-            <i class="fa-solid fa-credit-card"></i>
-            <span class="make_pay"> Make Payment </span>
-          </button>
-        </div>
-      `
-      : `
-        <div class="d-flex bottom-btns index_page_card">
-          <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
-            <i class="fa-brands fa-whatsapp"></i>
-          </button>
-          <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
-            <i class="fa-solid fa-phone"></i>
-          </button>
-        </div>
-      `;
+        ? `
+          <div class="d-flex bottom-btns index_page_card">
+            <button class="pays btn btn-danger w-100 rounded-0 rounded-bottom" onclick="location.href='pages/make-payment.php?product_id=${product.id}'">
+              <i class="fa-solid fa-credit-card"></i>
+              <span class="make_pay"> Mark as Listing </span>
+            </button>
+          </div>
+        `
+        : `
+          <div class="d-flex bottom-btns index_page_card">
+            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
+              <i class="fa-brands fa-whatsapp"></i>
+            </button>
+            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
+              <i class="fa-solid fa-phone"></i>
+            </button>
+          </div>
+        `;
 
+      const cardId = `deleteProduct_${product.id}`;
       const card = `
         <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
           <div class="product-card bg-white">
@@ -128,23 +129,79 @@
                                   : product.user.name)
                               : "N/A"}
                       </p>
-                      <p>
-                        ${product.status}
-                      </p>
+                      <p>${product.status}</p>
                     </div>
                     <div class="lower_right">
                       <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
-                      <p>
-                        ${product.validity}
-                      </p>
+                      <p>${product.validity}</p>
                     </div>
                 </div>                          
             </div>
             ${actionButtons}
+            <div class="delete-box">
+              ${product.status === "active"
+                ? `<a href="javascript:void(0);" id="${cardId}" style="pointer-events: none; color: #aaa; cursor: not-allowed;">
+                      <i class="fa-regular fa-trash-can"></i> Delete
+                  </a>`
+                : `<a href="javascript:void(0);" id="${cardId}">
+                      <i class="fa-regular fa-trash-can"></i> Delete
+                  </a>`
+              }
+            </div>
           </div>
         </div>
       `;
-      container.innerHTML += card;
+
+      // Insert card into DOM
+      container.insertAdjacentHTML("beforeend", card);
+
+      // Delay binding event to ensure DOM has it
+      setTimeout(() => {
+        const deleteBtn = document.getElementById(cardId);
+        if (deleteBtn && product.status !== "active") {
+          deleteBtn.addEventListener("click", async function () {
+            const authToken = localStorage.getItem("authToken");
+
+            if (!authToken) {
+              Swal.fire("Unauthorized", "Please login to perform this action.", "error");
+              return;
+            }
+
+            const confirm = await Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Yes, delete it!"
+            });
+
+            if (confirm.isConfirmed) {
+              try {
+                const response = await fetch(`<?php echo BASE_URL; ?>/product/${product.id}`, {
+                  method: "DELETE",
+                  headers: {
+                    "Authorization": `Bearer ${authToken}`,
+                    "Content-Type": "application/json"
+                  }
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                  Swal.fire("Deleted!", "Your product has been deleted.", "success");
+                  this.closest('.col-12').remove();
+                } else {
+                  Swal.fire("Error", result.message || "Something went wrong.", "error");
+                }
+              } catch (error) {
+                Swal.fire("Error", "Failed to delete the product.", "error");
+              }
+            }
+          });
+        }
+      }, 10); // slight delay for DOM readiness
     });
   }
 
@@ -348,5 +405,7 @@
     });
   });
 </script>
+
+
 
 

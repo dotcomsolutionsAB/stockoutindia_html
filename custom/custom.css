@@ -716,7 +716,29 @@
     color: #e3342f;
   }
 
-
+  /*  */
+  .delete-box{
+    margin-top: 5px;
+    width: 100%;
+    background: #be1312;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .delete-box:hover {
+    margin-top: 5px;
+    width: 100%;
+    background: #e36666;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .delete-box a{
+    color: #fff;
+  }
+  /*  */
   /* Order List*/
     .payment_section {
       background: #f9f9f9;

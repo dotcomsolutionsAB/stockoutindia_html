@@ -64,7 +64,7 @@
       }
 
       const image = product.image?.[0] || "uploads/placeholder.png";
-      const productLink = `pages/product_detail.php?name=${product.product_name}`;
+      const productLink = `pages/product_detail.php?id=${product.id}`;
       const isInactive = product.status === "in-active";
 
       const actionButtons = isInactive
@@ -324,39 +324,32 @@
         <div class="form-grid">
           <div>
             <label>Product Name</label>
-            <input value="${product.product_name}" disabled>
+            <input value="${product.product_name}" id="product_name" disabled>
           </div>
-
           <div>
             <label>Original Price</label>
-            <input value="${product.original_price}">
+            <input value="${product.original_price}" id="original_price">
           </div>
-
           <div>
             <label>Selling Price</label>
-            <input value="${product.selling_price}">
+            <input value="${product.selling_price}" id="selling_price">
           </div>
-
           <div>
             <label>Minimum Quantity</label>
-            <input value="${product.minimum_quantity}">
+            <input value="${product.minimum_quantity}" id="minimum_quantity">
           </div>
-
           <div>
             <label>Offer Quantity</label>
-            <input value="${product.offer_quantity}">
+            <input value="${product.offer_quantity}" id="offer_quantity">
           </div>
-
           <div>
             <label>Unit</label>
             <select id="unit_select">${unitOptions}</select>
           </div>
-
           <div>
             <label>Industry</label>
             <input value="${product.industry_details?.name || 'N/A'}" disabled>
           </div>
-
           <div>
             <label>Sub-Industry</label>
             <input value="${product.sub_industry_details?.name || 'N/A'}" disabled>
@@ -365,20 +358,17 @@
             <label>State</label>
             <select id="state_select">${stateOptions}</select>
           </div>
-
           <div>
             <label>City</label>
             <select id="city_select">${cityOptions}</select>
           </div>
-
           <div>
             <label>Dimensions</label>
-            <input value="${product.dimensions || ''}">
+            <input value="${product.dimensions || ''}" id="dimensions">
           </div>
-
           <div style="grid-column: span 3;">
             <label>Description</label>
-            <textarea>${product.description || ''}</textarea>
+            <textarea id="description">${product.description || ''}</textarea>
           </div>
         </div>
       `,
@@ -394,13 +384,44 @@
           const cityRes = await fetch(`<?php echo BASE_URL; ?>/cities?state_id=${stateId}`, { headers: head });
           const cityResult = await cityRes.json();
           const citySelect = document.getElementById("city_select");
-
           if (cityResult.success) {
             citySelect.innerHTML = cityResult.data.map(city =>
-              `<option value="${city.id}">${city.name}</option>`
-            ).join('');
+              `<option value="${city.id}">${city.name}</option>`).join('');
           }
         });
+      },
+
+      preConfirm: async () => {
+        const payload = {
+          product_name: product.product_name,
+          original_price: parseFloat(document.getElementById("original_price").value),
+          selling_price: parseFloat(document.getElementById("selling_price").value),
+          offer_quantity: parseInt(document.getElementById("offer_quantity").value),
+          minimum_quantity: parseInt(document.getElementById("minimum_quantity").value),
+          unit: document.getElementById("unit_select").value,
+          state_id: parseInt(document.getElementById("state_select").value),
+          city: document.getElementById("city_select").value, // ✅ now passed as string
+          dimensions: document.getElementById("dimensions").value,
+          description: document.getElementById("description").value,
+          // status: "active"
+        };
+
+        try {
+          const updateRes = await fetch(`<?php echo BASE_URL; ?>/product/update/${product.id}`, {
+            method: "POST",
+            headers: head,
+            body: JSON.stringify(payload)
+          });
+
+          const updateResult = await updateRes.json();
+          if (updateResult.success) {
+            Swal.fire("Updated!", "Product updated successfully.", "success").then(() => location.reload());
+          } else {
+            Swal.showValidationMessage(updateResult.message || "Update failed.");
+          }
+        } catch (err) {
+          Swal.showValidationMessage("Request failed.");
+        }
       }
     });
   });

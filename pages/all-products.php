@@ -77,7 +77,7 @@
                             </div> -->
                         </nav>
                         <!-- <div class="row" id="product-list">
-                            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+                            <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
                                 <div class="product-card bg-white">
                                     <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
                                     <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
@@ -237,7 +237,7 @@
             const whatsapp = product.user?.whatsapp || phone;
 
             container.innerHTML += `
-                <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+                <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
                     <div class="product-card bg-white">
                         <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
                             <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
@@ -500,7 +500,7 @@
         container.innerHTML = '';
         for (let i = 0; i < limit; i++) {
             container.innerHTML += `
-                <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+                <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
                     <div class="product-card bg-white p-3 placeholder-glow" style="width: 100%; min-height: 350px;">
                         <div class="placeholder w-100" style="height: 200px;"></div>
                         <div class="mt-2">
@@ -520,7 +520,7 @@
         products.forEach(product => {
             const image = product.image?.[0] || '../uploads/placeholder.png';
             container.innerHTML += `
-            <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+            <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
                 <div class="product-card bg-white">
                     <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
                     <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">

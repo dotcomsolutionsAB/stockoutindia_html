@@ -89,7 +89,7 @@
 
       const cardId = `deleteProduct_${product.id}`;
       const card = `
-        <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+        <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
           <div class="product-card bg-white">
             <a href="javascript:void(0);" class="updateProductBtn" data-name="${product.product_name}">
               <span class="badge bg-warning text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Update</span>

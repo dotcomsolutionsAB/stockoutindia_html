@@ -112,7 +112,7 @@ function loadSimilarProducts(currentProduct, userId) {
           const image = product.image?.[0] || 'uploads/placeholder.png';
 
           return `
-          <div class="col-12 col-sm-6 col-md-3 d-flex justify-content-center">
+          <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
             <div class="product-card bg-white">
               <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
                 <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>

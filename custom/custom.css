@@ -530,7 +530,8 @@
   /* Account page */
   .account_page {
     display: flex;
-    min-height: 100vh;
+    height: 90vh;
+    max-height: 100vh;
     background-color: #f9f9f9;
     font-family: Arial, sans-serif;
   }
@@ -577,6 +578,7 @@
   .acc-main {
     flex: 1;
     padding: 40px;
+    overflow-y: scroll;
   }
   
   .acc-tab-content {
@@ -915,6 +917,17 @@
       background-color: #900000;
   }
 
+  .mark-sold{
+    /* pointer-events: none; */
+    color: #fff;
+    /* cursor: not-allowed; */
+    width: 100%;
+    display: flex    ;
+    justify-content: center;
+    background-color: orange !important;
+    gap: 10px;
+    align-items: center;
+  }
   /* End Account Page */
   
 

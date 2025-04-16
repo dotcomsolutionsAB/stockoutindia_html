@@ -133,6 +133,76 @@
             });
     });
 
+    // for wishlist and share
+    document.addEventListener("click", async (e) => {
+        const authToken = localStorage.getItem("authToken");
+        const userId = localStorage.getItem("user_id");
+
+        // ❤️ Wishlist Button
+        if (e.target.matches(".fa-heart")) {
+            const card = e.target.closest(".product-card");
+            const productId = card?.querySelector("a.updateProductBtn")?.dataset?.id || card?.querySelector("a")?.href?.split("id=")[1];
+
+            if (!authToken || !userId || !productId) {
+            Swal.fire("Unauthorized", "Please log in to use wishlist.", "warning");
+            return;
+            }
+
+            try {
+            const res = await fetch(`<?php echo BASE_URL; ?>/wishlist/add`, {
+                method: "POST",
+                headers: {
+                "Authorization": `Bearer ${authToken}`,
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                user_id: parseInt(userId),
+                product_id: parseInt(productId)
+                })
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                Toastify({
+                text: "Added to wishlist ❤️",
+                duration: 2000,
+                gravity: "bottom",
+                position: "right",
+                backgroundColor: "#b30000"
+                }).showToast();
+            } else {
+                Swal.fire("Error", result.message || "Could not add to wishlist", "error");
+            }
+            } catch (err) {
+            Swal.fire("Error", "Request failed", "error");
+            }
+        }
+
+        // 📤 Share Button
+        if (e.target.matches(".fa-share")) {
+            const card = e.target.closest(".product-card");
+            const productId = card?.querySelector("a")?.href?.split("id=")[1];
+
+            if (!productId) return;
+
+            const shareUrl = `http://localhost/stockout/pages/product_detail.php?id=${productId}`;
+
+            try {
+            await navigator.clipboard.writeText(shareUrl);
+            Toastify({
+                text: "Copied link to clipboard 🔗",
+                duration: 2000,
+                gravity: "bottom",
+                position: "center",
+                backgroundColor: "#28a745"
+            }).showToast();
+            } catch (err) {
+            Swal.fire("Oops!", "Clipboard not supported!", "error");
+            }
+        }
+    });
+    
     function handleWhatsApp(_, isDisabled) {
         if (isDisabled) return showLoginAlert();
 

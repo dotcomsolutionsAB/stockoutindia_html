@@ -2,57 +2,62 @@
 <?php include("../header.php") ?>
 <?php include("../configs/config_static_data.php"); ?> 
 <?php include("../configs/auth_check.php"); ?>
+
 		<main class="main">
-            <section class="account_page">
-                <div class="acc-sidebar">
-                    <h2 class="acc-title">Account</h2>
-                    <button id="tab-profile" class="acc-btn" onclick="showAccTab('profile')">
-                      <i class="fas fa-user-circle"></i>
-                      Profile
-                    </button>
-                    <button id="tab-products" class="acc-btn" onclick="showAccTab('products')">
-                      <i class="fas fa-boxes"></i>
-                      My Products
-                    </button>
-                    <button id="tab-addProducts" class="acc-btn" onclick="showAccTab('addProducts')">
-                      <i class="fas fa-plus-circle"></i>
-                      Add Products
-                    </button>
-                    <button id="tab-orderHistory" class="acc-btn" onclick="showAccTab('orderHistory')">
-                      <i class="fas fa-user-circle"></i>
-                      Order History
-                    </button>
-                    <button class="acc-btn acc-logout" onclick="accLogout()">
-                      <i class="fas fa-sign-out-alt"></i>
-                      Logout
-                    </button>
-                </div>
+          <section class="account_page">
+              <div class="acc-sidebar">
+                  <h2 class="acc-title">Account</h2>
+                  <button id="tab-profile" class="acc-btn" onclick="showAccTab('profile')">
+                    <i class="fas fa-user-circle"></i>
+                    Profile
+                  </button>
+                  <button id="tab-products" class="acc-btn" onclick="showAccTab('products')">
+                    <i class="fas fa-boxes"></i>
+                    My Products
+                  </button>
+                  <button id="tab-addProducts" class="acc-btn" onclick="showAccTab('addProducts')">
+                    <i class="fas fa-plus-circle"></i>
+                    Add Products
+                  </button>
+                  <button id="tab-wishlist" class="acc-btn" onclick="showAccTab('wishlist')">
+                    <i class="fa-regular fa-heart"></i>
+                    Wisthlist
+                  </button>
+                  <button id="tab-orderHistory" class="acc-btn" onclick="showAccTab('orderHistory')">
+                    <i class="fas fa-user-circle"></i>
+                    Order History
+                  </button>
+                  <button class="acc-btn acc-logout" onclick="accLogout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                  </button>
+              </div>
 
-                <div class="acc-main">
-                    <div id="acc-profileTab" class="acc-tab-content acc-active">
-                        <?php include("profile_section.php"); ?>
-                    </div>
+              <div class="acc-main">
+                  <div id="acc-profileTab" class="acc-tab-content acc-active">
+                      <?php include("profile_section.php"); ?>
+                  </div>
 
-                    <div id="acc-productsTab" class="acc-tab-content">
-                        <?php include("my-product_section.php"); ?>
-                    </div>
+                  <div id="acc-productsTab" class="acc-tab-content">
+                      <?php include("my-product_section.php"); ?>
+                  </div>
 
-                    <div id="acc-addProductsTab" class="acc-tab-content">
-                        <?php include("add-product_section.php"); ?>
-                    </div>
+                  <div id="acc-addProductsTab" class="acc-tab-content">
+                      <?php include("add-product_section.php"); ?>
+                  </div>
 
-                    <div id="acc-orderHistoryTab" class="acc-tab-content">
-                        <?php include("order_history_section.php"); ?>
-                    </div>
-                </div>
-            </section>
+                  <div id="acc-wishlistTab" class="acc-tab-content">
+                      <?php include("wishlist_section.php"); ?>
+                  </div>
 
-		</main><!-- End .main -->
+                  <div id="acc-orderHistoryTab" class="acc-tab-content">
+                      <?php include("order_history_section.php"); ?>
+                  </div>
+              </div>
+          </section>
+		</main>
+
 <script>
-//   function showAccTab(tabId) {
-//     document.querySelectorAll('.acc-tab-content').forEach(tab => tab.classList.remove('acc-active'));
-//     document.getElementById('acc-' + tabId + 'Tab').classList.add('acc-active');
-//   }
     function showAccTab(tabId) {
         // Hide all tab contents
         document.querySelectorAll('.acc-tab-content').forEach(tab => tab.classList.remove('acc-active'));

@@ -38,79 +38,8 @@
                                     </svg>
                                     <span>Filter</span>
                                 </a>
-                                <!-- <div class="toolbox-item toolbox-sort">
-                                    <label>Sort By:</label>
-                                    <div class="select-custom">
-                                        <select name="orderby" class="form-control">
-                                            <option value="menu_order" selected="selected">Default sorting</option>
-                                            <option value="popularity">Sort by popularity</option>
-                                            <option value="rating">Sort by average rating</option>
-                                            <option value="date">Sort by newness</option>
-                                            <option value="price">Sort by price: low to high</option>
-                                            <option value="price-desc">Sort by price: high to low</option>
-                                        </select>
-                                    </div>
-                                </div> -->
-                            </div><!-- End .toolbox-left -->
-
-                            <!-- <div class="toolbox-right">
-                                <div class="toolbox-item toolbox-show">
-                                    <label>Show:</label>
-
-                                    <div class="select-custom">
-                                        <select name="count" class="form-control">
-                                            <option value="12">12</option>
-                                            <option value="24">24</option>
-                                            <option value="36">36</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="toolbox-item layout-modes">
-                                    <a href="category.html" class="layout-btn btn-grid active" title="Grid">
-                                        <i class="icon-mode-grid"></i>
-                                    </a>
-                                    <a href="category-list.html" class="layout-btn btn-list" title="List">
-                                        <i class="icon-mode-list"></i>
-                                    </a>
-                                </div>
-                            </div> -->
-                        </nav>
-                        <!-- <div class="row" id="product-list">
-                            <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
-                                <div class="product-card bg-white">
-                                    <span class="badge bg-danger text-white position-absolute top-0 start-0 mt-1 m-2 px-2 py-2 rounded-pill badge-featured">Featured</span>
-                                    <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
-                                        <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
-                                        <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
-                                    </div>
-                                    <div class="image_box">
-                                        <img src="${image}" class="card-img-top img-fluid" alt="${product.product_name}">
-                                    </div>
-                                    <hr class="my-0">
-                                    <div class="card-body pt-2 pb-1 px-3">                
-                                        <div class="left_side_body">
-                                            <h6 class="text-success fw-bold">${product.product_name}</h6>
-                                            <p class="p_user fw-semibold mb0">Dealer: ${product.user?.name || "N/A"}</p>
-                                            <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
-                                        </div>
-                                        <div class="right_side_body">
-                                            <span class="badge bg-secondary text-white">Qty: <strong>${product.offer_quantity}</strong></span>
-                                            <span class="badge bg-warning text-dark">Min: <strong>${product.minimum_quantity}</strong></span>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex bottom-btns index_page_card">
-                                        <button class="btn btn-success w-50 rounded-0 rounded-bottom-start">
-                                            <i class="fa-brands fa-whatsapp"></i>
-                                        </button>
-                                        <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end">
-                                            <i class="fa-solid fa-phone"></i>
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
-                        </div> -->
-
+                        </nav>
                         <div class="row" id="product-list"></div>
                         <!-- HTML Section -->
                         <nav class="toolbox toolbox-pagination mb-0 d-flex justify-content-between align-items-center flex-wrap">
@@ -291,6 +220,78 @@
         });
     }
 
+    // for wishlist and share
+    document.addEventListener("click", async (e) => {
+        const authToken = localStorage.getItem("authToken");
+        const userId = localStorage.getItem("user_id");
+
+        // ❤️ Wishlist Button
+        if (e.target.matches(".fa-heart")) {
+            const card = e.target.closest(".product-card");
+            const productId = card?.querySelector("a.updateProductBtn")?.dataset?.id || card?.querySelector("a")?.href?.split("id=")[1];
+
+            if (!authToken || !userId || !productId) {
+            Swal.fire("Unauthorized", "Please log in to use wishlist.", "warning");
+            return;
+            }
+
+            try {
+            const res = await fetch(`<?php echo BASE_URL; ?>/wishlist/add`, {
+                method: "POST",
+                headers: {
+                "Authorization": `Bearer ${authToken}`,
+                "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                user_id: parseInt(userId),
+                product_id: parseInt(productId)
+                })
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+                Toastify({
+                text: "Added to wishlist ❤️",
+                duration: 2000,
+                gravity: "bottom",
+                position: "right",
+                backgroundColor: "#b30000"
+                }).showToast();
+            } else {
+                Swal.fire("Error", result.message || "Could not add to wishlist", "error");
+            }
+            } catch (err) {
+            Swal.fire("Error", "Request failed", "error");
+            }
+        }
+
+        // 📤 Share Button
+        if (e.target.matches(".fa-share")) {
+            const card = e.target.closest(".product-card");
+            const productId = card?.querySelector("a")?.href?.split("id=")[1];
+
+            if (!productId) return;
+
+            const shareUrl = `http://localhost/stockout/pages/product_detail.php?id=${productId}`;
+
+            try {
+            await navigator.clipboard.writeText(shareUrl);
+            Toastify({
+                text: "Copied link to clipboard 🔗",
+                duration: 2000,
+                gravity: "bottom",
+                position: "center",
+                backgroundColor: "#28a745"
+            }).showToast();
+            } catch (err) {
+            Swal.fire("Oops!", "Clipboard not supported!", "error");
+            }
+        }
+    });
+
+
+    // end wishlist and share
     function handleWhatsApp(_, isDisabled) {
         if (isDisabled) return showLoginAlert();
 

@@ -219,7 +219,7 @@
             const productId = card?.querySelector("a.updateProductBtn")?.dataset?.id || card?.querySelector("a")?.href?.split("id=")[1];
 
             if (!authToken || !userId || !productId) {
-            Swal.fire("Unauthorized", "Please log in to use wishlist.", "warning");
+            Swal.fire("Login First", "Please log in to use wishlist.", "warning");
             return;
             }
 

@@ -35,11 +35,12 @@
 
     <div class="alert_box_footer">
       <textarea name="description" rows="3" placeholder="Product Description"></textarea>
-      <label for="stockout_image_upload" class="upload-box">
+      <label class="upload-box" id="customUploadBox">
         <i class="fas fa-upload"></i><br>
         Click to upload Product Image
-        <input type="file" name="image" accept="image/*" id="stockout_image_upload" style="display:none">
       </label>
+      <input type="file" name="files[]" id="stockout_image_upload" accept="image/*" style="display:none" multiple>
+      <span id="fileNamePreview" style="display:block; font-size: 13px; color: #555;"></span>
     </div>
 
     <br>
@@ -61,9 +62,20 @@
     let stockout_industry_data = [];
     let stockout_cities_data = [];
 
-    // Image upload click
-    document.querySelector(".upload-box").addEventListener("click", () => {
+    // Image upload - custom trigger
+    document.getElementById("customUploadBox").addEventListener("click", () => {
       document.getElementById("stockout_image_upload").click();
+    });
+
+    // Show selected file name(s)
+    document.getElementById("stockout_image_upload").addEventListener("change", function () {
+      const fileNameDisplay = document.getElementById("fileNamePreview");
+      const files = Array.from(this.files);
+      if (files.length > 0) {
+        fileNameDisplay.innerText = files.map(f => f.name).join(", ");
+      } else {
+        fileNameDisplay.innerText = "";
+      }
     });
 
     // Load Units
@@ -200,9 +212,41 @@
         });
 
         const res = await response.json();
-        if (res.success) {
-          alert("✅ Product added successfully!");
-          window.location.href = "pages/account.php";
+
+        if (res.success && res.data?.id) {
+          const productId = res.data.id;
+
+          // ✅ Upload image now
+          const fileInput = document.getElementById("stockout_image_upload");
+          const files = fileInput.files;
+
+          if (files.length > 0) {
+            const formData = new FormData();
+            for (let i = 0; i < files.length; i++) {
+              formData.append("files[]", files[i]); // ✅ Correct key name
+            }
+
+            const imageUpload = await fetch(`${stockout_base_url}/product/images/${productId}`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${stockout_token}`, // ✅ only this, no content-type!
+              },
+              body: formData,
+            });
+
+            const imageRes = await imageUpload.json();
+            console.log("Image Upload Response:", imageRes);
+
+            if (imageRes.success) {
+              alert("✅ Product & Image uploaded successfully!");
+              window.location.reload();
+            } else {
+              alert("⚠️ Product added but image upload failed: " + imageRes.message);
+            }
+          } else {
+            alert("✅ Product added (No image uploaded)");
+            window.location.reload();
+          }
         } else {
           alert("❌ Error: " + res.message);
         }
@@ -210,5 +254,6 @@
         alert("❌ Submission failed: " + err.message);
       }
     });
+
   });
 </script>

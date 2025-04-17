@@ -273,7 +273,7 @@
 
             if (!productId) return;
 
-            const shareUrl = `http://localhost/stockout/pages/product_detail.php?id=${productId}`;
+            const shareUrl = `https://new.stockoutindia.com/pages/product_detail.php?id=${productId}`;
 
             try {
             await navigator.clipboard.writeText(shareUrl);

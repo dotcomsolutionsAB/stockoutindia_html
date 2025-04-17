@@ -40,12 +40,21 @@
         <form id="loginForm">
           <p class="text-sm text-gray-700 mb-4">If you have an account with us, Please log in!</p>
 
+          <!-- Radio buttons for choosing mobile or email -->
+          <div class="flex items-center mb-4">
+            <input type="radio" id="mobileOption" name="usernameOption" value="mobile" checked class="mr-2">
+            <label for="mobileOption" class="text-sm text-gray-700">Mobile Number</label>
+            <input type="radio" id="emailOption" name="usernameOption" value="email" class="ml-4 mr-2">
+            <label for="emailOption" class="text-sm text-gray-700">Email</label>
+          </div>
+
+          <!-- Username Field (Mobile or Email) -->
           <div class="relative mb-4">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 text-sm font-medium">+91</span>
-            <input type="tel" name="username" id="username" placeholder="Enter phone number" pattern="[0-9]{10}"
-              required
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 text-sm font-medium" id="prefix">+91</span>
+            <input type="text" name="username" id="username" placeholder="Enter phone number or email" required
               class="pl-12 w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
           </div>
+
           <!-- Password Field with Eye Icon -->
           <div class="relative mb-4">
             <input type="password" name="password" id="password" placeholder="Password" required
@@ -53,32 +62,15 @@
             <!-- Toggle Eye Icon -->
             <i id="togglePassword"
               class="fa-solid fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-              onclick="
-                const input = document.getElementById('password');
-                const icon = this;
-                if (input.type === 'password') {
-                  input.type = 'text';
-                  icon.classList.remove('fa-eye');
-                  icon.classList.add('fa-eye-slash');
-                } else {
-                  input.type = 'password';
-                  icon.classList.remove('fa-eye-slash');
-                  icon.classList.add('fa-eye');
-                }
-              "></i>
+              onclick="togglePasswordVisibility()"></i>
           </div>
-
-          <!-- <input type="text" name="username" id="username" placeholder="Phone" required
-                 class="w-full border border-gray-400 px-3 py-2 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-red-500" /> -->
-          <!-- <input type="password" name="password" id="password" placeholder="Password" required
-                 class="w-full border border-gray-400 px-3 py-2 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-red-500" /> -->
 
           <div class="flex justify-between items-center mb-4 text-sm">
             <a href="forget-password.php" class="text-red-600 font-semibold hover:underline">Forgot Your Password?</a>
           </div>
 
           <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">
-            login
+            Login
           </button>
         </form>
 
@@ -101,11 +93,31 @@
 
   <!-- JS: Login Logic -->
   <script>
+    function togglePasswordVisibility() {
+      const input = document.getElementById('password');
+      const icon = document.getElementById('togglePassword');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+
     document.getElementById('loginForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      const rawNumber = document.getElementById('username').value.trim();
-      const username = `+91${rawNumber}`;
+      const usernameOption = document.querySelector('input[name="usernameOption"]:checked').value;
+      let username = document.getElementById('username').value.trim();
+      
+      // Add country code if mobile number
+      if (usernameOption === 'mobile' && !username.startsWith('+91')) {
+        username = `+91${username}`;
+      }
+
       const password = document.getElementById('password').value;
 
       try {
@@ -129,8 +141,12 @@
           localStorage.setItem('role', role);
           localStorage.setItem('username', username);
 
-          // Redirect
-          window.location.href = "index.php";
+          // Redirect based on role
+          if (role === 'admin') {
+            window.location.href = "admin_index.php";
+          } else {
+            window.location.href = "index.php";
+          }
         } else {
           window.location.href = "login.php";
         }

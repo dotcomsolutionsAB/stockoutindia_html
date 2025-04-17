@@ -8,7 +8,7 @@
 
     // List of pages that only admins can access
     const adminPages = [
-        "../admin/index.php",
+        "../admin_index.php",
         
         "../admin/pages/add_user.php",
         "../admin/pages/show_users.php",
@@ -41,7 +41,7 @@
     } else {
         if (userRole === "admin" && customerPages.includes(currentPage)) {
             // Redirect admin users trying to access customer pages
-            window.location.href = "../admin/index.php";
+            window.location.href = "../admin_index.php";
         } else if (userRole === "user" && adminPages.includes(currentPage)) {
             // Redirect customer users trying to access admin pages
             window.location.href = "index.php";

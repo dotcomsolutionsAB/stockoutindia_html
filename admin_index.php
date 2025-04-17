@@ -7,6 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stockout India Dashboard</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="custom/admin_style.css">
 </head>

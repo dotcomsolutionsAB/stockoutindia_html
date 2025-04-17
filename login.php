@@ -40,43 +40,55 @@
         <form id="loginForm">
           <p class="text-sm text-gray-700 mb-4">If you have an account with us, Please log in!</p>
 
-          <!-- Tabs: Mobile or Email -->
-          <div class="flex border-b border-gray-400 mb-4">
-            <button type="button" id="mobileTab" class="w-1/2 py-2 text-center text-sm font-medium text-gray-700 focus:outline-none" onclick="showTab('mobile')">Mobile</button>
-            <button type="button" id="emailTab" class="w-1/2 py-2 text-center text-sm font-medium text-gray-700 focus:outline-none" onclick="showTab('email')">Email</button>
+          <!-- Select Type of Input (Mobile / Email) -->
+          <div class="flex mb-4">
+            <button type="button" id="mobileButton" class="w-1/2 py-2 bg-red-700 text-white font-semibold rounded-l-md">
+              Mobile
+            </button>
+            <button type="button" id="emailButton" class="w-1/2 py-2 bg-gray-300 text-gray-700 font-semibold rounded-r-md">
+              Email
+            </button>
           </div>
 
-          <!-- Input Fields -->
-          <!-- Mobile Input -->
-          <div id="mobileField" class="tab-content relative mb-4">
-            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 text-sm font-medium" id="prefix">+91</span>
-            <input type="tel" name="mobile" id="mobileNumber" placeholder="Enter phone number" pattern="[0-9]{10}" required class="pl-12 w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
+          <!-- For Mobile -->
+          <div id="mobileInput" class="relative mb-4">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 text-sm font-medium">+91</span>
+            <input type="tel" name="mobile" id="mobile" placeholder="Enter phone number" pattern="[0-9]{10}"
+              required
+              class="pl-12 w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
           </div>
 
-          <!-- Email Input -->
-          <div id="emailField" class="tab-content mb-4 hidden">
-            <input type="email" name="email" id="email" placeholder="Enter email" required class="w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
+          <!-- For Email -->
+          <div id="emailInput" class="relative mb-4 hidden">
+            <input type="email" name="email" id="email" placeholder="Enter Email Id" class="w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
           </div>
 
           <!-- Password Field with Eye Icon -->
           <div class="relative mb-4">
-            <input type="password" name="password" id="password" placeholder="Password" required class="w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 pr-10" />
+            <input type="password" name="password" id="password" placeholder="Password" required
+              class="w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 pr-10" />
             <!-- Toggle Eye Icon -->
-            <i id="togglePassword" class="fa-solid fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" onclick="togglePasswordVisibility()"></i>
+            <i id="togglePassword"
+              class="fa-solid fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+              onclick="togglePasswordVisibility()"></i>
           </div>
 
           <div class="flex justify-between items-center mb-4 text-sm">
             <a href="forget-password.php" class="text-red-600 font-semibold hover:underline">Forgot Your Password?</a>
           </div>
 
-          <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">Login</button>
+          <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">
+            login
+          </button>
         </form>
 
         <br>
 
         <!-- Google Sign-in -->
-        <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mb-6 hover:shadow-md">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5 mr-2">
+        <button
+          class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mb-6 hover:shadow-md">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
+            class="w-5 h-5 mr-2">
           <span class="text-sm font-medium">Sign in with Google</span>
         </button>
 
@@ -87,8 +99,31 @@
     </div>
   </div>
 
-  <!-- JS: Login Logic -->
-  <script>
+  <!-- <script>
+    // Toggle Mobile and Email input fields
+    document.getElementById('mobileButton').addEventListener('click', function () {
+      document.getElementById('mobileInput').classList.remove('hidden');
+      document.getElementById('emailInput').classList.add('hidden');
+      this.classList.add('bg-red-700');
+      this.classList.remove('bg-gray-300');
+      document.getElementById('emailButton').classList.add('bg-gray-300');
+      document.getElementById('emailButton').classList.remove('bg-red-700');
+      document.getElementById('email').removeAttribute('required');
+      document.getElementById('mobile').setAttribute('required', 'required');
+    });
+
+    document.getElementById('emailButton').addEventListener('click', function () {
+      document.getElementById('emailInput').classList.remove('hidden');
+      document.getElementById('mobileInput').classList.add('hidden');
+      this.classList.add('bg-red-700');
+      this.classList.remove('bg-gray-300');
+      document.getElementById('mobileButton').classList.add('bg-gray-300');
+      document.getElementById('mobileButton').classList.remove('bg-red-700');
+      document.getElementById('mobile').removeAttribute('required');
+      document.getElementById('email').setAttribute('required', 'required');
+    });
+
+    // Toggle password visibility
     function togglePasswordVisibility() {
       const input = document.getElementById('password');
       const icon = document.getElementById('togglePassword');
@@ -103,95 +138,100 @@
       }
     }
 
-  function showTab(type) {
-    const mobileTab = document.getElementById('mobileTab');
-    const emailTab = document.getElementById('emailTab');
-    const mobileField = document.getElementById('mobileField');
-    const emailField = document.getElementById('emailField');
+    // Handle form submission
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
 
-    // Reset all tabs to hidden
-    mobileField.classList.add('hidden');
-    emailField.classList.add('hidden');
+      const mobileInput = document.getElementById('mobile');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      let inputData = '';
 
-    // Remove active class from both tabs
-    mobileTab.classList.remove('text-red-700', 'font-semibold');
-    emailTab.classList.remove('text-red-700', 'font-semibold');
-
-    // Show the selected tab content
-    if (type === 'mobile') {
-      mobileField.classList.remove('hidden');
-      mobileTab.classList.add('text-red-700', 'font-semibold');
-      document.getElementById('mobileNumber').setAttribute('placeholder', 'Enter phone number');
-      document.getElementById('mobileNumber').focus(); // Focus on mobile input field
-    } else {
-      emailField.classList.remove('hidden');
-      emailTab.classList.add('text-red-700', 'font-semibold');
-      document.getElementById('mobileNumber').setAttribute('placeholder', 'Enter email');
-      document.getElementById('email').focus(); // Focus on email input field
-    }
-  }
-
-  function showTab(type) {
-    const mobileTab = document.getElementById('mobileTab');
-    const emailTab = document.getElementById('emailTab');
-    const mobileField = document.getElementById('mobileField');
-    const emailField = document.getElementById('emailField');
-
-    // Reset all tabs to hidden
-    mobileField.classList.add('hidden');
-    emailField.classList.add('hidden');
-
-    // Remove active class from both tabs
-    mobileTab.classList.remove('text-red-700', 'font-semibold');
-    emailTab.classList.remove('text-red-700', 'font-semibold');
-
-    // Show the selected tab content
-    if (type === 'mobile') {
-      mobileField.classList.remove('hidden');
-      mobileTab.classList.add('text-red-700', 'font-semibold');
-      document.getElementById('mobileNumber').setAttribute('placeholder', 'Enter phone number');
-      document.getElementById('mobileNumber').focus(); // Focus on mobile input field
-    } else {
-      emailField.classList.remove('hidden');
-      emailTab.classList.add('text-red-700', 'font-semibold');
-      document.getElementById('mobileNumber').setAttribute('placeholder', 'Enter email');
-      document.getElementById('email').focus(); // Focus on email input field
-    }
-  }
-
-  // Default to showing the mobile tab
-  document.addEventListener('DOMContentLoaded', function () {
-    showTab('mobile');
+      if (mobileInput.value && !emailInput.value) {
+        inputData = `Mobile: +91${mobileInput.value}, Password: ${passwordInput.value}`;
+        alert(inputData + " - Mobile selected");
+      } else if (emailInput.value && !mobileInput.value) {
+        inputData = `Email: ${emailInput.value}, Password: ${passwordInput.value}`;
+        alert(inputData + " - Email selected");
+      }
+    });
+  </script> -->
+  <script>
+  // Toggle Mobile and Email input fields
+  document.getElementById('mobileButton').addEventListener('click', function () {
+    document.getElementById('mobileInput').classList.remove('hidden');
+    document.getElementById('emailInput').classList.add('hidden');
+    this.classList.add('bg-red-700');
+    this.classList.remove('bg-gray-300');
+    document.getElementById('emailButton').classList.add('bg-gray-300');
+    document.getElementById('emailButton').classList.remove('bg-red-700');
+    document.getElementById('email').removeAttribute('required');
+    document.getElementById('mobile').setAttribute('required', 'required');
   });
 
-  document.getElementById('loginForm').addEventListener('submit', async function (e) {
+  document.getElementById('emailButton').addEventListener('click', function () {
+    document.getElementById('emailInput').classList.remove('hidden');
+    document.getElementById('mobileInput').classList.add('hidden');
+    this.classList.add('bg-red-700');
+    this.classList.remove('bg-gray-300');
+    document.getElementById('mobileButton').classList.add('bg-gray-300');
+    document.getElementById('mobileButton').classList.remove('bg-red-700');
+    document.getElementById('mobile').removeAttribute('required');
+    document.getElementById('email').setAttribute('required', 'required');
+  });
+
+  // Toggle password visibility
+  function togglePasswordVisibility() {
+    const input = document.getElementById('password');
+    const icon = document.getElementById('togglePassword');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    } else {
+      input.type = 'password';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    }
+  }
+
+  // Handle form submission
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    let username;
-    const usernameOption = document.querySelector('input[name="mobile"]') ? 'mobile' : 'email';  // Determine which field is visible
+    const mobileInput = document.getElementById('mobile');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    let data = {};
 
-    if (usernameOption === 'email') {
-      username = document.getElementById('email').value.trim();
-    } else {
-      username = `+91${document.getElementById('mobileNumber').value.trim()}`;  // prepend +91 for mobile
+    // Determine whether mobile or email is used
+    if (mobileInput.value && !emailInput.value) {
+      // If mobile is selected
+      data = {
+        username: `+91${mobileInput.value}`,
+        password: passwordInput.value
+      };
+    } else if (emailInput.value && !mobileInput.value) {
+      // If email is selected
+      data = {
+        username: emailInput.value,
+        password: passwordInput.value
+      };
     }
 
-    const password = document.getElementById('password').value;
-
-    try {
-      const response = await fetch('<?php echo BASE_URL; ?>/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const result = await response.json();
-
+    // Send login data to API
+    fetch('<?php echo BASE_URL; ?>/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
       if (result.success) {
         const { token, user_id, name, role, username } = result.data;
-
+        
         // Save to localStorage
         localStorage.setItem('authToken', token);
         localStorage.setItem('user_id', user_id);
@@ -201,21 +241,23 @@
 
         // Redirect based on role
         if (role === 'admin') {
-          window.location.href = "admin/index.php";
+          window.location.href = 'admin_index.php';  // Redirect to admin dashboard
+        } else if (role === 'user') {
+          window.location.href = 'index.php';  // Redirect to user dashboard
         } else {
-          window.location.href = "index.php";
+          window.location.href = 'login.php';  // Default to login page if role is not recognized
         }
       } else {
-        window.location.href = "login.php";
+        alert(result.message || 'Login failed!');
       }
-    } catch (err) {
-      console.error('Login Error:', err);
-      alert("Something went wrong. Please try again later.");
-    }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred during login. Please try again.');
+    });
   });
+</script>
 
-
-  </script>
 </body>
 
 </html>

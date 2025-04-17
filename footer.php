@@ -156,7 +156,7 @@
                     </div> -->
                 </div>
                 <div class="footer-bottom">
-                    <p class="footer-copyright text-lg-center mb-0">&copy; StockOut India. 2025. All Rights
+                    <p class="footer-copyright text-lg-center mb-0">&copy; Stockout India. 2025. All Rights
                         Reserved
                     </p>
                 </div><!-- End .footer-bottom -->

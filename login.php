@@ -40,47 +40,43 @@
         <form id="loginForm">
           <p class="text-sm text-gray-700 mb-4">If you have an account with us, Please log in!</p>
 
-          <!-- Radio buttons for choosing mobile or email -->
-          <div class="flex items-center mb-4">
-            <input type="radio" id="mobileOption" name="usernameOption" value="mobile" checked class="mr-2">
-            <label for="mobileOption" class="text-sm text-gray-700">Mobile Number</label>
-            <input type="radio" id="emailOption" name="usernameOption" value="email" class="ml-4 mr-2">
-            <label for="emailOption" class="text-sm text-gray-700">Email</label>
+          <!-- Tabs: Mobile or Email -->
+          <div class="flex border-b border-gray-400 mb-4">
+            <button type="button" id="mobileTab" class="w-1/2 py-2 text-center text-sm font-medium text-gray-700 focus:outline-none" onclick="showTab('mobile')">Mobile</button>
+            <button type="button" id="emailTab" class="w-1/2 py-2 text-center text-sm font-medium text-gray-700 focus:outline-none" onclick="showTab('email')">Email</button>
           </div>
 
-          <!-- Username Field (Mobile or Email) -->
-          <div class="relative mb-4">
+          <!-- Input Fields -->
+          <!-- Mobile Input -->
+          <div id="mobileField" class="tab-content relative mb-4">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 text-sm font-medium" id="prefix">+91</span>
-            <input type="text" name="username" id="username" placeholder="Enter phone number or email" required
-              class="pl-12 w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
+            <input type="tel" name="mobile" id="mobileNumber" placeholder="Enter phone number" pattern="[0-9]{10}" required class="pl-12 w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
+          </div>
+
+          <!-- Email Input -->
+          <div id="emailField" class="tab-content mb-4 hidden">
+            <input type="email" name="email" id="email" placeholder="Enter email" required class="w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
           </div>
 
           <!-- Password Field with Eye Icon -->
           <div class="relative mb-4">
-            <input type="password" name="password" id="password" placeholder="Password" required
-              class="w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 pr-10" />
+            <input type="password" name="password" id="password" placeholder="Password" required class="w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 pr-10" />
             <!-- Toggle Eye Icon -->
-            <i id="togglePassword"
-              class="fa-solid fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-              onclick="togglePasswordVisibility()"></i>
+            <i id="togglePassword" class="fa-solid fa-eye absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer" onclick="togglePasswordVisibility()"></i>
           </div>
 
           <div class="flex justify-between items-center mb-4 text-sm">
             <a href="forget-password.php" class="text-red-600 font-semibold hover:underline">Forgot Your Password?</a>
           </div>
 
-          <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">
-            Login
-          </button>
+          <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">Login</button>
         </form>
 
         <br>
 
         <!-- Google Sign-in -->
-        <button
-          class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mb-6 hover:shadow-md">
-          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google"
-            class="w-5 h-5 mr-2">
+        <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mb-6 hover:shadow-md">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5 mr-2">
           <span class="text-sm font-medium">Sign in with Google</span>
         </button>
 
@@ -107,54 +103,118 @@
       }
     }
 
-    document.getElementById('loginForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
+  function showTab(type) {
+    const mobileTab = document.getElementById('mobileTab');
+    const emailTab = document.getElementById('emailTab');
+    const mobileField = document.getElementById('mobileField');
+    const emailField = document.getElementById('emailField');
 
-      const usernameOption = document.querySelector('input[name="usernameOption"]:checked').value;
-      let username = document.getElementById('username').value.trim();
-      
-      // Add country code if mobile number
-      if (usernameOption === 'mobile' && !username.startsWith('+91')) {
-        username = `+91${username}`;
-      }
+    // Reset all tabs to hidden
+    mobileField.classList.add('hidden');
+    emailField.classList.add('hidden');
 
-      const password = document.getElementById('password').value;
+    // Remove active class from both tabs
+    mobileTab.classList.remove('text-red-700', 'font-semibold');
+    emailTab.classList.remove('text-red-700', 'font-semibold');
 
-      try {
-        const response = await fetch('<?php echo BASE_URL; ?>/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ username, password })
-        });
+    // Show the selected tab content
+    if (type === 'mobile') {
+      mobileField.classList.remove('hidden');
+      mobileTab.classList.add('text-red-700', 'font-semibold');
+      document.getElementById('mobileNumber').setAttribute('placeholder', 'Enter phone number');
+      document.getElementById('mobileNumber').focus(); // Focus on mobile input field
+    } else {
+      emailField.classList.remove('hidden');
+      emailTab.classList.add('text-red-700', 'font-semibold');
+      document.getElementById('mobileNumber').setAttribute('placeholder', 'Enter email');
+      document.getElementById('email').focus(); // Focus on email input field
+    }
+  }
 
-        const result = await response.json();
+  function showTab(type) {
+    const mobileTab = document.getElementById('mobileTab');
+    const emailTab = document.getElementById('emailTab');
+    const mobileField = document.getElementById('mobileField');
+    const emailField = document.getElementById('emailField');
 
-        if (result.success) {
-          const { token, user_id, name, role, username } = result.data;
+    // Reset all tabs to hidden
+    mobileField.classList.add('hidden');
+    emailField.classList.add('hidden');
 
-          // Save to localStorage
-          localStorage.setItem('authToken', token);
-          localStorage.setItem('user_id', user_id);
-          localStorage.setItem('name', name);
-          localStorage.setItem('role', role);
-          localStorage.setItem('username', username);
+    // Remove active class from both tabs
+    mobileTab.classList.remove('text-red-700', 'font-semibold');
+    emailTab.classList.remove('text-red-700', 'font-semibold');
 
-          // Redirect based on role
-          if (role === 'admin') {
-            window.location.href = "admin_index.php";
-          } else {
-            window.location.href = "index.php";
-          }
+    // Show the selected tab content
+    if (type === 'mobile') {
+      mobileField.classList.remove('hidden');
+      mobileTab.classList.add('text-red-700', 'font-semibold');
+      document.getElementById('mobileNumber').setAttribute('placeholder', 'Enter phone number');
+      document.getElementById('mobileNumber').focus(); // Focus on mobile input field
+    } else {
+      emailField.classList.remove('hidden');
+      emailTab.classList.add('text-red-700', 'font-semibold');
+      document.getElementById('mobileNumber').setAttribute('placeholder', 'Enter email');
+      document.getElementById('email').focus(); // Focus on email input field
+    }
+  }
+
+  // Default to showing the mobile tab
+  document.addEventListener('DOMContentLoaded', function () {
+    showTab('mobile');
+  });
+
+  document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    let username;
+    const usernameOption = document.querySelector('input[name="mobile"]') ? 'mobile' : 'email';  // Determine which field is visible
+
+    if (usernameOption === 'email') {
+      username = document.getElementById('email').value.trim();
+    } else {
+      username = `+91${document.getElementById('mobileNumber').value.trim()}`;  // prepend +91 for mobile
+    }
+
+    const password = document.getElementById('password').value;
+
+    try {
+      const response = await fetch('<?php echo BASE_URL; ?>/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        const { token, user_id, name, role, username } = result.data;
+
+        // Save to localStorage
+        localStorage.setItem('authToken', token);
+        localStorage.setItem('user_id', user_id);
+        localStorage.setItem('name', name);
+        localStorage.setItem('role', role);
+        localStorage.setItem('username', username);
+
+        // Redirect based on role
+        if (role === 'admin') {
+          window.location.href = "admin/index.php";
         } else {
-          window.location.href = "login.php";
+          window.location.href = "index.php";
         }
-      } catch (err) {
-        console.error('Login Error:', err);
-        alert("Something went wrong. Please try again later.");
+      } else {
+        window.location.href = "login.php";
       }
-    });
+    } catch (err) {
+      console.error('Login Error:', err);
+      alert("Something went wrong. Please try again later.");
+    }
+  });
+
+
   </script>
 </body>
 

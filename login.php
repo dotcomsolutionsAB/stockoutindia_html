@@ -43,10 +43,10 @@
           <!-- Select Type of Input (Mobile / Email) -->
           <div class="flex mb-4">
             <button type="button" id="mobileButton" class="w-1/2 py-2 bg-red-700 text-white font-semibold rounded-l-md">
-              Mobile
+            <i class="fa-solid fa-phone"></i>
             </button>
-            <button type="button" id="emailButton" class="w-1/2 py-2 bg-gray-300 text-gray-700 font-semibold rounded-r-md">
-              Email
+            <button type="button" id="emailButton" class="w-1/2 py-2 bg-gray-500 text-white font-semibold rounded-r-md">
+            <i class="fa-solid fa-envelope"></i>
             </button>
           </div>
 
@@ -156,107 +156,7 @@
       }
     });
   </script> -->
-  <!-- <script>
-    // Toggle Mobile and Email input fields
-    document.getElementById('mobileButton').addEventListener('click', function () {
-      document.getElementById('mobileInput').classList.remove('hidden');
-      document.getElementById('emailInput').classList.add('hidden');
-      this.classList.add('bg-red-700');
-      this.classList.remove('bg-gray-300');
-      document.getElementById('emailButton').classList.add('bg-gray-300');
-      document.getElementById('emailButton').classList.remove('bg-red-700');
-      document.getElementById('email').removeAttribute('required');
-      document.getElementById('mobile').setAttribute('required', 'required');
-    });
 
-    document.getElementById('emailButton').addEventListener('click', function () {
-      document.getElementById('emailInput').classList.remove('hidden');
-      document.getElementById('mobileInput').classList.add('hidden');
-      this.classList.add('bg-red-700');
-      this.classList.remove('bg-gray-300');
-      document.getElementById('mobileButton').classList.add('bg-gray-300');
-      document.getElementById('mobileButton').classList.remove('bg-red-700');
-      document.getElementById('mobile').removeAttribute('required');
-      document.getElementById('email').setAttribute('required', 'required');
-    });
-
-    // Toggle password visibility
-    function togglePasswordVisibility() {
-      const input = document.getElementById('password');
-      const icon = document.getElementById('togglePassword');
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-      } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-      }
-    }
-
-    // Handle form submission
-    document.getElementById('loginForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const mobileInput = document.getElementById('mobile');
-      const emailInput = document.getElementById('email');
-      const passwordInput = document.getElementById('password');
-      let data = {};
-
-      // Determine whether mobile or email is used
-      if (mobileInput.value && !emailInput.value) {
-        // If mobile is selected
-        data = {
-          username: `+91${mobileInput.value}`,
-          password: passwordInput.value
-        };
-      } else if (emailInput.value && !mobileInput.value) {
-        // If email is selected
-        data = {
-          username: emailInput.value,
-          password: passwordInput.value
-        };
-      }
-
-      // Send login data to API
-      fetch('<?php echo BASE_URL; ?>/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(result => {
-        if (result.success) {
-          const { token, user_id, name, role, username } = result.data;
-          
-          // Save to localStorage
-          localStorage.setItem('authToken', token);
-          localStorage.setItem('user_id', user_id);
-          localStorage.setItem('name', name);
-          localStorage.setItem('role', role);
-          localStorage.setItem('username', username);
-
-          // Redirect based on role
-          if (role === 'admin') {
-            window.location.href = 'admin_index.php';  // Redirect to admin dashboard
-          } else if (role === 'user') {
-            window.location.href = 'index.php';  // Redirect to user dashboard
-          } else {
-            window.location.href = 'login.php';  // Default to login page if role is not recognized
-          }
-        } else {
-          alert(result.message || 'Login failed!');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred during login. Please try again.');
-      });
-    });
-</script> -->
 <script>
   const mobileBtn = document.getElementById('mobileButton');
   const emailBtn = document.getElementById('emailButton');

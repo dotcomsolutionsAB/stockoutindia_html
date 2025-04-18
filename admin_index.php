@@ -31,14 +31,14 @@
                 <!-- Profile Section -->
                 <?php include("admin_inc/admin_profile_section.php"); ?>
 
-                <!-- View Products Section -->
-                <?php include("admin_inc/admin_product_section.php"); ?>                
-
-                <!-- View Users Section -->
-                <?php include("admin_inc/admin_users_section.php"); ?> 
+                <!-- View all Products Section -->
+                <?php include("admin_inc/view_all_product_section.php"); ?>  
                 
-                <!-- Orders Section -->
-                <?php include("admin_inc/admin_orders_section.php"); ?>                
+                <!-- View Product by user Section -->
+                <?php include("admin_inc/view_product_by_user_section.php"); ?> 
+
+                <!-- View order by users Section -->
+                <?php include("admin_inc/view_order_by_users_section.php"); ?>                
 
                 <!-- Settings Section -->
                 <?php include("admin_inc/setting_section.php"); ?> 

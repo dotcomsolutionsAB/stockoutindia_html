@@ -10,6 +10,7 @@
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="custom/admin_style.css">
 </head>
 <body class="bg-gray-50">
@@ -40,7 +41,10 @@
                 <?php include("admin_inc/admin_orders_section.php"); ?>                
 
                 <!-- Settings Section -->
-                <?php include("admin_inc/setting_section.php"); ?>  
+                <?php include("admin_inc/setting_section.php"); ?> 
+                
+                <!-- Test Section -->
+                <?php include("admin_inc/admin_test_section.php"); ?>   
                 
             </div>
         </div>

@@ -4,7 +4,7 @@
     const userRole = localStorage.getItem("role");
 
     // Get the current page URL
-    const currentPage = window.location.pathname;
+    const currentPages = window.location.pathname;
 
     // List of pages that only admins can access
     const adminPages = [
@@ -39,10 +39,10 @@
         // Redirect to login page if not authenticated
         window.location.href = "index.php";
     } else {
-        if (userRole === "admin" && customerPages.includes(currentPage)) {
+        if (userRole === "admin" && customerPages.includes(currentPages)) {
             // Redirect admin users trying to access customer pages
             window.location.href = "../admin_index.php";
-        } else if (userRole === "user" && adminPages.includes(currentPage)) {
+        } else if (userRole === "user" && adminPages.includes(currentPages)) {
             // Redirect customer users trying to access admin pages
             window.location.href = "index.php";
         }

@@ -1,215 +1,393 @@
-<div id="view-products" class="tab-content active">
-    <h2 class="text-2xl font-semibold text-red-600 mb-6">View Products</h2>
-
-    <!-- Search and Filters Section -->
-    <div class="flex items-center space-x-4 mb-6">
-        <!-- Search Bar -->
-        <input type="text" id="search" class="border px-4 py-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-red-500" placeholder="Search Products">
-
-        <!-- Status Select Box -->
-        <select id="status" class="border px-4 py-2 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-red-500">
-            <option value="">Select Status</option>
+<div id="view-products" class="tab-content">
+  <div class="max-w-7xl mx-auto space-y-8">
+    <!-- ╭─ FILTER PANEL ───────────────────────────────────────────────────╮ -->
+    <section id="filters" class="bg-white shadow rounded-2xl p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+      <div class="flex flex-col gap-1">
+        <!-- Status -->
+        <div class="flex flex-col gap-1">
+          <label for="statusFilter" class="font-medium text-gray-700">Status</label>
+          <select id="statusFilter" class="bg-gray-50 border border-gray-300 rounded-lg p-2 focus:ring-red-500 focus:border-red-500">
+            <option value="">All</option>
             <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-        </select>
-
-<!-- Industry Select Box -->
-<div class="relative w-64">
-    <select id="industry" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple>
-        <!-- Options will be populated by API -->
-    </select>
-    <label for="industry" class="absolute left-4 top-0 text-gray-500 text-sm">Industry</label>
-</div>
-
-<!-- Sub-Industry Select Box -->
-<div class="relative w-64">
-    <select id="sub-industry" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" multiple>
-        <!-- Options will be populated by API -->
-    </select>
-    <label for="sub-industry" class="absolute left-4 top-0 text-gray-500 text-sm">Sub-Industry</label>
-</div>
-
-
-
-        <!-- Apply Filters Button -->
-        <button id="apply-filters" class="bg-red-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">Apply Filters</button>
-    </div>
-
-    <!-- Products Table -->
-    <table class="min-w-full table-auto border-collapse border border-gray-300 rounded-lg shadow-md">
-        <thead class="bg-red-600 text-white">
-            <tr>
-                <th class="border-b-2 px-6 py-3 text-left">Image</th>
-                <th class="border-b-2 px-6 py-3 text-left">Product Name</th>
-                <th class="border-b-2 px-6 py-3 text-left">Offer Quantity</th>
-                <th class="border-b-2 px-6 py-3 text-left">Minimum Quantity</th>
-                <th class="border-b-2 px-6 py-3 text-left">Original Price</th>
-                <th class="border-b-2 px-6 py-3 text-left">Selling Price</th>
-                <th class="border-b-2 px-6 py-3 text-left">Status</th>
-                <th class="border-b-2 px-6 py-3 text-left">Unit</th>
-                <th class="border-b-2 px-6 py-3 text-left">Validity</th>
-                <th class="border-b-2 px-6 py-3 text-left">Industry</th>
-                <th class="border-b-2 px-6 py-3 text-left">Sub-Industry</th>
-                <th class="border-b-2 px-6 py-3 text-left">Actions</th>
-            </tr>
-        </thead>
-        <tbody id="product-table-body" class="bg-gray-50">
-            <!-- Products will be populated here by JS -->
-        </tbody>
-    </table>
-
-    <!-- Count and Pagination Section -->
-    <div class="flex justify-between items-center mt-6">
-        <!-- Total Count -->
-        <span id="total-count" class="text-lg font-semibold text-gray-800">Total Products: 0</span>
-
-        <!-- Pagination Controls -->
-        <div id="pagination-controls" class="space-x-2">
-            <!-- Pagination buttons will be added dynamically -->
+            <option value="in-active">Inactive</option>
+            <option value="sold">Sold</option>
+          </select>
         </div>
-    </div>
+
+        <!-- Min price -->
+        <div class="flex flex-col gap-1">
+          <!-- <label for="minPrice" class="font-medium text-gray-700">Min Price (₹)</label> -->
+          <input id="minPrice" type="number" min="0" placeholder="min-Price (₹)" class="bg-gray-50 border border-gray-300 rounded-lg p-2
+                          focus:ring-red-500 focus:border-red-500">
+        </div>
+
+        <!-- Max price -->
+        <div class="flex flex-col gap-1">
+          <!-- <label for="maxPrice" class="font-medium text-gray-700">Max Price (₹)</label> -->
+          <input id="maxPrice" type="number" min="0" placeholder="min-Price (₹) ∞" class="bg-gray-50 border border-gray-300 rounded-lg p-2
+                          focus:ring-red-500 focus:border-red-500">
+        </div>
+      </div>
+
+      <!-- Industry list -->
+      <div class="flex flex-col gap-1">
+        <span class="font-medium text-gray-700">Industry</span>
+        <input id="industrySearch" type="text" placeholder="Search…" class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2
+                      text-sm focus:ring-red-500 focus:border-red-500">
+        <div id="industryList" class="bg-gray-50 border border-gray-300 rounded-lg p-2
+                      h-20 overflow-y-auto space-y-1"></div>
+      </div>
+      <!-- Sub‑industry list -->
+      <div class="flex flex-col gap-1">
+        <span class="font-medium text-gray-700">Sub‑Industry</span>
+        <input id="subIndustrySearch" type="text" placeholder="Search…" class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2
+                      text-sm focus:ring-red-500 focus:border-red-500">
+        <div id="subIndustryList" class="bg-gray-50 border border-gray-300 rounded-lg p-2
+                      h-20 overflow-y-auto space-y-1"></div>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <!-- Search (product name) -->
+        <div class="flex flex-col gap-1">
+          <label for="searchInput" class="font-medium text-gray-700">Search</label>
+          <div class="relative">
+            <input id="searchInput" type="text" placeholder="Product name…" class="w-full pl-10 pr-3 py-3 rounded-lg border border-gray-300
+                              focus:ring-2 focus:ring-red-500 focus:border-red-500
+                              placeholder:text-gray-400">
+            <svg class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-4.35-4.35m2.31-5.3a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+        <!-- Apply button -->
+        <div class="col-span-full flex justify-end pt-2">
+          <button id="applyFilters" class="inline-flex items-center gap-1 px-5 py-2.5 bg-red-600
+                              hover:bg-red-500 text-white font-medium rounded-lg shadow-lg
+                              focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition">
+            Apply Filters
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- ╰────────────────────────────────────────────────────────────────────╯ -->
+
+    <!-- ╭─ TABLE ────────────────────────────────────────────────────────────╮ -->
+    <section class="bg-white shadow rounded-2xl overflow-x-auto mg-10p">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50 text-xs uppercase tracking-wider text-gray-600 sticky top-0 z-10">
+          <tr>
+            <!-- <th class="px-6 py-3 text-left">Image</th> -->
+            <th class="px-6 py-3 text-left">Product</th>
+            <th class="px-6 py-3 text-center">Offer Qty</th>
+            <th class="px-6 py-3 text-center">Min Qty</th>
+            <th class="px-6 py-3 text-right">Original</th>
+            <th class="px-6 py-3 text-right">Selling</th>
+            <th class="px-6 py-3 text-center">Status</th>
+            <th class="px-6 py-3 text-center">Unit</th>
+            <th class="px-6 py-3 text-center">Validity</th>
+            <th class="px-6 py-3 text-left">Industry</th>
+            <th class="px-6 py-3 text-left">Sub‑Industry</th>
+            <th class="px-6 py-3 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody" class="divide-y divide-gray-100 bg-white"></tbody>
+      </table>
+    </section>
+    <!-- ╰────────────────────────────────────────────────────────────────────╯ -->
+
+    <!-- Footer -->
+    <footer class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-gray-700">
+      <div id="resultCount">0 results</div>
+      <nav id="pagination" class="flex items-center gap-2"></nav>
+    </footer>
+  </div>
+
+  <!-- Row template -->
+  <template id="rowTemplate">
+    <tr class="hover:bg-gray-50">
+      <!-- replace the first two <td> blocks with this one -->
+      <td class="px-6 py-4">
+        <div class="flex items-center gap-3">
+          <img data-field="image" class="h-12 w-12 rounded object-cover ring-1 ring-gray-200 shrink-0" alt="Product">
+          <span data-field="product_name" class="font-medium text-gray-900 break-words w-48"></span>
+        </div>
+      </td>
+      <!-- keep the rest of the <td> cells exactly as before -->
+
+      <!-- <td class="px-6 py-4 whitespace-nowrap">
+              <img data-field="image" class="h-12 w-12 rounded object-cover ring-1 ring-gray-200" alt="Product">
+          </td>
+          <td class="px-6 py-4 font-medium text-gray-900" data-field="product_name"></td> -->
+      <td class="px-6 py-4 text-center" data-field="offer_quantity"></td>
+      <td class="px-6 py-4 text-center" data-field="minimum_quantity"></td>
+      <td class="px-6 py-4 text-right" data-field="original_price"></td>
+      <td class="px-6 py-4 text-right" data-field="selling_price"></td>
+      <td class="px-6 py-4 text-center" data-field="status"></td>
+      <td class="px-6 py-4 text-center" data-field="unit"></td>
+      <td class="px-6 py-4 text-center" data-field="validity"></td>
+      <td class="px-6 py-4" data-field="industry"></td>
+      <td class="px-6 py-4" data-field="sub_industry"></td>
+      <!-- Row template: swap the old single button cell with this -->
+      <td class="px-6 py-4 text-center space-x-1">
+        <!-- View -->
+        <button class="viewBtn inline-flex items-center justify-center w-8 h-8 rounded-full
+                      text-white bg-indigo-600 hover:bg-indigo-500
+                      focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 shadow" title="View">
+          <i data-lucide="eye"></i>
+        </button>
+
+        <!-- Update -->
+        <button class="updateBtn inline-flex items-center justify-center w-8 h-8 rounded-full
+                      text-white bg-blue-600 hover:bg-blue-500
+                      focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 shadow" title="Update">
+          <i data-lucide="pencil"></i>
+        </button>
+
+        <!-- Delete -->
+        <button class="deleteBtn inline-flex items-center justify-center w-8 h-8 rounded-full
+                      text-white bg-red-600 hover:bg-red-500
+                      focus:ring-2 focus:ring-offset-2 focus:ring-red-500 shadow" title="Delete">
+          <i data-lucide="trash-2"></i>
+        </button>
+      </td>
+    </tr>
+  </template>
+
 </div>
 
+<!-- ╭─ JAVASCRIPT ─────────────────────────────────────────────────────────╮ -->
 <script>
-    // Fetch Auth Token from localStorage
-    const authToken = localStorage.getItem('authToken');
+  lucide.createIcons();
 
-    // Function to fetch industry and sub-industry options
-    async function fetchIndustriesAndSubIndustries() {
-        try {
-            const industryResponse = await fetch('<?php echo BASE_URL; ?>/industry', { method: 'GET' });
-            const industryData = await industryResponse.json();
+  /* ------------------------------------------------------------------
+    BASE URL from PHP
+  ------------------------------------------------------------------ */
+  const BASE_URL = '<?php echo BASE_URL; ?>';   // ← echo your constant
+  const API_URL = `${BASE_URL}/admin/products`;
+  const INDUSTRY_URL = `${BASE_URL}/industry`;
+  const SUB_INDUSTRY_URL = `${BASE_URL}/sub_industry`;
 
-            const subIndustryResponse = await fetch('<?php echo BASE_URL; ?>/sub_industry', { method: 'GET' });
-            const subIndustryData = await subIndustryResponse.json();
+  /* ------------------------------------------------------------------
+    STATE & CONSTANTS
+  ------------------------------------------------------------------ */
+  const limit = 10;
+  let currentPage = 1;
+  let totalResults = 0;
 
-            // Populate Industry Select Box
-            const industrySelect = document.getElementById('industry');
-            industryData.data.forEach(industry => {
-                const option = document.createElement('option');
-                option.value = industry.id;
-                option.textContent = industry.name;
-                industrySelect.appendChild(option);
-            });
+  /* ------------------------------------------------------------------
+    HELPER – checkbox element
+  ------------------------------------------------------------------ */
+  const makeCheckbox = (value, label, cls) => {
+    const lbl = document.createElement('label');
+    lbl.className = 'inline-flex items-center gap-2 w-full text-gray-700';
+    lbl.innerHTML =
+      `<input type="checkbox" value="${value}" class="${cls} accent-red-600 rounded">
+    <span>${label}</span>`;
+    return lbl;
+  };
 
-            // Populate Sub-Industry Select Box
-            const subIndustrySelect = document.getElementById('sub-industry');
-            subIndustryData.data.forEach(subIndustry => {
-                const option = document.createElement('option');
-                option.value = subIndustry.id;
-                option.textContent = subIndustry.name;
-                subIndustrySelect.appendChild(option);
-            });
-        } catch (error) {
-            console.error('Error fetching industries or sub-industries:', error);
-        }
-    }
+  /* ------------------------------------------------------------------
+    BUILD INDUSTRY & SUB‑INDUSTRY LISTS
+  ------------------------------------------------------------------ */
+  async function initCheckList(url, wrapEl, cls, labelFormatter) {
+    try {
+      const token = localStorage.getItem('authToken');
+      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      const json = await res.json();
+      if (!json.success) throw new Error('Failed list load');
+      json.data.forEach(item => wrapEl.appendChild(makeCheckbox(item.id, labelFormatter(item), cls)));
+    } catch (err) { console.error(err); }
+  }
 
-    // Function to fetch products with applied filters
-    async function fetchProducts(filters) {
-        try {
-            const response = await fetch('<?php echo BASE_URL; ?>/admin/products', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${authToken}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(filters),
-            });
-
-            const data = await response.json();
-            if (data.success) {
-                // Display products in table
-                const products = data.data;
-                const totalCount = data.total_count;
-
-                // Update product count
-                document.getElementById('total-count').textContent = `Total Products: ${totalCount}`;
-
-                // Clear the table body
-                const tableBody = document.getElementById('product-table-body');
-                tableBody.innerHTML = '';
-
-                // Populate table with products
-                products.forEach(product => {
-                    const row = document.createElement('tr');
-                    row.classList.add('hover:bg-gray-100');
-
-                    row.innerHTML = `
-                        <td class="border-b px-6 py-4">
-                            <img src="uploads/${product.image || 'placeholder.png'}" alt="Product Image" class="w-16 h-16 object-cover rounded-full">
-                        </td>
-                        <td class="border-b px-6 py-4">${product.product_name}</td>
-                        <td class="border-b px-6 py-4">${product.offer_quantity}</td>
-                        <td class="border-b px-6 py-4">${product.minimum_quantity}</td>
-                        <td class="border-b px-6 py-4">$${product.original_price}</td>
-                        <td class="border-b px-6 py-4">$${product.selling_price}</td>
-                        <td class="border-b px-6 py-4">${product.status}</td>
-                        <td class="border-b px-6 py-4">${product.unit}</td>
-                        <td class="border-b px-6 py-4">${product.validity || 'N/A'}</td>
-                        <td class="border-b px-6 py-4">${product.industry}</td>
-                        <td class="border-b px-6 py-4">${product.sub_industry}</td>
-                        <td class="border-b px-6 py-4">
-                            <button class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">Edit</button>
-                            <button class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Delete</button>
-                        </td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-
-                // Handle pagination
-                handlePagination(totalCount);
-            }
-        } catch (error) {
-            console.error('Error fetching products:', error);
-        }
-    }
-
-    // Function to handle pagination
-    function handlePagination(totalCount) {
-        const itemsPerPage = 10;
-        const totalPages = Math.ceil(totalCount / itemsPerPage);
-        const paginationControls = document.getElementById('pagination-controls');
-        paginationControls.innerHTML = '';
-
-        // Create pagination buttons
-        for (let i = 1; i <= totalPages; i++) {
-            const button = document.createElement('button');
-            button.textContent = i;
-            button.className = 'bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600';
-            button.addEventListener('click', () => {
-                const filters = getFilters();
-                filters.offset = (i - 1) * itemsPerPage;
-                fetchProducts(filters);
-            });
-            paginationControls.appendChild(button);
-        }
-    }
-
-    // Function to get filters from the UI
-    function getFilters() {
-        const productName = document.getElementById('search').value;
-        const status = document.getElementById('status').value;
-        const industry = Array.from(document.getElementById('industry').selectedOptions).map(option => option.value).join(',');
-        const subIndustry = Array.from(document.getElementById('sub-industry').selectedOptions).map(option => option.value).join(',');
-
-        return {
-            product_name: productName,
-            status: status,
-            industry: industry,
-            sub_industry: subIndustry,
-            limit: 10,
-            offset: 0,
-        };
-    }
-
-    // Event Listener for Apply Filters Button
-    document.getElementById('apply-filters').addEventListener('click', () => {
-        const filters = getFilters();
-        fetchProducts(filters);
+  /* Simple live‑search for the checkbox lists */
+  function attachSearch(inputId, listId) {
+    const search = document.getElementById(inputId);
+    const list = document.getElementById(listId);
+    search.addEventListener('input', () => {
+      const term = search.value.trim().toLowerCase();
+      list.querySelectorAll('label').forEach(lbl =>
+        lbl.classList.toggle('hidden', !lbl.textContent.toLowerCase().includes(term))
+      );
     });
+  }
 
-    // Initialize
-    fetchIndustriesAndSubIndustries();
-    fetchProducts(getFilters());
+  /* ------------------------------------------------------------------
+    FETCH PRODUCTS
+  ------------------------------------------------------------------ */
+  async function fetchProducts() {
+    const token = localStorage.getItem('authToken');
+    const search = document.getElementById('searchInput').value.trim();
+    const status = document.getElementById('statusFilter').value;
+    const minP = document.getElementById('minPrice').value;
+    const maxP = document.getElementById('maxPrice').value;
+    const indIds = [...document.querySelectorAll('.industryChk:checked')].map(c => c.value).join(',');
+    const subIds = [...document.querySelectorAll('.subChk:checked')].map(c => c.value).join(',');
+
+    const payload = {
+      product_name: search || undefined,
+      industry: indIds || undefined,
+      sub_industry: subIds || undefined,
+      status: status || undefined,
+      min_amount: minP ? Number(minP) : undefined,
+      max_amount: maxP ? Number(maxP) : undefined,
+      limit,
+      offset: (currentPage - 1) * limit
+    };
+    Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message || 'API error');
+      totalResults = json.total_count || json.data.length;
+      renderTable(json.data);
+    } catch (err) {
+      console.error(err);
+      totalResults = 0;
+      renderTable([]);
+    }
+    renderPagination();
+    document.getElementById('resultCount').textContent =
+      `${totalResults} result${totalResults !== 1 ? 's' : ''}`;
+  }
+
+  /* ------------------------------------------------------------------
+    RENDER TABLE
+  ------------------------------------------------------------------ */
+  // helper once, outside renderTable():
+  const rupee = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0       // change if you need paise
+  });
+
+  function renderTable(rows) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    const tmpl = document.getElementById('rowTemplate');
+
+    rows.forEach(row => {
+      const tr = tmpl.content.cloneNode(true);
+      //   const img = (Array.isArray(row.image) && row.image.length)
+      //     ? row.image[0]
+      //     : 'uploads/placeholder.png';
+      //   tr.querySelector('[data-field="image"]').src = img;
+
+      //   tr.querySelector('[data-field="product_name"]').textContent = row.product_name || '';
+      // (inside renderTable, for each row)
+      const imgEl = tr.querySelector('[data-field="image"]');
+      const nameEl = tr.querySelector('[data-field="product_name"]');
+
+      const imgSrc = Array.isArray(row.image) && row.image.length
+        ? row.image[0]
+        : 'uploads/placeholder.png';
+
+      imgEl.src = imgSrc;
+      nameEl.textContent = row.product_name || '';
+
+      tr.querySelector('[data-field="offer_quantity"]').textContent = row.offer_quantity ?? '-';
+      tr.querySelector('[data-field="minimum_quantity"]').textContent = row.minimum_quantity ?? '-';
+      tr.querySelector('[data-field="original_price"]').textContent = row.original_price != null ? rupee.format(row.original_price) : '–';
+      //   tr.querySelector('[data-field="original_price"]').textContent = row.original_price ?? '-';
+      tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price != null ? rupee.format(row.selling_price) : '–';
+      //   tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price ?? '-';
+
+      const status = row.status || '—';
+      tr.querySelector('[data-field="status"]').innerHTML =
+        `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${status === 'active' ? 'bg-green-100 text-green-800' :
+          status === 'inactive' ? 'bg-yellow-100 text-yellow-800' :
+            'bg-gray-100 text-gray-700'
+        }">${status}</span>`;
+
+      tr.querySelector('[data-field="unit"]').textContent = row.unit || '-';
+      tr.querySelector('[data-field="validity"]').textContent = row.validity || '-';
+      tr.querySelector('[data-field="industry"]').textContent = row.industry?.name ?? '-';
+      tr.querySelector('[data-field="sub_industry"]').textContent = row.sub_industry?.name ?? '-';
+
+      //   tr.querySelector('.updateBtn').addEventListener('click',
+      //     () => alert(`Update product #${row.id}`));
+      // Add handlers
+      tr.querySelector('.viewBtn').addEventListener('click', () => {
+        // 👉  put your “open product details” logic here
+        alert(`View product #${row.id}`);
+      });
+
+      tr.querySelector('.updateBtn').addEventListener('click', () => {
+        // 👉  existing update‑popup logic
+        alert(`Update product #${row.id}`);
+      });
+
+      tr.querySelector('.deleteBtn').addEventListener('click', () => {
+        // 👉  call your delete API (confirm first!)
+        if (confirm(`Delete product #${row.id}?`)) {
+          alert('Perform delete here…');
+        }
+      });
+
+
+      tbody.appendChild(tr);
+    });
+    lucide.createIcons();
+  }
+
+  /* ------------------------------------------------------------------
+    PAGINATION
+  ------------------------------------------------------------------ */
+  function renderPagination() {
+    const nav = document.getElementById('pagination');
+    nav.innerHTML = '';
+    const totalPages = Math.max(1, Math.ceil(totalResults / limit));
+
+    const btn = (label, page, disabled = false) => {
+      const b = document.createElement('button');
+      b.textContent = label;
+      b.dataset.page = page;
+      b.disabled = disabled;
+      b.className =
+        `px-3 py-1.5 rounded-md border transition ${page === currentPage
+          ? 'bg-red-600 text-white border-red-600'
+          : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+        } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+      return b;
+    };
+
+    nav.appendChild(btn('Prev', Math.max(1, currentPage - 1), currentPage === 1));
+    for (let p = 1; p <= totalPages; p++) nav.appendChild(btn(p, p));
+    nav.appendChild(btn('Next', Math.min(totalPages, currentPage + 1), currentPage === totalPages));
+  }
+
+  /* ------------------------------------------------------------------
+    EVENT HANDLERS
+  ------------------------------------------------------------------ */
+  document.getElementById('applyFilters').addEventListener('click', () => {
+    currentPage = 1;
+    fetchProducts();
+  });
+  document.getElementById('pagination').addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
+      currentPage = Number(e.target.dataset.page);
+      fetchProducts();
+    }
+  });
+
+  /* ------------------------------------------------------------------
+    INITIALISE
+  ------------------------------------------------------------------ */
+  (async () => {
+    await initCheckList(INDUSTRY_URL, document.getElementById('industryList'),
+      'industryChk', i => i.name);
+    await initCheckList(SUB_INDUSTRY_URL, document.getElementById('subIndustryList'),
+      'subChk', s => s.name);
+
+    attachSearch('industrySearch', 'industryList');
+    attachSearch('subIndustrySearch', 'subIndustryList');
+
+    fetchProducts();   // first load
+  })();
 </script>

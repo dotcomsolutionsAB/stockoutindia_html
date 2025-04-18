@@ -37,6 +37,11 @@
 .w-600 {
     width: 600px;
 }
+
+.mg-10p{
+    margin-top: 10px !important;
+}
+
 @media (max-width: 520px) {
   .w-600{
     width:180px;

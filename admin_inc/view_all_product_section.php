@@ -1,13 +1,13 @@
 <div id="view-products" class="tab-content">
   <div class="max-w-7xl mx-auto space-y-8">
     <!-- ╭─ FILTER PANEL ───────────────────────────────────────────────────╮ -->
-    <section id="filters" class="bg-white shadow rounded-2xl p-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <section id="filters" class="bg-white shadow rounded-2xl p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
       <div class="flex flex-col gap-1">
         <!-- Status -->
         <div class="flex flex-col gap-1">
-          <label for="statusFilter" class="font-medium text-gray-700">Status</label>
+          <!-- <label for="statusFilter" class="font-medium text-gray-700">Status</label> -->
           <select id="statusFilter" class="bg-gray-50 border border-gray-300 rounded-lg p-2 focus:ring-red-500 focus:border-red-500">
-            <option value="">All</option>
+            <option value="">Status</option>
             <option value="active">Active</option>
             <option value="in-active">Inactive</option>
             <option value="sold">Sold</option>
@@ -31,16 +31,16 @@
 
       <!-- Industry list -->
       <div class="flex flex-col gap-1">
-        <span class="font-medium text-gray-700">Industry</span>
-        <input id="industrySearch" type="text" placeholder="Search…" class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2
+        <!-- <span class="font-medium text-gray-700">Industry</span> -->
+        <input id="industrySearch" type="text" placeholder="Search Industry" class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2
                       text-sm focus:ring-red-500 focus:border-red-500">
         <div id="industryList" class="bg-gray-50 border border-gray-300 rounded-lg p-2
                       h-20 overflow-y-auto space-y-1"></div>
       </div>
       <!-- Sub‑industry list -->
       <div class="flex flex-col gap-1">
-        <span class="font-medium text-gray-700">Sub‑Industry</span>
-        <input id="subIndustrySearch" type="text" placeholder="Search…" class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2
+        <!-- <span class="font-medium text-gray-700">Sub‑Industry</span> -->
+        <input id="subIndustrySearch" type="text" placeholder="Search Sub Industry" class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2
                       text-sm focus:ring-red-500 focus:border-red-500">
         <div id="subIndustryList" class="bg-gray-50 border border-gray-300 rounded-lg p-2
                       h-20 overflow-y-auto space-y-1"></div>
@@ -49,7 +49,7 @@
       <div class="flex flex-col gap-1">
         <!-- Search (product name) -->
         <div class="flex flex-col gap-1">
-          <label for="searchInput" class="font-medium text-gray-700">Search</label>
+          <!-- <label for="searchInput" class="font-medium text-gray-700">Search</label> -->
           <div class="relative">
             <input id="searchInput" type="text" placeholder="Product name…" class="w-full pl-10 pr-3 py-3 rounded-lg border border-gray-300
                               focus:ring-2 focus:ring-red-500 focus:border-red-500
@@ -76,7 +76,7 @@
     <!-- ╭─ TABLE ────────────────────────────────────────────────────────────╮ -->
     <section class="bg-white shadow rounded-2xl overflow-x-auto mg-10p">
       <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50 text-xs uppercase tracking-wider text-gray-600 sticky top-0 z-10">
+        <thead class="bg-gray-50 text-xs uppercase tracking-wider bg-red-800 text-red-200 sticky top-0 z-10">
           <tr>
             <!-- <th class="px-6 py-3 text-left">Image</th> -->
             <th class="px-6 py-3 text-left">Product</th>

@@ -1,15 +1,15 @@
 <div id="view-order-by-user" class="tab-content">
-  <h1 class="text-3xl font-bold text-gray-800 tracking-tight mb-6">
+  <h2 class="text-2xl font-semibold text-red-600 mb-6">
     View Orders by User
-  </h1>
+  </h2>
 
   <!-- ░░ FILTER BAR ░░ -->
-  <section class="bg-white shadow rounded-2xl p-6 flex flex-wrap gap-4 items-end border border-red-200">
+  <section class="bg-white shadow rounded-2xl p-3 flex flex-wrap gap-4 items-end border border-red-200">
 
     <!-- User name search (≥2 chars) -->
     <div class="flex flex-col gap-1 relative">
-      <label for="uo-search" class="font-medium text-gray-700">User Name</label>
-      <input id="uo-search" type="text" autocomplete="off" placeholder="Start typing…" class="w-56 bg-gray-50 border border-red-300 rounded-lg p-2.5
+      <!-- <label for="uo-search" class="font-medium text-gray-700">User Name</label> -->
+      <input id="uo-search" type="text" autocomplete="off" placeholder="Typing User Name" class="w-56 bg-gray-50 border border-red-300 rounded-lg p-2.5
                     focus:ring-red-500 focus:border-red-500">
       <ul id="uo-suggest" class="absolute z-10 mt-1 w-full bg-white border border-gray-300
                  rounded-md shadow-lg max-h-48 overflow-y-auto hidden"></ul>
@@ -17,9 +17,10 @@
 
     <!-- Rows‑per‑page -->
     <div class="flex flex-col gap-1">
-      <label for="uo-rows" class="font-medium text-gray-700">Show</label>
+      <!-- <label for="uo-rows" class="font-medium text-gray-700">Show</label> -->
       <select id="uo-rows" class="bg-gray-50 border border-red-300 rounded-lg p-2.5 w-24
                      focus:ring-red-500 focus:border-red-500">
+        <option value="">Show</option>
         <option value="10" selected>10</option>
         <option value="20">20</option>
         <option value="40">40</option>
@@ -31,7 +32,7 @@
   <!-- ░░ TABLE ░░ -->
   <section class="bg-white shadow rounded-2xl overflow-x-auto mt-6">
     <table class="min-w-full divide-y divide-red-200">
-      <thead class="bg-red-50/30 text-xs uppercase tracking-wider text-red-700 border-b-2 border-red-600">
+      <thead class="text-xs uppercase tracking-wider bg-red-800 text-red-200 border-b-2 border-red-600">
         <tr>
           <th class="px-6 py-3 text-left">Name</th>
           <th class="px-6 py-3 text-left">Email</th>

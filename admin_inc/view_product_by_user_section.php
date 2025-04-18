@@ -3,19 +3,19 @@
   <h2 class="text-2xl font-semibold text-red-600 mb-6">View Product by User</h2>
 
   <!-- ░░ FILTER BAR ░░ -->
-  <section class="bg-white shadow rounded-2xl p-6 flex flex-wrap gap-4 items-end border border-red-200">
+  <section class="bg-white shadow rounded-2xl p-3 flex flex-wrap gap-4 items-end border border-red-200">
 
     <div class="flex flex-col gap-1">
-      <label for="up-userIds" class="font-medium text-gray-700">User IDs <span
-          class="text-xs text-gray-500">(comma)</span></label>
-      <input id="up-userIds" type="text" placeholder="e.g. 1,6,5" class="bg-gray-50 border border-red-300 rounded-lg p-2.5 w-64
+      <!-- <label for="up-userIds" class="font-medium text-gray-700">User IDs 
+        <span class="text-xs text-gray-500">(comma)</span></label> -->
+      <input id="up-userIds" type="text" placeholder="Search User IDs(comma) e.g. 1,6,5" class="bg-gray-50 border border-red-300 rounded-lg p-2.5 w-64
                     focus:ring-red-500 focus:border-red-500">
     </div>
 
     <div class="flex flex-col gap-1">
-      <label for="up-rowsPerPage" class="font-medium text-gray-700">Show</label>
-      <select id="up-rowsPerPage" class="bg-gray-50 border border-red-300 rounded-lg p-2.5 w-24
-                     focus:ring-red-500 focus:border-red-500">
+      <!-- <label for="up-rowsPerPage" class="font-medium text-gray-700">Show</label> -->
+      <select id="up-rowsPerPage" class="bg-gray-50 border border-red-300 rounded-lg p-2.5 w-24 focus:ring-red-500 focus:border-red-500">
+        <option value="">Show</option>
         <option value="10" selected>10</option>
         <option value="20">20</option>
         <option value="40">40</option>
@@ -27,7 +27,7 @@
   <!-- ░░ TABLE ░░ -->
   <section class="bg-white shadow rounded-2xl overflow-x-auto mt-6">
     <table class="min-w-full divide-y divide-red-200">
-      <thead class="bg-red-50/30 text-xs uppercase tracking-wider text-red-700 border-b-2 border-red-600">
+      <thead class="text-xs uppercase tracking-wider bg-red-800 text-red-200 border-b-2 border-red-600">
         <tr>
           <th class="px-6 py-3 text-left w-1/5">Name</th>
           <th class="px-6 py-3 text-left w-1/4">Email</th>

@@ -54,7 +54,7 @@
           <div id="mobileInput" class="relative mb-4">
             <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-600 text-sm font-medium">+91</span>
             <input type="tel" name="mobile" id="mobile" placeholder="Enter phone number" pattern="[0-9]{10}"
-              required
+              
               class="pl-12 w-full border border-gray-400 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" />
           </div>
 

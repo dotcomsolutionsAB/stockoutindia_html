@@ -35,10 +35,11 @@
       <thead class="text-xs uppercase tracking-wider bg-red-800 text-red-200 border-b-2 border-red-600">
         <tr>
           <th class="px-6 py-3 text-left">Name</th>
-          <th class="px-6 py-3 text-left">Email</th>
+          <!-- <th class="px-6 py-3 text-left">Email</th> -->
           <th class="px-6 py-3 text-center">Order #</th>
           <th class="px-6 py-3 text-center">Date</th>
           <th class="px-6 py-3 text-center">Status</th>
+          <th class="px-6 py-3 text-center">Amount</th>
           <th class="px-6 py-3 text-center w-32">Actions</th>
         </tr>
       </thead>
@@ -55,11 +56,21 @@
   <!-- ░░ ROW TEMPLATE ░░ -->
   <template id="uo-tmpl">
     <tr class="hover:bg-gray-50">
-      <td class="px-6 py-4 font-medium text-gray-900" data-f="name"></td>
-      <td class="px-6 py-4 text-gray-700 break-all" data-f="email"></td>
-      <td class="px-6 py-4 text-center" data-f="oid"></td>
+      <td class="px-6 py-4 font-medium text-gray-900">
+        <div class="flex flex-col div">
+          <span class="name " data-f="name"></span>
+          <span class="email text-red-900" data-f="email"></span>
+        </div>
+      </td>
+      <td class="px-6 py-4 text-center">
+        <div class="flex flex-col div2">
+          <span class="name " data-f="oid"></span>
+          <span class="email text-red-900" data-f="razor-pay-id"></span>
+        </div>
+      </td>
       <td class="px-6 py-4 text-center" data-f="date"></td>
       <td class="px-6 py-4 text-center" data-f="status"></td>
+      <td class="px-6 py-4 text-center" data-f="amount"></td>
       <td class="px-6 py-4 text-center space-x-1">
         <button class="view w-8 h-8 rounded-full bg-red-500 hover:bg-red-400
                        text-white inline-flex items-center justify-center" title="View">
@@ -132,12 +143,6 @@
         box.classList.toggle('hidden', box.childElementCount === 0);
       }
 
-      // document.getElementById('uo-search')
-      //         .addEventListener('input',debounce(async e=>{
-      //           await loadUsersForSuggest();
-      //           selectedUserId=null;        // reset until chosen
-      //           showSuggestions(e.target.value.trim());
-      //         },200));
       document.getElementById('uo-search')
         .addEventListener('input', debounce(async e => {
           const term = e.target.value.trim();
@@ -202,7 +207,10 @@
           tr.querySelector('[data-f="name"]').textContent = u.name;
           tr.querySelector('[data-f="email"]').textContent = u.email;
           tr.querySelector('[data-f="oid"]').textContent = o.order_id ?? '–';
+          tr.querySelector('[data-f="razor-pay-id"]').textContent = o.razorpay_order_id ?? '–';
           tr.querySelector('[data-f="date"]').textContent = o.date ?? '–';
+          // tr.querySelector('[data-f="amount"]').textContent = o.amount ?? '–';
+          tr.querySelector('[data-f="amount"]').textContent = o.amount != null ? rupee.format(o.amount) : '–';
 
           const st = o.status ?? '–';
           tr.querySelector('[data-f="status"]').innerHTML =
@@ -211,6 +219,7 @@
                 'bg-gray-100 text-gray-700'
             }">${st}</span>`;
 
+          tr.querySelector('[data-f="date"]').textContent = o.date ?? '–';
           tr.querySelector('.view').onclick = () => alert('View order ' + o.order_id);
           tr.querySelector('.edit').onclick = () => alert('Edit order ' + o.order_id);
           tr.querySelector('.del').onclick = () => { if (confirm('Delete order ' + o.order_id + '?')) alert('delete API'); };

@@ -266,6 +266,74 @@
     maximumFractionDigits: 0       // change if you need paise
   });
 
+  // function renderTable(rows) {
+  //   const tbody = document.getElementById('tableBody');
+  //   tbody.innerHTML = '';
+  //   const tmpl = document.getElementById('rowTemplate');
+
+  //   rows.forEach(row => {
+  //     const tr = tmpl.content.cloneNode(true);
+  //     //   const img = (Array.isArray(row.image) && row.image.length)
+  //     //     ? row.image[0]
+  //     //     : 'uploads/placeholder.png';
+  //     //   tr.querySelector('[data-field="image"]').src = img;
+
+  //     //   tr.querySelector('[data-field="product_name"]').textContent = row.product_name || '';
+  //     // (inside renderTable, for each row)
+  //     const imgEl = tr.querySelector('[data-field="image"]');
+  //     const nameEl = tr.querySelector('[data-field="product_name"]');
+
+  //     const imgSrc = Array.isArray(row.image) && row.image.length
+  //       ? row.image[0]
+  //       : 'uploads/placeholder.png';
+
+  //     imgEl.src = imgSrc;
+  //     nameEl.textContent = row.product_name || '';
+
+  //     tr.querySelector('[data-field="offer_quantity"]').textContent = row.offer_quantity ?? '-';
+  //     tr.querySelector('[data-field="minimum_quantity"]').textContent = row.minimum_quantity ?? '-';
+  //     tr.querySelector('[data-field="original_price"]').textContent = row.original_price != null ? rupee.format(row.original_price) : '–';
+  //     //   tr.querySelector('[data-field="original_price"]').textContent = row.original_price ?? '-';
+  //     tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price != null ? rupee.format(row.selling_price) : '–';
+  //     //   tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price ?? '-';
+
+  //     const status = row.status || '—';
+  //     tr.querySelector('[data-field="status"]').innerHTML =
+  //       `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${status === 'active' ? 'bg-green-100 text-green-800' :
+  //         status === 'inactive' ? 'bg-yellow-100 text-yellow-800' :
+  //           'bg-gray-100 text-gray-700'
+  //       }">${status}</span>`;
+
+  //     tr.querySelector('[data-field="unit"]').textContent = row.unit || '-';
+  //     tr.querySelector('[data-field="validity"]').textContent = row.validity || '-';
+  //     tr.querySelector('[data-field="industry"]').textContent = row.industry?.name ?? '-';
+  //     tr.querySelector('[data-field="sub_industry"]').textContent = row.sub_industry?.name ?? '-';
+
+  //     //   tr.querySelector('.updateBtn').addEventListener('click',
+  //     //     () => alert(`Update product #${row.id}`));
+  //     // Add handlers
+  //     tr.querySelector('.viewBtn').addEventListener('click', () => {
+  //       // 👉  put your “open product details” logic here
+  //       alert(`View product #${row.id}`);
+  //     });
+
+  //     tr.querySelector('.updateBtn').addEventListener('click', () => {
+  //       // 👉  existing update‑popup logic
+  //       alert(`Update product #${row.id}`);
+  //     });
+
+  //     tr.querySelector('.deleteBtn').addEventListener('click', () => {
+  //       // 👉  call your delete API (confirm first!)
+  //       if (confirm(`Delete product #${row.id}?`)) {
+  //         alert('Perform delete here…');
+  //       }
+  //     });
+
+
+  //     tbody.appendChild(tr);
+  //   });
+  //   lucide.createIcons();
+  // }
   function renderTable(rows) {
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
@@ -273,13 +341,6 @@
 
     rows.forEach(row => {
       const tr = tmpl.content.cloneNode(true);
-      //   const img = (Array.isArray(row.image) && row.image.length)
-      //     ? row.image[0]
-      //     : 'uploads/placeholder.png';
-      //   tr.querySelector('[data-field="image"]').src = img;
-
-      //   tr.querySelector('[data-field="product_name"]').textContent = row.product_name || '';
-      // (inside renderTable, for each row)
       const imgEl = tr.querySelector('[data-field="image"]');
       const nameEl = tr.querySelector('[data-field="product_name"]');
 
@@ -293,47 +354,86 @@
       tr.querySelector('[data-field="offer_quantity"]').textContent = row.offer_quantity ?? '-';
       tr.querySelector('[data-field="minimum_quantity"]').textContent = row.minimum_quantity ?? '-';
       tr.querySelector('[data-field="original_price"]').textContent = row.original_price != null ? rupee.format(row.original_price) : '–';
-      //   tr.querySelector('[data-field="original_price"]').textContent = row.original_price ?? '-';
       tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price != null ? rupee.format(row.selling_price) : '–';
-      //   tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price ?? '-';
 
-      const status = row.status || '—';
-      tr.querySelector('[data-field="status"]').innerHTML =
-        `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${status === 'active' ? 'bg-green-100 text-green-800' :
-          status === 'inactive' ? 'bg-yellow-100 text-yellow-800' :
-            'bg-gray-100 text-gray-700'
-        }">${status}</span>`;
+      // ✅ STATUS SELECT BOX LOGIC
+      const statusTd = tr.querySelector('[data-field="status"]');
+      const statusSelect = document.createElement('select');
+      statusSelect.className = 'border rounded px-2 py-1 text-sm';
+
+      const statusOptions = ['active', 'in-active', 'sold'];
+
+      statusOptions.forEach(status => {
+        const option = document.createElement('option');
+        option.value = status;
+        option.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+        if (row.status === status) {
+          option.selected = true;
+        }
+        statusSelect.appendChild(option);
+      });
+
+      statusSelect.addEventListener('change', () => {
+        const selectedStatus = statusSelect.value;
+
+        const token = localStorage.getItem('authToken');
+        const payload = {
+          product_id: row.id,
+          product_status: selectedStatus // 'active', 'in-active', or 'sold'
+        };
+        
+        fetch('<?php echo BASE_URL; ?>/admin/product_toggle_status', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert(`Status updated to "${selectedStatus}"`);
+            } else {
+              alert('Failed to update status.');
+              statusSelect.value = row.status; // rollback
+            }
+          })
+          .catch(error => {
+            console.error('Error updating status:', error);
+            alert('Something went wrong.');
+            statusSelect.value = row.status; // rollback
+          });
+      });
+
+      statusTd.innerHTML = '';
+      statusTd.appendChild(statusSelect);
 
       tr.querySelector('[data-field="unit"]').textContent = row.unit || '-';
       tr.querySelector('[data-field="validity"]').textContent = row.validity || '-';
       tr.querySelector('[data-field="industry"]').textContent = row.industry?.name ?? '-';
       tr.querySelector('[data-field="sub_industry"]').textContent = row.sub_industry?.name ?? '-';
 
-      //   tr.querySelector('.updateBtn').addEventListener('click',
-      //     () => alert(`Update product #${row.id}`));
-      // Add handlers
       tr.querySelector('.viewBtn').addEventListener('click', () => {
-        // 👉  put your “open product details” logic here
         alert(`View product #${row.id}`);
       });
 
       tr.querySelector('.updateBtn').addEventListener('click', () => {
-        // 👉  existing update‑popup logic
         alert(`Update product #${row.id}`);
       });
 
       tr.querySelector('.deleteBtn').addEventListener('click', () => {
-        // 👉  call your delete API (confirm first!)
         if (confirm(`Delete product #${row.id}?`)) {
           alert('Perform delete here…');
         }
       });
 
-
       tbody.appendChild(tr);
     });
+
     lucide.createIcons();
   }
+
 
   /* ------------------------------------------------------------------
     PAGINATION

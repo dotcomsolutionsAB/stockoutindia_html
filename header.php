@@ -21,7 +21,7 @@
             s.parentNode.insertBefore( wf, s );
         } )( document );
     </script>
-
+    <script src="configs/auth.js"></script>
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 

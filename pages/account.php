@@ -1,7 +1,6 @@
 <base href="../">
 <?php include("../header.php") ?>
 <?php include("../configs/config_static_data.php"); ?> 
-<?php include("../configs/auth_check.php"); ?>
 
 		<main class="main">
           <section class="account_page">

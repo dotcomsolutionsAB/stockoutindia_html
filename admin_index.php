@@ -1,6 +1,5 @@
 <!-- <base href="../"> -->
 <?php include("configs/config_static_data.php"); ?> 
-<?php include("configs/auth_check.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +8,23 @@
     <title>Stockout India Dashboard</title>
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
+    <script src="configs/auth.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <!-- <script>
+        const token = localStorage.getItem('authToken');
+        const role = localStorage.getItem('role');
+
+        if (!token || role !== 'admin') {
+            Swal.fire({
+            icon: 'error',
+            title: 'Access Denied',
+            text: 'This page is for Admins only.',
+            confirmButtonColor: '#d33',
+            }).then(() => {
+            window.location.href = "login.php";
+            });
+        }
+    </script> -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="custom/admin_style.css">

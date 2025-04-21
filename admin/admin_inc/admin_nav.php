@@ -46,6 +46,6 @@
         localStorage.removeItem("username");
         localStorage.removeItem("name");
 
-        window.location.href = "login.php";
+        window.location.href = "../login.php";
     }
 </script>

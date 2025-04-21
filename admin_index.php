@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stockout India Dashboard</title>
-    <script src="configs/admin_auth.js"></script>
+    <script src="configs/auth.js"></script>
     <!-- <script>
         const token = localStorage.getItem('authToken');
         const role = localStorage.getItem('role');

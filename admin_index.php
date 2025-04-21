@@ -6,23 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stockout India Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        const token = localStorage.getItem('authToken');
-        const role = localStorage.getItem('role');
-
-        if (!token || role !== 'admin') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Access Denied',
-                text: 'This page is for Admins only.',
-                confirmButtonColor: '#d33',
-                }).then(() => {
-                window.location.href = "login.php";
-            });
-        }
-    </script>
-
+    <script src="configs/admin_auth.js"></script>
     <!-- <script>
         const token = localStorage.getItem('authToken');
         const role = localStorage.getItem('role');

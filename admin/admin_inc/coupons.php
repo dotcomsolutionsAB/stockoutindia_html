@@ -47,14 +47,16 @@
   const BASE_URL = "https://api.stockoutindia.com/api";
   // Replace with your actual base URL
   const couponMap = {};
+  const BASE_URL = "https://new.stockoutindia.com/api"; // if your API runs on that
 
   async function fetchCoupons() {
-    const token = localStorage.getItem('authToken');
-    if (!token) {
-      console.warn("Auth token not found.");
-      return;
-    }
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    console.warn("Auth token not found.");
+    return;
+  }
 
+  try {
     const response = await fetch(`${BASE_URL}/coupon/index`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -87,7 +89,12 @@
     } else {
       tbody.innerHTML = `<tr><td colspan="4" class="text-center px-6 py-4 text-gray-500">No Coupons Found</td></tr>`;
     }
+  } catch (err) {
+    console.error("Fetch failed:", err);
+    Swal.fire("Error", "Failed to fetch coupons. Please check your API or token.", "error");
   }
+}
+
 
   function viewCoupon(id) {
     const data = couponMap[id];

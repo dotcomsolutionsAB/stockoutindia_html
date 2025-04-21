@@ -918,6 +918,9 @@
   .make_payment_button:hover {
       background-color: #900000;
   }
+  .coupon_section {
+    display: flex !important;
+  }
 
   .mark-sold{
     /* pointer-events: none; */

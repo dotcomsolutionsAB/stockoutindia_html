@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stockout India Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const token = localStorage.getItem('authToken');
         const role = localStorage.getItem('role');
@@ -21,7 +22,7 @@
             });
         }
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- <script>
         const token = localStorage.getItem('authToken');
         const role = localStorage.getItem('role');

@@ -68,8 +68,8 @@
   <!-- ░░ SCRIPT ░░ -->
   <script>
     (() => {
-      const BASE_URL = '<?php echo BASE_URL; ?>';
-      const API_URL = `${BASE_URL}/admin/users_with_products`;
+      // const BASE_URL = '';
+      const API_URLs = `<?php echo BASE_URL; ?>/admin/users_with_products`;
 
       let limit = 10;
       let offset = 0;
@@ -86,7 +86,7 @@
         if (userIdsCSV) body.user_ids = userIdsCSV;
 
         try {
-          const res = await fetch(API_URL, {
+          const res = await fetch(API_URLs, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
             body: JSON.stringify(body)

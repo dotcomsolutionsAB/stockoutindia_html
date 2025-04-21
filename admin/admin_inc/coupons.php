@@ -49,8 +49,8 @@
   const BASE_URL = "https://new.stockoutindia.com/api"; // if your API runs on that
 
   async function fetchCoupons() {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
+  const tokens = localStorage.getItem('authToken');
+  if (!tokens) {
     console.warn("Auth token not found.");
     return;
   }
@@ -58,7 +58,7 @@
   try {
     const response = await fetch(`${BASE_URL}/coupon/index`, {
       headers: {
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${tokens}`
       }
     });
 

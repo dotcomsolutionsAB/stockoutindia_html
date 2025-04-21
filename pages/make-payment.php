@@ -291,6 +291,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     // Apply coupon button handler
+    // applyCouponBtn.addEventListener("click", function () {
+    //     const selected = couponSelect.value;
+    //     if (!selected) {
+    //         alert("Please select a valid coupon.");
+    //         return;
+    //     }
+
+    //     const couponObj = JSON.parse(selected);
+    //     selectedCoupon = couponObj.name;
+    //     const discount = couponObj.value;
+    //     finalAmount = productPrice - discount;
+
+    //     document.querySelector(".downbox h2").textContent = `Total: ₹${finalAmount}`;
+    //     discountInfo.style.display = "block";
+    //     discountInfo.textContent = `Coupon applied: ₹${discount} OFF`;
+
+    //     // Step 4: Regenerate Razorpay order with coupon
+    //     generateRazorpayOrder(finalAmount, selectedCoupon);
+    // });
     applyCouponBtn.addEventListener("click", function () {
         const selected = couponSelect.value;
         if (!selected) {
@@ -307,9 +326,20 @@ document.addEventListener("DOMContentLoaded", function () {
         discountInfo.style.display = "block";
         discountInfo.textContent = `Coupon applied: ₹${discount} OFF`;
 
-        // Step 4: Regenerate Razorpay order with coupon
+        // ✅ Lock the coupon select and disable Apply button
+        couponSelect.disabled = true;
+        applyCouponBtn.disabled = true;
+
+        // ✅ Show an info note
+        const lockNote = document.createElement("p");
+        lockNote.className = "text-muted small mt-1";
+        lockNote.textContent = "Coupon has been applied and locked.";
+        discountInfo.parentNode.appendChild(lockNote);
+
+        // 🔁 Generate Razorpay order with coupon
         generateRazorpayOrder(finalAmount, selectedCoupon);
     });
+
 
     // Step 5: Razorpay popup
     makePaymentBtn.addEventListener("click", function () {

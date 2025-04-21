@@ -116,11 +116,6 @@
                 </div>
             </td>
             <!-- keep the rest of the <td> cells exactly as before -->
-
-            <!-- <td class="px-6 py-4 whitespace-nowrap">
-                <img data-field="image" class="h-12 w-12 rounded object-cover ring-1 ring-gray-200" alt="Product">
-            </td>
-            <td class="px-6 py-4 font-medium text-gray-900" data-field="product_name"></td> -->
             <td class="px-6 py-4 text-center" data-field="offer_quantity"></td>
             <td class="px-6 py-4 text-center" data-field="minimum_quantity"></td>
             <td class="px-6 py-4 text-right" data-field="original_price"></td>
@@ -288,15 +283,15 @@
 
     //   tr.querySelector('[data-field="product_name"]').textContent = row.product_name || '';
     // (inside renderTable, for each row)
-const imgEl   = tr.querySelector('[data-field="image"]');
-const nameEl  = tr.querySelector('[data-field="product_name"]');
+      const imgEl   = tr.querySelector('[data-field="image"]');
+      const nameEl  = tr.querySelector('[data-field="product_name"]');
 
-const imgSrc  = Array.isArray(row.image) && row.image.length
-              ? row.image[0]
-              : 'uploads/placeholder.png';
+      const imgSrc  = Array.isArray(row.image) && row.image.length
+                    ? row.image[0]
+                    : 'uploads/placeholder.png';
 
-imgEl.src = imgSrc;
-nameEl.textContent = row.product_name || '';
+      imgEl.src = imgSrc;
+      nameEl.textContent = row.product_name || '';
 
       tr.querySelector('[data-field="offer_quantity"]').textContent = row.offer_quantity ?? '-';
       tr.querySelector('[data-field="minimum_quantity"]').textContent = row.minimum_quantity ?? '-';

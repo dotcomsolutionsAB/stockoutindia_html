@@ -97,40 +97,6 @@
       });
   }
 
-  // function deleteCoupon(id) {
-  //   const token = localStorage.getItem("authToken");
-
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "This will permanently delete the coupon.",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonText: "Yes, delete it!",
-  //     cancelButtonText: "Cancel"
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       fetch(`${BASE_URL}/coupon/${id}`, {
-  //         method: "DELETE",
-  //         headers: {
-  //           "Authorization": `Bearer ${token}`
-  //         }
-  //       })
-  //         .then(res => res.json())
-  //         .then(data => {
-  //           if (data.success) {
-  //             Swal.fire("Deleted!", "Coupon has been deleted.", "success");
-  //             fetchCoupons();
-  //           } else {
-  //             Swal.fire("Error", data.message || "Failed to delete coupon", "error");
-  //           }
-  //         })
-  //         .catch(error => {
-  //           console.error("Delete error:", error);
-  //           Swal.fire("Error", "Server error while deleting.", "error");
-  //         });
-  //     }
-  //   });
-  // }
   function deleteCoupon(id) {
     const token = localStorage.getItem("authToken");
 

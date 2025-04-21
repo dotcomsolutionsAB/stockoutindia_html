@@ -47,37 +47,43 @@
 //   const BASE_URL = "https://api.new.stockoutindia.com/api"; // update if different
     const couponMap = {};
 
-    async function fetchCoupons() {
-    const token = localStorage.getItem('authToken');
-    const response = await fetch(`<?php echo BASE_URL; ?>/coupon/index`, {
-        headers: { 'Authorization': `Bearer ${token}` }
+    const couponMap = {};
+
+async function fetchCoupons() {
+  const token = localStorage.getItem('authToken');
+  const response = await fetch("https://api.stockoutindia.com/api/coupon/index", {
+    headers: { 'Authorization': `Bearer ${token}` }
+  });
+
+  const result = await response.json();
+  console.log("Coupon fetch result:", result); // 👈 Add this
+
+  const tbody = document.getElementById("tableBody");
+  tbody.innerHTML = "";
+
+  if (result.success && result.data.length > 0) {
+    result.data.forEach((item, index) => {
+      couponMap[item.id] = item;
+
+      const row = `
+        <tr>
+          <td class="px-6 py-4">${index + 1}</td>
+          <td class="px-6 py-4">${item.name}</td>
+          <td class="px-6 py-4 text-center">₹${item.value}</td>
+          <td class="px-6 py-4 text-center space-x-2">
+            <button onclick="viewCoupon(${item.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
+            <button onclick="updateCoupon(${item.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Update</button>
+            <button onclick="deleteCoupon(${item.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+          </td>
+        </tr>`;
+      tbody.insertAdjacentHTML('beforeend', row);
     });
+  } else {
+    console.warn("No data found or success is false.");
+    tbody.innerHTML = `<tr><td colspan="4" class="text-center px-6 py-4 text-gray-500">No Coupons Found</td></tr>`;
+  }
+}
 
-    const result = await response.json();
-    const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = "";
-
-    if (result.success && result.data.length > 0) {
-        result.data.forEach((item, index) => {
-        couponMap[item.id] = item; // Store in map
-
-        const row = `
-            <tr>
-            <td class="px-6 py-4">${index + 1}</td>
-            <td class="px-6 py-4">${item.name}</td>
-            <td class="px-6 py-4 text-center">₹${item.value}</td>
-            <td class="px-6 py-4 text-center space-x-2">
-                <button onclick="viewCoupon(${item.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
-                <button onclick="updateCoupon(${item.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Update</button>
-                <button onclick="deleteCoupon(${item.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
-            </td>
-            </tr>`;
-        tbody.insertAdjacentHTML('beforeend', row);
-        });
-    } else {
-        tbody.innerHTML = `<tr><td colspan="4" class="text-center px-6 py-4 text-gray-500">No Coupons Found</td></tr>`;
-    }
-    }
 
     function viewCoupon(id) {
     const data = couponMap[id];

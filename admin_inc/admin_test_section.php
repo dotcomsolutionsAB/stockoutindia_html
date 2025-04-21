@@ -171,10 +171,10 @@
   /* ------------------------------------------------------------------
     BASE URL from PHP
   ------------------------------------------------------------------ */
-  const BASE_URL = '<?php echo BASE_URL; ?>';   // ← echo your constant
-  const API_URL = `${BASE_URL}/admin/products`;
-  const INDUSTRY_URL = `${BASE_URL}/industry`;
-  const SUB_INDUSTRY_URL = `${BASE_URL}/sub_industry`;
+  // ← echo your constant
+  const API_URL = `<?php echo BASE_URL; ?>/admin/products`;
+  const INDUSTRY_URL = `<?php echo BASE_URL; ?>/industry`;
+  const SUB_INDUSTRY_URL = `<?php echo BASE_URL; ?>/sub_industry`;
 
   /* ------------------------------------------------------------------
     STATE & CONSTANTS

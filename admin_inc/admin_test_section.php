@@ -173,8 +173,8 @@
   ------------------------------------------------------------------ */
   // ← echo your constant
   const API_URLL = `<?php echo BASE_URL; ?>/admin/products`;
-  const INDUSTRY_URL = `<?php echo BASE_URL; ?>/industry`;
-  const SUB_INDUSTRY_URL = `<?php echo BASE_URL; ?>/sub_industry`;
+  const INDUSTRY_URLL = `<?php echo BASE_URL; ?>/industry`;
+  const SUB_INDUSTRY_URLL = `<?php echo BASE_URL; ?>/sub_industry`;
 
   /* ------------------------------------------------------------------
     STATE & CONSTANTS
@@ -387,9 +387,9 @@ nameEl.textContent = row.product_name || '';
     INITIALISE
   ------------------------------------------------------------------ */
   (async () => {
-    await initCheckList(INDUSTRY_URL, document.getElementById('industryList'),
+    await initCheckList(INDUSTRY_URLL, document.getElementById('industryList'),
       'industryChk', i => i.name);
-    await initCheckList(SUB_INDUSTRY_URL, document.getElementById('subIndustryList'),
+    await initCheckList(SUB_INDUSTRY_URLLL, document.getElementById('subIndustryList'),
       'subChk', s => s.name);
 
     attachSearch('industrySearch', 'industryList');

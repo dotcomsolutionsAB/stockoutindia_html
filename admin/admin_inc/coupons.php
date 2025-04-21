@@ -44,7 +44,6 @@
 </div>
 
 <script>
-  const BASE_URL = "https://api.stockoutindia.com/api";
   // Replace with your actual base URL
   const couponMap = {};
   const BASE_URL = "https://new.stockoutindia.com/api"; // if your API runs on that

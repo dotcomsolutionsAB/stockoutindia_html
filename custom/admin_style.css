@@ -61,7 +61,7 @@
         border-radius: 6px;
         border: 1px solid #ccc;
         box-sizing: border-box;
-        margin: 0 auto;
+        margin: 10px auto;
     }
 
     .swal2-popup .swal2-select {

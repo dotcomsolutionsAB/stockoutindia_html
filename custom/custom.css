@@ -884,6 +884,8 @@
       margin-bottom: 20px;
       width: 40%;
       font-size: 25px;
+      display: flex;
+      justify-content: flex-end;
   }
   .comment_section {
       margin-bottom: 20px;

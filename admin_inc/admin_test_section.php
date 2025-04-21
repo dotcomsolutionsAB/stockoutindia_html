@@ -172,7 +172,7 @@
     BASE URL from PHP
   ------------------------------------------------------------------ */
   // ← echo your constant
-  const API_URL = `<?php echo BASE_URL; ?>/admin/products`;
+  const API_URLL = `<?php echo BASE_URL; ?>/admin/products`;
   const INDUSTRY_URL = `<?php echo BASE_URL; ?>/industry`;
   const SUB_INDUSTRY_URL = `<?php echo BASE_URL; ?>/sub_industry`;
 
@@ -245,7 +245,7 @@
     Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(API_URLL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify(payload)

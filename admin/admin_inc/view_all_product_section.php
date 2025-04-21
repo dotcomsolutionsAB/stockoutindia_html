@@ -24,7 +24,7 @@
         <!-- Max price -->
         <div class="flex flex-col gap-1">
           <!-- <label for="maxPrice" class="font-medium text-gray-700">Max Price (₹)</label> -->
-          <input id="maxPrice" type="number" min="0" placeholder="min-Price (₹) ∞" class="bg-gray-50 border border-gray-300 rounded-lg p-2
+          <input id="maxPrice" type="number" min="0" placeholder="max-Price (₹) ∞" class="bg-gray-50 border border-gray-300 rounded-lg p-2
                           focus:ring-red-500 focus:border-red-500">
         </div>
       </div>
@@ -266,74 +266,6 @@
     maximumFractionDigits: 0       // change if you need paise
   });
 
-  // function renderTable(rows) {
-  //   const tbody = document.getElementById('tableBody');
-  //   tbody.innerHTML = '';
-  //   const tmpl = document.getElementById('rowTemplate');
-
-  //   rows.forEach(row => {
-  //     const tr = tmpl.content.cloneNode(true);
-  //     //   const img = (Array.isArray(row.image) && row.image.length)
-  //     //     ? row.image[0]
-  //     //     : 'uploads/placeholder.png';
-  //     //   tr.querySelector('[data-field="image"]').src = img;
-
-  //     //   tr.querySelector('[data-field="product_name"]').textContent = row.product_name || '';
-  //     // (inside renderTable, for each row)
-  //     const imgEl = tr.querySelector('[data-field="image"]');
-  //     const nameEl = tr.querySelector('[data-field="product_name"]');
-
-  //     const imgSrc = Array.isArray(row.image) && row.image.length
-  //       ? row.image[0]
-  //       : 'uploads/placeholder.png';
-
-  //     imgEl.src = imgSrc;
-  //     nameEl.textContent = row.product_name || '';
-
-  //     tr.querySelector('[data-field="offer_quantity"]').textContent = row.offer_quantity ?? '-';
-  //     tr.querySelector('[data-field="minimum_quantity"]').textContent = row.minimum_quantity ?? '-';
-  //     tr.querySelector('[data-field="original_price"]').textContent = row.original_price != null ? rupee.format(row.original_price) : '–';
-  //     //   tr.querySelector('[data-field="original_price"]').textContent = row.original_price ?? '-';
-  //     tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price != null ? rupee.format(row.selling_price) : '–';
-  //     //   tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price ?? '-';
-
-  //     const status = row.status || '—';
-  //     tr.querySelector('[data-field="status"]').innerHTML =
-  //       `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${status === 'active' ? 'bg-green-100 text-green-800' :
-  //         status === 'inactive' ? 'bg-yellow-100 text-yellow-800' :
-  //           'bg-gray-100 text-gray-700'
-  //       }">${status}</span>`;
-
-  //     tr.querySelector('[data-field="unit"]').textContent = row.unit || '-';
-  //     tr.querySelector('[data-field="validity"]').textContent = row.validity || '-';
-  //     tr.querySelector('[data-field="industry"]').textContent = row.industry?.name ?? '-';
-  //     tr.querySelector('[data-field="sub_industry"]').textContent = row.sub_industry?.name ?? '-';
-
-  //     //   tr.querySelector('.updateBtn').addEventListener('click',
-  //     //     () => alert(`Update product #${row.id}`));
-  //     // Add handlers
-  //     tr.querySelector('.viewBtn').addEventListener('click', () => {
-  //       // 👉  put your “open product details” logic here
-  //       alert(`View product #${row.id}`);
-  //     });
-
-  //     tr.querySelector('.updateBtn').addEventListener('click', () => {
-  //       // 👉  existing update‑popup logic
-  //       alert(`Update product #${row.id}`);
-  //     });
-
-  //     tr.querySelector('.deleteBtn').addEventListener('click', () => {
-  //       // 👉  call your delete API (confirm first!)
-  //       if (confirm(`Delete product #${row.id}?`)) {
-  //         alert('Perform delete here…');
-  //       }
-  //     });
-
-
-  //     tbody.appendChild(tr);
-  //   });
-  //   lucide.createIcons();
-  // }
   function renderTable(rows) {
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
@@ -346,7 +278,7 @@
 
       const imgSrc = Array.isArray(row.image) && row.image.length
         ? row.image[0]
-        : 'uploads/placeholder.png';
+        : '../uploads/placeholder.png';
 
       imgEl.src = imgSrc;
       nameEl.textContent = row.product_name || '';

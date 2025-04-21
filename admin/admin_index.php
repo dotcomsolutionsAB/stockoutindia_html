@@ -50,7 +50,7 @@
                 <?php include("admin_inc/view_order_by_users_section.php"); ?>                
 
                 <!-- Settings Section -->
-                <?php include("admin_inc/setting_section.php"); ?> 
+                <?php include("admin_inc/coupons.php"); ?> 
                 
                 <!-- Test Section -->
                 <?php include("admin_inc/admin_test_section.php"); ?>   

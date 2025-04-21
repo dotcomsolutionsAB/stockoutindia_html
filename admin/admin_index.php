@@ -27,33 +27,33 @@
     <div class="flex h-screen">
         
         <!-- Sidebar for larger screens -->
-        <?php include("admin_inc/admin_sidebar.php"); ?>
+        <?php include("admin_sidebar.php"); ?>
 
         <!-- Main Content -->
         <div class="flex-1 p-1 overflow-y-auto">
 
             <!-- Navbar for larger screens -->
-            <?php include("admin_inc/admin_nav.php"); ?>
+            <?php include("admin_nav.php"); ?>
 
             <!-- Content Sections -->
             <div class="main_content p-3">
                 <!-- Profile Section -->
-                <?php include("admin_inc/admin_profile_section.php"); ?>
+                <?php include("admin_profile_section.php"); ?>
 
                 <!-- View all Products Section -->
-                <?php include("admin_inc/view_all_product_section.php"); ?>  
+                <?php include("view_all_product_section.php"); ?>  
                 
                 <!-- View Product by user Section -->
-                <?php include("admin_inc/view_product_by_user_section.php"); ?> 
+                <?php include("view_product_by_user_section.php"); ?> 
 
                 <!-- View order by users Section -->
-                <?php include("admin_inc/view_order_by_users_section.php"); ?>                
+                <?php include("view_order_by_users_section.php"); ?>                
 
                 <!-- Settings Section -->
-                <?php include("admin_inc/setting_section.php"); ?> 
+                <?php include("setting_section.php"); ?> 
                 
                 <!-- Test Section -->
-                <?php include("admin_inc/admin_test_section.php"); ?>   
+                <?php include("admin_test_section.php"); ?>   
                 
             </div>
         </div>

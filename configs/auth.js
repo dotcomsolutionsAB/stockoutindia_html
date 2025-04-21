@@ -50,11 +50,11 @@
     // Allow public
   } else if (adminPages.includes(pathname)) {
     if (!token || role !== 'admin') {
-      redirectToLogin("Admin access only.");
+      redirectToLogin("Access Denied !");
     }
   } else if (customerPages.includes(pathname)) {
     if (!token || role !== 'user') {
-      redirectToLogin("Customer access only.");
+      redirectToLogin("Access Denied");
     }
   } else {
     // Unknown or protected page

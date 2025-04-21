@@ -134,21 +134,58 @@ function editCoupon(id) {
   const coupon = couponMap[id];
   if (!coupon) return;
 
-  document.getElementById("coupon").value = coupon.name;
-  document.getElementById("couponValue").value = coupon.value;
-  document.getElementById("coupon").focus();
-
-  // Optionally store current editing ID
-  document.getElementById("coupon").dataset.editId = id;
-
   Swal.fire({
-    title: "Edit Mode Enabled",
-    text: "Update the fields above and click submit.",
-    icon: "info",
-    timer: 2000,
-    showConfirmButton: false
+    title: `Update Coupon: ${coupon.name}`,
+    html: `
+      <input id="editName" class="swal2-input" placeholder="Coupon Name" value="${coupon.name}">
+      <input id="editValue" type="number" class="swal2-input" placeholder="Coupon Value" value="${coupon.value}">
+    `,
+    confirmButtonText: 'Update',
+    showCancelButton: true,
+    focusConfirm: false,
+    preConfirm: () => {
+      const name = document.getElementById('editName').value.trim();
+      const value = document.getElementById('editValue').value.trim();
+
+      if (!name || !value) {
+        Swal.showValidationMessage('Please enter both name and value');
+        return false;
+      }
+
+      return { name, value };
+    }
+  }).then(result => {
+    if (result.isConfirmed && result.value) {
+      const token = localStorage.getItem("authToken");
+
+      fetch(`${BASE_URL}/coupon/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          name: result.value.name,
+          value: result.value.value
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          Swal.fire("Updated!", "Coupon updated successfully.", "success");
+          fetchCoupons();
+        } else {
+          Swal.fire("Error", data.message || "Update failed.", "error");
+        }
+      })
+      .catch(error => {
+        console.error("Update error:", error);
+        Swal.fire("Error", "Server error while updating.", "error");
+      });
+    }
   });
 }
+
 
   function submitCoupon() {
     const name = document.getElementById("coupon").value.trim();

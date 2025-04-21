@@ -10,7 +10,7 @@ if (!defined('BASE_URL')) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- ⬇⬇ COUPON SECTION ⬇⬇ -->
-<section id="coupons" class="tab-content px-4 py-6">
+<div id="coupons" class="tab-content px-4 py-6">
   <h2 class="text-2xl font-semibold text-red-600 mb-6">Coupons</h2>
 
   <!-- ── Coupon Form ─────────────────────────────────────────── -->
@@ -51,7 +51,7 @@ if (!defined('BASE_URL')) {
       </tbody>
     </table>
   </div>
-</section>
+</div>
 
 <script>
 /*  ──────────────────────────────────────────────────────────────

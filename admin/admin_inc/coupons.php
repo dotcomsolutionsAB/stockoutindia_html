@@ -77,7 +77,7 @@
                       <td class="px-6 py-4">${index + 1}</td>
                       <td class="px-6 py-4">${coupon.name}</td>
                       <td class="px-6 py-4">₹${coupon.value}</td>
-                      <td class="px-6 py-4">${coupon.is_active === "0" ? "✅ Active" : "❌ Inactive"}</td>
+                      <td class="px-6 py-4">${coupon.is_active === "1" ? "✅ Active" : "❌ Inactive"}</td>
                       <td class="px-6 py-4 text-center space-x-2">
                         <button onclick="viewCoupon(${coupon.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
                         <button onclick="editCoupon(${coupon.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Update</button>
@@ -198,8 +198,8 @@
         <input id="editName" class="swal2-input" placeholder="Coupon Name" value="${coupon.name}">
         <input id="editValue" type="number" class="swal2-input" placeholder="Coupon Value" value="${coupon.value}">
         <select id="editStatus" class="swal2-select" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-          <option value="0" ${coupon.is_active === "0" ? "selected" : ""}>Active</option>
-          <option value="1" ${coupon.is_active === "1" ? "selected" : ""}>Inactive</option>
+          <option value="1" ${coupon.is_active === "1" ? "selected" : ""}>Active</option>
+          <option value="0" ${coupon.is_active === "0" ? "selected" : ""}>Inactive</option>
         </select>
       `,
       confirmButtonText: 'Update',

@@ -171,7 +171,7 @@
   /* ------------------------------------------------------------------
     STATE & CONSTANTS
   ------------------------------------------------------------------ */
-  const limit = 10;
+  const limitt = 10;
   let currentPage = 1;
   let totalResults = 0;
 
@@ -231,8 +231,8 @@
       status: status || undefined,
       min_amount: minP ? Number(minP) : undefined,
       max_amount: maxP ? Number(maxP) : undefined,
-      limit,
-      offset: (currentPage - 1) * limit
+      limitt,
+      offset: (currentPage - 1) * limitt
     };
     Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
@@ -373,7 +373,7 @@
   function renderPagination() {
     const nav = document.getElementById('pagination');
     nav.innerHTML = '';
-    const totalPages = Math.max(1, Math.ceil(totalResults / limit));
+    const totalPages = Math.max(1, Math.ceil(totalResults / limitt));
 
     const btn = (label, page, disabled = false) => {
       const b = document.createElement('button');

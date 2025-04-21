@@ -44,11 +44,11 @@
 </div>
 
 <script>
-  const BASE_URL = "https://api.new.stockoutindia.com/api"; // update if different
+//   const BASE_URL = "https://api.new.stockoutindia.com/api"; // update if different
 
   async function fetchCoupons() {
     const token = localStorage.getItem('authToken');
-    const response = await fetch(`${BASE_URL}/coupon/index`, {
+    const response = await fetch(`<?php echo BASE_URL; ?>/coupon/index`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
 
@@ -95,7 +95,7 @@
       return;
     }
 
-    fetch(`${BASE_URL}/coupon/add`, {
+    fetch(`<?php echo BASE_URL; ?>/coupon/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

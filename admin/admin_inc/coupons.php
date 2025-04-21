@@ -21,18 +21,10 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50 text-xs uppercase tracking-wider bg-red-800 text-red-200 sticky top-0 z-10">
                     <tr>
-                        <!-- <th class="px-6 py-3 text-left">Image</th> -->
-                        <th class="px-6 py-3 text-left">Product</th>
-                        <th class="px-6 py-3 text-center">Offer Qty</th>
-                        <th class="px-6 py-3 text-center">Min Qty</th>
-                        <th class="px-6 py-3 text-right">Original</th>
-                        <th class="px-6 py-3 text-right">Selling</th>
-                        <th class="px-6 py-3 text-center">Status</th>
-                        <th class="px-6 py-3 text-center">Unit</th>
-                        <th class="px-6 py-3 text-center">Validity</th>
-                        <th class="px-6 py-3 text-left">Industry</th>
-                        <th class="px-6 py-3 text-left">Sub‑Industry</th>
-                        <th class="px-6 py-3 text-center">Actions</th>
+                        <th class="px-6 py-3 text-left">Sl No</th>
+                        <th class="px-6 py-3 text-left">Name</th>
+                        <th class="px-6 py-3 text-center">Value</th>
+                        <th class="px-6 py-3 text-center">Action</th>
                     </tr>
                     </thead>
                     <tbody id="tableBody" class="divide-y divide-gray-100 bg-white"></tbody>

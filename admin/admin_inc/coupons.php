@@ -1,118 +1,105 @@
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<div id="cuopons" class="tab-content active px-4 py-6">
+<div id="coupons" class="tab-content px-4 py-6">
   <h2 class="text-2xl font-semibold text-red-600 mb-6">Coupons</h2>
 
   <!-- Coupon Form -->
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col gap-2">
+    <div class="bg-white p-6 rounded-lg shadow flex flex-col gap-2">
       <label for="coupon" class="font-medium text-gray-700">Coupon Name</label>
       <input id="coupon" type="text" placeholder="Enter coupon name"
-        class="bg-gray-50 border border-gray-300 rounded-lg p-2 focus:ring-red-500 focus:border-red-500">
+        class="border border-gray-300 rounded p-2 focus:ring-red-500 focus:border-red-500">
     </div>
 
-    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col gap-2">
+    <div class="bg-white p-6 rounded-lg shadow flex flex-col gap-2">
       <label for="couponValue" class="font-medium text-gray-700">Coupon Value</label>
-      <input id="couponValue" type="number" placeholder="Enter coupon value"
-        class="bg-gray-50 border border-gray-300 rounded-lg p-2 focus:ring-red-500 focus:border-red-500">
+      <input id="couponValue" type="number" placeholder="Enter value"
+        class="border border-gray-300 rounded p-2 focus:ring-red-500 focus:border-red-500">
     </div>
 
-    <div class="flex items-end justify-start">
-      <button onclick="submitCoupon()" class="bg-red-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-red-700">
+    <div class="flex items-end">
+      <button onclick="submitCoupon()"
+        class="bg-red-600 text-white font-semibold px-6 py-3 rounded hover:bg-red-700">
         Submit Coupon
       </button>
     </div>
   </div>
 
   <!-- Coupons Table -->
-  <div class="bg-white shadow rounded-2xl overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200 text-sm text-gray-700">
-      <thead class="bg-red-800 text-red-100 text-xs uppercase tracking-wider sticky top-0 z-10">
+  <div class="overflow-x-auto bg-white rounded-lg shadow">
+    <table class="w-full text-sm text-left text-gray-700">
+      <thead class="bg-red-700 text-white text-xs uppercase">
         <tr>
-          <th class="px-6 py-3 text-left">Sl No</th>
-          <th class="px-6 py-3 text-left">Name</th>
-          <th class="px-6 py-3 text-center">Value</th>
-          <th class="px-6 py-3 text-center">Action</th>
+          <th class="px-6 py-3">Sl No</th>
+          <th class="px-6 py-3">Coupon Name</th>
+          <th class="px-6 py-3">Value (₹)</th>
+          <th class="px-6 py-3 text-center">Actions</th>
         </tr>
       </thead>
-      <tbody id="tableBody" class="divide-y divide-gray-100 bg-white">
-        <!-- Dynamic rows will appear here -->
+      <tbody id="couponTableBody" class="divide-y divide-gray-200">
+        <!-- Dynamic rows will be inserted here -->
       </tbody>
     </table>
   </div>
 </div>
 
 <script>
-  // Replace with your actual base URL
+  const BASE_URL = "<?php echo BASE_URL; ?>"; // Make sure this is echoed in PHP properly
   const couponMap = {};
-  const BASE_URL = "https://api.stockoutindia.com/api"; // if your API runs on that
 
-  async function fetchCoupons() {
-  const tokens = localStorage.getItem('authToken');
-  if (!tokens) {
-    console.warn("Auth token not found.");
-    return;
-  }
+  // Load Coupons on Page Load
+  document.addEventListener("DOMContentLoaded", fetchCoupons);
 
-  try {
-    const response = await fetch(`${BASE_URL}/coupon/index`, {
-      headers: {
-        'Authorization': `Bearer ${tokens}`
-      }
-    });
-
-    const result = await response.json();
-    console.log("Fetched coupons:", result);
-
-    const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = "";
-
-    if (result.success && Array.isArray(result.data)) {
-      result.data.forEach((item, index) => {
-        couponMap[item.id] = item;
-
-        const row = `
-          <tr>
-            <td class="px-6 py-4">${index + 1}</td>
-            <td class="px-6 py-4">${item.name}</td>
-            <td class="px-6 py-4 text-center">₹${item.value}</td>
-            <td class="px-6 py-4 text-center space-x-2">
-              <button onclick="viewCoupon(${item.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
-              <button onclick="updateCoupon(${item.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Update</button>
-              <button onclick="deleteCoupon(${item.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
-            </td>
-          </tr>`;
-        tbody.insertAdjacentHTML('beforeend', row);
-      });
-    } else {
-      tbody.innerHTML = `<tr><td colspan="4" class="text-center px-6 py-4 text-gray-500">No Coupons Found</td></tr>`;
+  function fetchCoupons() {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      Swal.fire("Error", "You are not logged in.", "error");
+      return;
     }
-  } catch (err) {
-    console.error("Fetch failed:", err);
-    Swal.fire("Error", "Failed to fetch coupons. Please check your API or token.", "error");
-  }
-}
 
+    fetch(`${BASE_URL}/coupon/index`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById("couponTableBody");
+        tbody.innerHTML = "";
 
-  function viewCoupon(id) {
-    const data = couponMap[id];
-    if (!data) return;
-
-    Swal.fire({
-      title: `Coupon: ${data.name}`,
-      html: `<strong>Value:</strong> ₹${data.value}<br><strong>Active:</strong> ${data.is_active === "1" ? "Yes" : "No"}`,
-      icon: "info"
-    });
+        if (data.success && Array.isArray(data.data)) {
+          data.data.forEach((coupon, index) => {
+            couponMap[coupon.id] = coupon;
+            const row = `
+              <tr>
+                <td class="px-6 py-4">${index + 1}</td>
+                <td class="px-6 py-4">${coupon.name}</td>
+                <td class="px-6 py-4">₹${coupon.value}</td>
+                <td class="px-6 py-4 text-center">
+                  <button onclick="viewCoupon(${coupon.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
+                </td>
+              </tr>
+            `;
+            tbody.insertAdjacentHTML("beforeend", row);
+          });
+        } else {
+          tbody.innerHTML = `<tr><td colspan="4" class="text-center px-6 py-4 text-gray-500">No Coupons Found</td></tr>`;
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching coupons:", error);
+        Swal.fire("Error", "Failed to fetch coupons.", "error");
+      });
   }
 
   function submitCoupon() {
     const name = document.getElementById("coupon").value.trim();
     const value = document.getElementById("couponValue").value.trim();
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem("authToken");
 
     if (!name || !value) {
-      Swal.fire("Error", "Please enter both name and value.", "error");
+      Swal.fire("Error", "Please fill in both fields.", "error");
       return;
     }
 
@@ -128,27 +115,31 @@
         is_active: "1"
       })
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        Swal.fire("Success", "Coupon added successfully", "success");
-        document.getElementById("coupon").value = "";
-        document.getElementById("couponValue").value = "";
-        fetchCoupons();
-      } else {
-        Swal.fire("Error", data.message || "Failed to add coupon", "error");
-      }
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          Swal.fire("Success", "Coupon added!", "success");
+          document.getElementById("coupon").value = "";
+          document.getElementById("couponValue").value = "";
+          fetchCoupons();
+        } else {
+          Swal.fire("Error", data.message || "Failed to add coupon", "error");
+        }
+      })
+      .catch(error => {
+        console.error("Submit error:", error);
+        Swal.fire("Error", "Server error occurred.", "error");
+      });
+  }
+
+  function viewCoupon(id) {
+    const data = couponMap[id];
+    if (!data) return;
+
+    Swal.fire({
+      title: `Coupon: ${data.name}`,
+      html: `<strong>Value:</strong> ₹${data.value}<br><strong>Active:</strong> ${data.is_active === "1" ? "Yes" : "No"}`,
+      icon: "info"
     });
   }
-
-  function updateCoupon(id) {
-    Swal.fire("Coming Soon", "Update functionality not implemented yet", "info");
-  }
-
-  function deleteCoupon(id) {
-    Swal.fire("Coming Soon", "Delete functionality not implemented yet", "info");
-  }
-
-  // Load coupons on page load
-  fetchCoupons();
 </script>

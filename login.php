@@ -195,7 +195,7 @@
             localStorage.setItem('username', username);
 
             if (role === 'admin') {
-              window.location.href = 'admin_index.php';
+              window.location.href = 'admin/admin_index.php';
             } else {
               window.location.href = 'index.php';
             }

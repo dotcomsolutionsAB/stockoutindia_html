@@ -46,7 +46,7 @@
 <script>
   // Replace with your actual base URL
   const couponMap = {};
-  const BASE_URL = "https://new.stockoutindia.com/api"; // if your API runs on that
+  const BASE_URL = "https://api.stockoutindia.com/api"; // if your API runs on that
 
   async function fetchCoupons() {
   const tokens = localStorage.getItem('authToken');

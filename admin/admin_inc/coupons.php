@@ -44,7 +44,7 @@
 </div>
 
 <script>
-  const BASE_URL = "https://new.stockoutindia.com/api"; // update if different
+  const BASE_URL = "https://api.new.stockoutindia.com/api"; // update if different
 
   async function fetchCoupons() {
     const token = localStorage.getItem('authToken');

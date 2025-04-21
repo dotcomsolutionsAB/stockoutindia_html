@@ -34,6 +34,7 @@
           <th class="px-6 py-3">Sl No</th>
           <th class="px-6 py-3">Coupon Name</th>
           <th class="px-6 py-3">Value (₹)</th>
+          <th class="px-6 py-3">Status</th>
           <th class="px-6 py-3 text-center">Actions</th>
         </tr>
       </thead>
@@ -76,6 +77,7 @@
                       <td class="px-6 py-4">${index + 1}</td>
                       <td class="px-6 py-4">${coupon.name}</td>
                       <td class="px-6 py-4">₹${coupon.value}</td>
+                      <td class="px-6 py-4">${coupon.is_active === "0" ? "✅ Active" : "❌ Inactive"}</td>
                       <td class="px-6 py-4 text-center space-x-2">
                         <button onclick="viewCoupon(${coupon.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
                         <button onclick="editCoupon(${coupon.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Update</button>
@@ -130,62 +132,123 @@
     });
   }
 
-function editCoupon(id) {
-  const coupon = couponMap[id];
-  if (!coupon) return;
+// function editCoupon(id) {
+//   const coupon = couponMap[id];
+//   if (!coupon) return;
 
-  Swal.fire({
-    title: `Update Coupon: ${coupon.name}`,
-    html: `
-      <input id="editName" class="swal2-input" placeholder="Coupon Name" value="${coupon.name}">
-      <input id="editValue" type="number" class="swal2-input" placeholder="Coupon Value" value="${coupon.value}">
-    `,
-    confirmButtonText: 'Update',
-    showCancelButton: true,
-    focusConfirm: false,
-    preConfirm: () => {
-      const name = document.getElementById('editName').value.trim();
-      const value = document.getElementById('editValue').value.trim();
+//   Swal.fire({
+//     title: `Update Coupon: ${coupon.name}`,
+//     html: `
+//       <input id="editName" class="swal2-input" placeholder="Coupon Name" value="${coupon.name}">
+//       <input id="editValue" type="number" class="swal2-input" placeholder="Coupon Value" value="${coupon.value}">
+//     `,
+//     confirmButtonText: 'Update',
+//     showCancelButton: true,
+//     focusConfirm: false,
+//     preConfirm: () => {
+//       const name = document.getElementById('editName').value.trim();
+//       const value = document.getElementById('editValue').value.trim();
 
-      if (!name || !value) {
-        Swal.showValidationMessage('Please enter both name and value');
-        return false;
-      }
+//       if (!name || !value) {
+//         Swal.showValidationMessage('Please enter both name and value');
+//         return false;
+//       }
 
-      return { name, value };
-    }
-  }).then(result => {
-    if (result.isConfirmed && result.value) {
-      const token = localStorage.getItem("authToken");
+//       return { name, value };
+//     }
+//   }).then(result => {
+//     if (result.isConfirmed && result.value) {
+//       const token = localStorage.getItem("authToken");
 
-      fetch(`${BASE_URL}/coupon/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          name: result.value.name,
-          value: result.value.value
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          Swal.fire("Updated!", "Coupon updated successfully.", "success");
-          fetchCoupons();
-        } else {
-          Swal.fire("Error", data.message || "Update failed.", "error");
+//       fetch(`${BASE_URL}/coupon/${id}`, {
+//         method: "PUT",
+//         headers: {
+//           "Content-Type": "application/json",
+//           "Authorization": `Bearer ${token}`
+//         },
+//         body: JSON.stringify({
+//           name: result.value.name,
+//           value: result.value.value
+//         })
+//       })
+//       .then(res => res.json())
+//       .then(data => {
+//         if (data.success) {
+//           Swal.fire("Updated!", "Coupon updated successfully.", "success");
+//           fetchCoupons();
+//         } else {
+//           Swal.fire("Error", data.message || "Update failed.", "error");
+//         }
+//       })
+//       .catch(error => {
+//         console.error("Update error:", error);
+//         Swal.fire("Error", "Server error while updating.", "error");
+//       });
+//     }
+//   });
+// }
+
+  function editCoupon(id) {
+    const coupon = couponMap[id];
+    if (!coupon) return;
+
+    Swal.fire({
+      title: `Update Coupon: ${coupon.name}`,
+      html: `
+        <input id="editName" class="swal2-input" placeholder="Coupon Name" value="${coupon.name}">
+        <input id="editValue" type="number" class="swal2-input" placeholder="Coupon Value" value="${coupon.value}">
+        <select id="editStatus" class="swal2-select" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+          <option value="0" ${coupon.is_active === "0" ? "selected" : ""}>Active</option>
+          <option value="1" ${coupon.is_active === "1" ? "selected" : ""}>Inactive</option>
+        </select>
+      `,
+      confirmButtonText: 'Update',
+      showCancelButton: true,
+      focusConfirm: false,
+      preConfirm: () => {
+        const name = document.getElementById('editName').value.trim();
+        const value = document.getElementById('editValue').value.trim();
+        const is_active = document.getElementById('editStatus').value;
+
+        if (!name || !value) {
+          Swal.showValidationMessage('Please fill out all fields');
+          return false;
         }
-      })
-      .catch(error => {
-        console.error("Update error:", error);
-        Swal.fire("Error", "Server error while updating.", "error");
-      });
-    }
-  });
-}
 
+        return { name, value, is_active };
+      }
+    }).then(result => {
+      if (result.isConfirmed && result.value) {
+        const token = localStorage.getItem("authToken");
+
+        fetch(`${BASE_URL}/coupon/edit/${id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            name: result.value.name,
+            value: result.value.value,
+            is_active: result.value.is_active
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            Swal.fire("Updated!", "Coupon updated successfully.", "success");
+            fetchCoupons();
+          } else {
+            Swal.fire("Error", data.message || "Failed to update coupon.", "error");
+          }
+        })
+        .catch(error => {
+          console.error("Update error:", error);
+          Swal.fire("Error", "Server error occurred while updating.", "error");
+        });
+      }
+    });
+  }
 
   function submitCoupon() {
     const name = document.getElementById("coupon").value.trim();

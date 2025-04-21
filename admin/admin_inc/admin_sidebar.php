@@ -3,7 +3,7 @@
         <a href="" id="closeHam">X</a>
     </div>
     <div class="flex items-center justify-center space-x-4 mb-8">
-        <img src="uploads/stockout_logo.png" alt="Logo" class="w-36 h-36">
+        <img src="../uploads/stockout_logo.png" alt="Logo" class="w-36 h-36">
     </div>
 
     <nav>

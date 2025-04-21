@@ -918,7 +918,7 @@
   .make_payment_button:hover {
       background-color: #900000;
   }
-  .coupon_section {
+  .coupon_section label {
     display: flex !important;
   }
 

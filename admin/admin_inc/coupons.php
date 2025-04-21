@@ -37,65 +37,68 @@
         </tr>
       </thead>
       <tbody id="tableBody" class="divide-y divide-gray-100 bg-white">
-        <!-- Filled by JS -->
+        <!-- Dynamic rows will appear here -->
       </tbody>
     </table>
   </div>
 </div>
 
 <script>
-//   const BASE_URL = "https://api.new.stockoutindia.com/api"; // update if different
-    const couponMap = {};
+  const BASE_URL = "https://api.stockoutindia.com/api";
+  // Replace with your actual base URL
+  const couponMap = {};
 
-    const couponMap = {};
+  async function fetchCoupons() {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      console.warn("Auth token not found.");
+      return;
+    }
 
-async function fetchCoupons() {
-  const token = localStorage.getItem('authToken');
-  const response = await fetch("https://api.stockoutindia.com/api/coupon/index", {
-    headers: { 'Authorization': `Bearer ${token}` }
-  });
-
-  const result = await response.json();
-  console.log("Coupon fetch result:", result); // 👈 Add this
-
-  const tbody = document.getElementById("tableBody");
-  tbody.innerHTML = "";
-
-  if (result.success && result.data.length > 0) {
-    result.data.forEach((item, index) => {
-      couponMap[item.id] = item;
-
-      const row = `
-        <tr>
-          <td class="px-6 py-4">${index + 1}</td>
-          <td class="px-6 py-4">${item.name}</td>
-          <td class="px-6 py-4 text-center">₹${item.value}</td>
-          <td class="px-6 py-4 text-center space-x-2">
-            <button onclick="viewCoupon(${item.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
-            <button onclick="updateCoupon(${item.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Update</button>
-            <button onclick="deleteCoupon(${item.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
-          </td>
-        </tr>`;
-      tbody.insertAdjacentHTML('beforeend', row);
+    const response = await fetch(`${BASE_URL}/coupon/index`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     });
-  } else {
-    console.warn("No data found or success is false.");
-    tbody.innerHTML = `<tr><td colspan="4" class="text-center px-6 py-4 text-gray-500">No Coupons Found</td></tr>`;
+
+    const result = await response.json();
+    console.log("Fetched coupons:", result);
+
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+
+    if (result.success && Array.isArray(result.data)) {
+      result.data.forEach((item, index) => {
+        couponMap[item.id] = item;
+
+        const row = `
+          <tr>
+            <td class="px-6 py-4">${index + 1}</td>
+            <td class="px-6 py-4">${item.name}</td>
+            <td class="px-6 py-4 text-center">₹${item.value}</td>
+            <td class="px-6 py-4 text-center space-x-2">
+              <button onclick="viewCoupon(${item.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
+              <button onclick="updateCoupon(${item.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Update</button>
+              <button onclick="deleteCoupon(${item.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+            </td>
+          </tr>`;
+        tbody.insertAdjacentHTML('beforeend', row);
+      });
+    } else {
+      tbody.innerHTML = `<tr><td colspan="4" class="text-center px-6 py-4 text-gray-500">No Coupons Found</td></tr>`;
+    }
   }
-}
 
-
-    function viewCoupon(id) {
+  function viewCoupon(id) {
     const data = couponMap[id];
     if (!data) return;
 
     Swal.fire({
-        title: `Coupon: ${data.name}`,
-        html: `<strong>Value:</strong> ₹${data.value}<br><strong>Active:</strong> ${data.is_active === "1" ? "Yes" : "No"}`,
-        icon: "info"
+      title: `Coupon: ${data.name}`,
+      html: `<strong>Value:</strong> ₹${data.value}<br><strong>Active:</strong> ${data.is_active === "1" ? "Yes" : "No"}`,
+      icon: "info"
     });
-    }
-
+  }
 
   function submitCoupon() {
     const name = document.getElementById("coupon").value.trim();
@@ -107,7 +110,7 @@ async function fetchCoupons() {
       return;
     }
 
-    fetch(`<?php echo BASE_URL; ?>/coupon/add`, {
+    fetch(`${BASE_URL}/coupon/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -123,23 +126,23 @@ async function fetchCoupons() {
     .then(data => {
       if (data.success) {
         Swal.fire("Success", "Coupon added successfully", "success");
-        fetchCoupons();
         document.getElementById("coupon").value = "";
         document.getElementById("couponValue").value = "";
+        fetchCoupons();
       } else {
-        Swal.fire("Error", data.message || "Something went wrong.", "error");
+        Swal.fire("Error", data.message || "Failed to add coupon", "error");
       }
     });
   }
 
   function updateCoupon(id) {
-    Swal.fire("Coming Soon", "Update feature not implemented yet", "info");
+    Swal.fire("Coming Soon", "Update functionality not implemented yet", "info");
   }
 
   function deleteCoupon(id) {
-    Swal.fire("Coming Soon", "Delete feature not implemented yet", "info");
+    Swal.fire("Coming Soon", "Delete functionality not implemented yet", "info");
   }
 
-  // Initial load
+  // Load coupons on page load
   fetchCoupons();
 </script>

@@ -2,8 +2,8 @@
   <h2 class="text-2xl font-semibold text-red-600 mb-6">Coupons</h2>
 
   <!-- Coupon Form -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-    <div class="bg-white p-6 rounded-lg shadow-md">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 bg-white">
+    <div class="p-6 rounded-lg shadow-md">
       <div class="flex flex-col gap-2">
         <label for="coupon" class="font-medium text-gray-700">Coupon Name</label>
         <input id="coupon" type="text" placeholder="Enter coupon name"
@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="p-6 rounded-lg shadow-md">
       <div class="flex flex-col gap-2">
         <label for="couponValue" class="font-medium text-gray-700">Coupon Value</label>
         <input id="couponValue" type="text" placeholder="Enter coupon value"

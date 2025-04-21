@@ -72,15 +72,17 @@
           data.data.forEach((coupon, index) => {
             couponMap[coupon.id] = coupon;
             const row = `
-              <tr>
-                <td class="px-6 py-4">${index + 1}</td>
-                <td class="px-6 py-4">${coupon.name}</td>
-                <td class="px-6 py-4">₹${coupon.value}</td>
-                <td class="px-6 py-4 text-center">
-                  <button onclick="viewCoupon(${coupon.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
-                </td>
-              </tr>
-            `;
+                    <tr>
+                      <td class="px-6 py-4">${index + 1}</td>
+                      <td class="px-6 py-4">${coupon.name}</td>
+                      <td class="px-6 py-4">₹${coupon.value}</td>
+                      <td class="px-6 py-4 text-center space-x-2">
+                        <button onclick="viewCoupon(${coupon.id})" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">View</button>
+                        <button onclick="editCoupon(${coupon.id})" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Update</button>
+                        <button onclick="deleteCoupon(${coupon.id})" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                      </td>
+                    </tr>
+                  `;
             tbody.insertAdjacentHTML("beforeend", row);
           });
         } else {
@@ -92,6 +94,61 @@
         Swal.fire("Error", "Failed to fetch coupons.", "error");
       });
   }
+
+  function deleteCoupon(id) {
+    const token = localStorage.getItem("authToken");
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the coupon.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`${BASE_URL}/coupon/${id}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              Swal.fire("Deleted!", "Coupon has been deleted.", "success");
+              fetchCoupons();
+            } else {
+              Swal.fire("Error", data.message || "Failed to delete coupon", "error");
+            }
+          })
+          .catch(error => {
+            console.error("Delete error:", error);
+            Swal.fire("Error", "Server error while deleting.", "error");
+          });
+      }
+    });
+  }
+
+function editCoupon(id) {
+  const coupon = couponMap[id];
+  if (!coupon) return;
+
+  document.getElementById("coupon").value = coupon.name;
+  document.getElementById("couponValue").value = coupon.value;
+  document.getElementById("coupon").focus();
+
+  // Optionally store current editing ID
+  document.getElementById("coupon").dataset.editId = id;
+
+  Swal.fire({
+    title: "Edit Mode Enabled",
+    text: "Update the fields above and click submit.",
+    icon: "info",
+    timer: 2000,
+    showConfirmButton: false
+  });
+}
 
   function submitCoupon() {
     const name = document.getElementById("coupon").value.trim();

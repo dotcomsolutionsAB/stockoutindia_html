@@ -28,7 +28,19 @@
                     </div>
                     <h2>Total: ₹999</h2>
                 </div>
-            
+
+                <!-- Coupon Section -->
+                <div class="coupon_section mb-4">
+                    <label for="coupon_select" class="fw-semibold text-dark mb-1 d-block">Apply Coupon:</label>
+                    <div class="d-flex gap-2">
+                        <select id="coupon_select" class="form-select" style="flex: 1;">
+                            <option value="">-- Select Coupon --</option>
+                        </select>
+                        <button id="apply_coupon_btn" class="btn btn-sm btn-outline-success">Apply</button>
+                    </div>
+                    <p id="discount_info" class="text-success mt-2 fw-semibold" style="display: none;"></p>
+                </div>
+
                 <button id="makePaymentBtn" class="make_payment_button">Make Payment</button>
             </div>
         </section>
@@ -37,7 +49,50 @@
 <style>
 
 </style>
+<script>
+    // Coupon-related elements
+    const couponSelect = document.getElementById("coupon_select");
+    const applyCouponBtn = document.getElementById("apply_coupon_btn");
+    const discountInfo = document.getElementById("discount_info");
+    let appliedCouponValue = 0;
 
+    // Fetch and populate coupons
+    fetch(`<?php echo BASE_URL; ?>/coupon/index`, {
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${authToken}`
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success && Array.isArray(data.data)) {
+            data.data
+                .filter(coupon => coupon.is_active === "1")
+                .forEach(coupon => {
+                    const option = document.createElement("option");
+                    option.value = coupon.value;
+                    option.textContent = `${coupon.name} (for ₹${coupon.value} OFF)`;
+                    couponSelect.appendChild(option);
+                });
+        }
+    });
+
+    // Apply coupon logic
+    applyCouponBtn.addEventListener("click", function () {
+        const selectedValue = parseFloat(couponSelect.value);
+        if (!selectedValue) {
+            alert("Please select a valid coupon.");
+            return;
+        }
+
+        appliedCouponValue = selectedValue;
+        const discountedPrice = productPrice - appliedCouponValue;
+        document.querySelector(".downbox h2").textContent = `Total: ₹${discountedPrice}`;
+        discountInfo.style.display = "block";
+        discountInfo.textContent = `Coupon applied successfully! ₹${appliedCouponValue} OFF`;
+    });
+
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const authToken = localStorage.getItem("authToken");

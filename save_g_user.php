@@ -23,6 +23,7 @@ if (!$data) {
     ]);
     exit;
 }
+file_put_contents(__DIR__ . '/json/debug.txt', $raw);
 
 $path ='json/g-sign-in.json';
 

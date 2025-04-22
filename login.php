@@ -281,7 +281,8 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  document.getElementById('googleSignInBtn').addEventListener('click', () => {
+  document.getElementById('googleSignInBtn').addEventListener('click', (e) => {
+    e.preventDefault(); // <- ADD THIS
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(auth, provider)
@@ -301,17 +302,22 @@
         // Send to PHP to save in json/g-sign-in.json
         fetch("save_g_user.php", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json"
+          },
           body: JSON.stringify(userData)
         })
         .then(res => res.json())
         .then(data => {
+          console.log("🧾 PHP Response:", data);
           if (data.success) {
-            alert("✅ Google Sign-In successful and saved!");
-            window.location.href = "index.php";
+            alert("✅ Sign-in & saved!");
           } else {
             alert("❌ Save failed: " + data.message);
           }
+        })
+        .catch(err => {
+          console.error("❌ Fetch error:", err);
         });
       })
       .catch((error) => {

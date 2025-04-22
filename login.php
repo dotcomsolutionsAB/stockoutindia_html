@@ -82,7 +82,11 @@
         <br>
 
         <!-- Google Sign-in -->
-        <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mb-6 hover:shadow-md">
+        <!-- <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mb-6 hover:shadow-md">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5 mr-2">
+          <span class="text-sm font-medium">Sign in with Google</span>
+        </button> -->
+        <button id="googleSignInBtn" class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mb-6 hover:shadow-md">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="w-5 h-5 mr-2">
           <span class="text-sm font-medium">Sign in with Google</span>
         </button>
@@ -209,6 +213,61 @@
         });
     });
   </script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkoJq5Gvhop48v2pXLbSUi1po4SLfjvkQ",
+    authDomain: "stockoutindia-3636e.firebaseapp.com",
+    projectId: "stockoutindia-3636e",
+    storageBucket: "stockoutindia-3636e.firebaseapp.com",
+    messagingSenderId: "1070850746164",
+    appId: "1:1070850746164:web:2a48bc7949577f6236e761",
+    measurementId: "G-7TXB99B3J2"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  document.getElementById('googleSignInBtn').addEventListener('click', () => {
+    const provider = new GoogleAuthProvider();
+
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const user = result.user;
+        const idToken = await user.getIdToken();
+
+        const userData = {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photo_url: user.photoURL,
+          token: idToken,
+          timestamp: new Date().toISOString()
+        };
+
+        // Convert to JSON file and trigger download
+        const blob = new Blob([JSON.stringify(userData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'g-sign-in.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        alert("Google Sign-In successful! File downloaded.");
+      })
+      .catch((error) => {
+        console.error("Google sign-in failed:", error);
+        alert("Google sign-in failed.");
+      });
+  });
+</script>
 
 </body>
 

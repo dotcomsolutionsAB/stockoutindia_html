@@ -1,17 +1,24 @@
 <?php
-$allowed = ['auth'];
 $map = [
     'auth' => 'configs/auth.js',
     'locked' => 'configs/locked_inc.js'
-    // add more as needed
 ];
 
-if (isset($_GET['f']) && in_array($_GET['f'], $allowed)) {
+// Only allow keys defined in the map
+if (isset($_GET['f']) && array_key_exists($_GET['f'], $map)) {
     $file = $map[$_GET['f']];
-    header("Content-Type: application/javascript");
-    readfile($file);
-    exit;
+
+    if (file_exists($file)) {
+        header("Content-Type: application/javascript");
+        readfile($file);
+        exit;
+    } else {
+        http_response_code(404);
+        echo "// File not found";
+        exit;
+    }
 }
 
+// If not allowed or invalid
 http_response_code(403);
 echo "// Forbidden";

@@ -21,17 +21,8 @@
             s.parentNode.insertBefore( wf, s );
         } )( document );
     </script>
+    <script src="loader.php?f=locked" type="text/javascript"></script>
     <script src="loader.php?f=auth" type="text/javascript"></script>
-    <script>
-        document.addEventListener("contextmenu", e => e.preventDefault(), false);
-
-        document.addEventListener("keydown", e => {
-            if(e.ctrlKey || e.keyCode == 123) {
-                e.stopPropagation();
-                e.preventDefault();
-            }
-        });
-    </script>
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 

@@ -2,6 +2,7 @@
 $allowed = ['auth'];
 $map = [
     'auth' => 'configs/auth.js',
+    'locked' => 'configs/locked_inc.js'
     // add more as needed
 ];
 

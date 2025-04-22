@@ -21,7 +21,7 @@
             s.parentNode.insertBefore( wf, s );
         } )( document );
     </script>
-    <script src="configs/auth.js"></script>
+    <script src="loader.php?f=auth" type="text/javascript"></script>
     <script>
         document.addEventListener("contextmenu", e => e.preventDefault(), false);
 

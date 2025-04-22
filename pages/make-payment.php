@@ -32,7 +32,7 @@
                 <div class="coupon_section mb-4">
                     <label for="coupon_input" class="fw-semibold text-dark mb-1 d-block">Enter Coupon:</label>
                     <div class="d-flex gap-2 align-items-center">
-                        <input id="coupon_input" type="text" class="form-control" placeholder="Enter coupon name" style="flex: 1;" />
+                        <input id="coupon_input" type="text" class="form-control c_input" placeholder="Enter coupon name" style="flex: 1;" />
                         <button id="apply_coupon_btn" class="btn btn-sm btn-outline-success" disabled>Apply</button>
                         <button id="cancel_coupon_btn" class="btn btn-sm btn-outline-danger d-none">Cancel</button>
                     </div>
@@ -44,8 +44,9 @@
     </div><!-- End .container -->
 </main>
 <style>
-    .coupon_input .form-control {
-        margin:0px !important;
+    .c_input {
+        margin-bottom :0px !important;
+        height: 30px;
     }
 </style>
 <script>

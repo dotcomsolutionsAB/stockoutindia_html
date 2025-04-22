@@ -44,7 +44,7 @@
     </div><!-- End .container -->
 </main>
 <style>
-    .coupon_input input{
+    .coupon_input .form-control {
         margin:0px !important;
     }
 </style>

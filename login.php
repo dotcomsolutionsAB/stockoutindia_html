@@ -248,19 +248,21 @@
           timestamp: new Date().toISOString()
         };
 
-        // Convert to JSON file and trigger download
-        const blob = new Blob([JSON.stringify(userData, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'g-sign-in.json';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-
-        alert("Google Sign-In successful! File downloaded.");
+        // Send data to backend
+        fetch("save_g_user.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert("Google Sign-In successful and saved!");
+            window.location.href = "index.php";
+          } else {
+            alert("Sign-in successful, but save failed: " + data.message);
+          }
+        });
       })
       .catch((error) => {
         console.error("Google sign-in failed:", error);
@@ -268,6 +270,7 @@
       });
   });
 </script>
+
 
 </body>
 

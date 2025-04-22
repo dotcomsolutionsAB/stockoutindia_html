@@ -22,6 +22,16 @@
         } )( document );
     </script>
     <script src="configs/auth.js"></script>
+    <script>
+        document.addEventListener("contextmenu", e => e.preventDefault(), false);
+
+        document.addEventListener("keydown", e => {
+            if(e.ctrlKey || e.keyCode == 123) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        });
+    </script>
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 

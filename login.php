@@ -269,69 +269,65 @@
 <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
 
 <script>
-  // Your Firebase config
-  const firebaseConfig = {
-    apiKey: "AIzaSyCkoJq5Gvhop48v2pXLbSUi1po4SLfjvkQ",
-    authDomain: "stockoutindia-3636e.firebaseapp.com",
-    projectId: "stockoutindia-3636e",
-    storageBucket: "stockoutindia-3636e.firebaseapp.com",
-    messagingSenderId: "1070850746164",
-    appId: "1:1070850746164:web:2a48bc7949577f6236e761",
-    measurementId: "G-7TXB99B3J2"
-  };
+    // ✅ Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCkoJq5Gvhop48v2pXLbSUi1po4SLfjvkQ",
+      authDomain: "stockoutindia-3636e.firebaseapp.com",
+      projectId: "stockoutindia-3636e",
+      storageBucket: "stockoutindia-3636e.firebaseapp.com",
+      messagingSenderId: "1070850746164",
+      appId: "1:1070850746164:web:2a48bc7949577f6236e761",
+      measurementId: "G-7TXB99B3J2"
+    };
 
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-  document.getElementById('googleSignInBtn').addEventListener('click', function (e) {
-    e.preventDefault();
+    document.getElementById('googleSignInBtn').addEventListener('click', function (e) {
+      e.preventDefault();
 
-    const provider = new firebase.auth.GoogleAuthProvider();
+      const provider = new firebase.auth.GoogleAuthProvider();
 
-    auth.signInWithPopup(provider)
-      .then(async (result) => {
-        const user = result.user;
-        const idToken = await user.getIdToken();
+      auth.signInWithPopup(provider)
+        .then(async (result) => {
+          const user = result.user;
+          const idToken = await user.getIdToken();
 
-        const userData = {
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-          photo_url: user.photoURL,
-          token: idToken,
-          timestamp: new Date().toISOString()
-        };
+          const userData = {
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            photo_url: user.photoURL,
+            token: idToken,
+            timestamp: new Date().toISOString()
+          };
 
-        console.log("✅ Sending user data:", userData);
+          console.log("Sending to PHP:", userData);
 
-        fetch("save_g_user.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(userData)
+          fetch("save_g_user.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(userData)
+          })
+          .then(res => res.json())
+          .then(data => {
+            console.log("PHP response:", data);
+            if (data.success) {
+              alert("✅ Login successful and saved!");
+            } else {
+              alert("❌ Save failed: " + data.message);
+            }
+          });
         })
-        .then(res => res.json())
-        .then(data => {
-          console.log("🧾 PHP Response:", data);
-          if (data.success) {
-            alert("✅ Google Sign-In successful!");
-            window.location.href = "index.php";
-          } else {
-            alert("❌ Save failed: " + data.message);
-          }
-        })
-        .catch(err => {
-          console.error("❌ Fetch error:", err);
+        .catch((error) => {
+          console.error("Google Sign-In error:", error);
+          alert("Google Sign-In failed.");
         });
-      })
-      .catch((error) => {
-        console.error("Google Sign-In Error:", error);
-        alert("Google sign-in failed.");
-      });
-  });
-</script>
+    });
+  </script>
+
 
 
 </body>

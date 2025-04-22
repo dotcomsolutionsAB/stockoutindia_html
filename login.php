@@ -264,10 +264,12 @@
   });
 </script> -->
 <!-- Firebase and Google Sign-In Script -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+<!-- Firebase SDKs - Use UMD build (NOT type="module") -->
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
 
+<script>
+  // Your Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyCkoJq5Gvhop48v2pXLbSUi1po4SLfjvkQ",
     authDomain: "stockoutindia-3636e.firebaseapp.com",
@@ -278,28 +280,31 @@
     measurementId: "G-7TXB99B3J2"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-  document.getElementById('googleSignInBtn').addEventListener('click', (e) => {
-    e.preventDefault(); // <- ADD THIS
-    const provider = new GoogleAuthProvider();
+  document.getElementById('googleSignInBtn').addEventListener('click', function (e) {
+    e.preventDefault();
 
-    signInWithPopup(auth, provider)
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    auth.signInWithPopup(provider)
       .then(async (result) => {
         const user = result.user;
-        const idToken = await user.getIdToken(); // 🔥 Get ID token
+        const idToken = await user.getIdToken();
 
         const userData = {
           uid: user.uid,
           name: user.displayName,
           email: user.email,
           photo_url: user.photoURL,
-          token: idToken, // 🔐 Save ID token
+          token: idToken,
           timestamp: new Date().toISOString()
         };
 
-        // Send to PHP to save in json/g-sign-in.json
+        console.log("✅ Sending user data:", userData);
+
         fetch("save_g_user.php", {
           method: "POST",
           headers: {
@@ -311,7 +316,8 @@
         .then(data => {
           console.log("🧾 PHP Response:", data);
           if (data.success) {
-            alert("✅ Sign-in & saved!");
+            alert("✅ Google Sign-In successful!");
+            window.location.href = "index.php";
           } else {
             alert("❌ Save failed: " + data.message);
           }
@@ -326,6 +332,7 @@
       });
   });
 </script>
+
 
 </body>
 

@@ -235,39 +235,32 @@
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(auth, provider)
-      .then(async (result) => {
-        const user = result.user;
-        const idToken = await user.getIdToken();
+    .then(async (result) => {
+      const user = result.user;
+      const idToken = await user.getIdToken();
 
-        const userData = {
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-          photo_url: user.photoURL,
-          token: idToken,
-          timestamp: new Date().toISOString()
-        };
+      const userData = {
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photo_url: user.photoURL,
+        token: idToken,
+        timestamp: new Date().toISOString()
+      };
 
-        // Send data to backend
-        fetch("save_g_user.php", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(userData)
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            alert("Google Sign-In successful and saved!");
-            window.location.href = "index.php";
-          } else {
-            alert("Sign-in successful, but save failed: " + data.message);
-          }
-        });
+      // 🔽 This part must be inside the same block
+      fetch("save_g_user.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData)
       })
-      .catch((error) => {
-        console.error("Google sign-in failed:", error);
-        alert("Google sign-in failed.");
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
       });
+
+    });
+
   });
 </script>
 

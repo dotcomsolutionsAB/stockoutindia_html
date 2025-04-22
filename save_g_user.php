@@ -1,7 +1,18 @@
 <?php
 header('Content-Type: application/json');
 
-$data = json_decode(file_get_contents('php://input'), true);
+$raw = file_get_contents('php://input');  // Get raw JSON input
+$data = json_decode($raw, true);          // Decode to array
+
+if (!$raw) {
+    echo json_encode(['success' => false, 'message' => 'Empty raw input']);
+    exit;
+}
+
+if (!$data) {
+    echo json_encode(['success' => false, 'message' => 'Invalid JSON', 'raw' => $raw]);
+    exit;
+}
 
 if ($data) {
     $path = __DIR__ . '/json/g-sign-in.json';

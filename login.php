@@ -214,7 +214,7 @@
     });
   </script>
 
-<script type="module">
+<!-- <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
   import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
@@ -262,8 +262,64 @@
     });
 
   });
-</script>
+</script> -->
+<!-- Firebase and Google Sign-In Script -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
+  const firebaseConfig = {
+    apiKey: "AIzaSyCkoJq5Gvhop48v2pXLbSUi1po4SLfjvkQ",
+    authDomain: "stockoutindia-3636e.firebaseapp.com",
+    projectId: "stockoutindia-3636e",
+    storageBucket: "stockoutindia-3636e.firebaseapp.com",
+    messagingSenderId: "1070850746164",
+    appId: "1:1070850746164:web:2a48bc7949577f6236e761",
+    measurementId: "G-7TXB99B3J2"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  document.getElementById('googleSignInBtn').addEventListener('click', () => {
+    const provider = new GoogleAuthProvider();
+
+    signInWithPopup(auth, provider)
+      .then(async (result) => {
+        const user = result.user;
+        const idToken = await user.getIdToken(); // 🔥 Get ID token
+
+        const userData = {
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photo_url: user.photoURL,
+          token: idToken, // 🔐 Save ID token
+          timestamp: new Date().toISOString()
+        };
+
+        // Send to PHP to save in json/g-sign-in.json
+        fetch("save_g_user.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(userData)
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            alert("✅ Google Sign-In successful and saved!");
+            window.location.href = "index.php";
+          } else {
+            alert("❌ Save failed: " + data.message);
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Google Sign-In Error:", error);
+        alert("Google sign-in failed.");
+      });
+  });
+</script>
 
 </body>
 

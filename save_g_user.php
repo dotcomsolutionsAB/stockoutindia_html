@@ -1,33 +1,26 @@
 <?php
 header('Content-Type: application/json');
 
-$raw = file_get_contents('php://input');  // Get raw JSON input
-$data = json_decode($raw, true);          // Decode to array
+// Get raw input
+$raw = file_get_contents('php://input');
+$data = json_decode($raw, true);
 
-if (!$raw) {
+// Check for empty input
+if (!$raw || !$data) {
     echo json_encode(['success' => false, 'message' => 'Empty raw input']);
     exit;
 }
 
-if (!$data) {
-    echo json_encode(['success' => false, 'message' => 'Invalid JSON', 'raw' => $raw]);
-    exit;
+// Make sure the target folder exists
+$path = __DIR__ . '/json/g-sign-in.json';
+$dir = dirname($path);
+if (!is_dir($dir)) {
+    mkdir($dir, 0755, true);
 }
 
-if ($data) {
-    $path = __DIR__ . '/json/g-sign-in.json';
-
-    // Make sure the directory exists
-    if (!is_dir(dirname($path))) {
-        mkdir(dirname($path), 0755, true);
-    }
-
-    // Save the JSON file
-    if (file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT))) {
-        echo json_encode(['success' => true, 'message' => 'Data saved']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Failed to save file']);
-    }
+// Save the data
+if (file_put_contents($path, json_encode($data, JSON_PRETTY_PRINT))) {
+    echo json_encode(['success' => true, 'message' => 'Data saved to g-sign-in.json']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'No data received']);
+    echo json_encode(['success' => false, 'message' => 'Failed to save file']);
 }

@@ -22,7 +22,7 @@
         } )( document );
     </script>
     
-    <script src="loader.php?f=locked-js" type="text/javascript"></script>
+    <!-- <script src="loader.php?f=locked-js" type="text/javascript"></script> -->
     <script src="loader.php?f=auth-js" type="text/javascript"></script>
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">

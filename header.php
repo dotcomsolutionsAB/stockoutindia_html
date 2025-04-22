@@ -21,8 +21,10 @@
             s.parentNode.insertBefore( wf, s );
         } )( document );
     </script>
-    <script src="loader.php?f=locked" type="text/javascript"></script>
-    <script src="loader.php?f=auth" type="text/javascript"></script>
+    <script src="loader.php?f=1a2b3c4d"></script>
+
+    <!-- <script src="loader.php?f=locked" type="text/javascript"></script> -->
+    <script src="loader.php?f=9f8e7d6c"></script>
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 

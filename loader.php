@@ -1,10 +1,11 @@
 <?php
+// Hidden mapping: encrypted/random key => actual file
 $map = [
-    'auth' => 'configs/auth.js',
-    'locked' => 'configs/locked_inc.js'
+    '1a2b3c4d' => 'configs/auth.js',
+    '9f8e7d6c' => 'configs/locked_inc.js'
 ];
 
-// Only allow keys defined in the map
+// Check if key is valid
 if (isset($_GET['f']) && array_key_exists($_GET['f'], $map)) {
     $file = $map[$_GET['f']];
 
@@ -19,6 +20,6 @@ if (isset($_GET['f']) && array_key_exists($_GET['f'], $map)) {
     }
 }
 
-// If not allowed or invalid
+// Forbidden if no valid access
 http_response_code(403);
 echo "// Forbidden";

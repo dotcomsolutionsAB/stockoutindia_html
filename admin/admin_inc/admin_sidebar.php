@@ -14,7 +14,7 @@
             <li><a class="tab-button block py-2 px-4 hover:bg-red-700 rounded" onclick="showTab('view-product-by-user')">View Products by Users</a></li>
             <li><a class="tab-button block py-2 px-4 hover:bg-red-700 rounded" onclick="showTab('view-order-by-user')">View Orders by User</a></li>
 
-            <li><a class="tab-button block py-2 px-4 hover:bg-red-700 rounded" onclick="showTab('cuopons')">Coupons</a></li>
+            <li><a class="tab-button block py-2 px-4 hover:bg-red-700 rounded" onclick="showTab('coupons')">Coupons</a></li>
             <li><a class="tab-button block py-2 px-4 hover:bg-red-700 rounded" onclick="showTab('test')">Test Section</a></li>
             <!-- <li><a href="javascript:void(0)" class="block py-2 px-4 hover:bg-red-700 rounded">Logout</a></li> -->
         </ul>

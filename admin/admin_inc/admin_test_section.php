@@ -45,7 +45,7 @@
 
 <script>
   const BASE_URL = "<?php echo BASE_URL; ?>"; // Make sure this is echoed in PHP properly
-  const couponMap = {};
+  const couponMapTest = {};
 
   // Load Coupons on Page Load
   document.addEventListener("DOMContentLoaded", fetchCoupons);
@@ -69,7 +69,7 @@
 
         if (data.success && Array.isArray(data.data)) {
           data.data.forEach((coupon, index) => {
-            couponMap[coupon.id] = coupon;
+            couponMapTest[coupon.id] = coupon;
             const row = `
                     <tr>
                       <td class="px-6 py-4">${index + 1}</td>
@@ -130,7 +130,7 @@
   }
 
   function editCoupon(id) {
-    const coupon = couponMap[id];
+    const coupon = couponMapTest[id];
     if (!coupon) return;
 
     Swal.fire({
@@ -231,7 +231,7 @@
   }
 
   function viewCoupon(id) {
-    const data = couponMap[id];
+    const data = couponMapTest[id];
     if (!data) return;
 
     Swal.fire({

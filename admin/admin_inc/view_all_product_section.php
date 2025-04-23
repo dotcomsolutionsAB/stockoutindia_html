@@ -178,7 +178,7 @@
   /* ------------------------------------------------------------------
     HELPER – checkbox element
   ------------------------------------------------------------------ */
-  const makeCheckbox = (value, label, cls) => {
+  const makeCheckbox_allPro = (value, label, cls) => {
     const lbl = document.createElement('label');
     lbl.className = 'inline-flex items-center gap-2 w-full text-gray-700';
     lbl.innerHTML =
@@ -196,7 +196,7 @@
       const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       if (!json.success) throw new Error('Failed list load');
-      json.data.forEach(item => wrapEl.appendChild(makeCheckbox(item.id, labelFormatter(item), cls)));
+      json.data.forEach(item => wrapEl.appendChild(makeCheckbox_allPro(item.id, labelFormatter(item), cls)));
     } catch (err) { console.error(err); }
   }
 

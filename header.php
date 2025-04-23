@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Stockout India</title>
-    <script src="loader.php?f=auth-js" type="text/javascript"></script>
+    <script src="configs/auth.js"></script>
+    <!-- <script src="loader.php?f=auth-js" type="text/javascript"></script> -->
     <meta name="description" content="StockOut">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">

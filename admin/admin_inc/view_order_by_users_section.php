@@ -11,7 +11,7 @@
       <!-- <label for="uo-search" class="font-medium text-gray-700">User Name</label> -->
       <input id="uo-search" type="text" autocomplete="off" placeholder="Typing User Name" class="w-56 bg-gray-50 border border-red-300 rounded-lg p-2.5
                     focus:ring-red-500 focus:border-red-500">
-      <ul id="uo-suggest" class="absolute z-10 mt-1 w-full bg-white border border-gray-300
+      <ul id="uo-suggest" class="absolute z-10 mt-12 w-full bg-white border border-gray-300
                  rounded-md shadow-lg max-h-48 overflow-y-auto hidden"></ul>
     </div>
 

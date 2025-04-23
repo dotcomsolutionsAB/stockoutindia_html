@@ -13,6 +13,8 @@
     <!-- <script src="configs/auth.js"></script> -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="../custom/admin_style.css">
 </head>
 <body class="bg-gray-50">

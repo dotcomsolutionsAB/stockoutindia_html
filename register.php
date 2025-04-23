@@ -10,6 +10,11 @@
   <script src="https://unpkg.com/feather-icons"></script>
 
   <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
+  <style>
+    .mt0{
+      margin-top:2px !important;
+    }
+  </style>
 </head>
 <?php include("configs/config_static_data.php"); ?>
 <body class="bg-cover bg-center bg-no-repeat"
@@ -55,7 +60,7 @@
               <input id="noGstChk" type="checkbox" class="accent-red-600 rounded">
               I&nbsp;don’t have a&nbsp;GSTIN
             </label>
-            <p id="gstMsg" class="text-sm mt-1 h-5"></p>
+            <p id="gstMsg" class="text-sm mt0 h-5"></p>
           <!-- Extra details (only when no GSTIN) -->
           <div id="extraGroup" class="hidden">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -83,7 +88,7 @@
           </div>
 
           <!-- Always-visible block -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt0">
             <input id="phone" type="text" placeholder="Phone"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
             <input id="email" type="email" placeholder="Email"

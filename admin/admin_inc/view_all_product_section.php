@@ -46,13 +46,14 @@
                       h-20 overflow-y-auto space-y-1"></div>
       </div>
 
+      <!-- User list (multi-select) -->
       <div class="flex flex-col gap-1">
-        <!-- User list (multi-select) -->
-        <div class="flex flex-col gap-1">
-          <input id="userSearch" type="text" placeholder="Search User"
-                class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2 text-sm focus:ring-red-500 focus:border-red-500">
-          <div id="userList" class="bg-gray-50 border border-gray-300 rounded-lg p-2 h-20 overflow-y-auto space-y-1"></div>
-        </div>
+        <input id="userSearch" type="text" placeholder="Search User"
+              class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2 text-sm focus:ring-red-500 focus:border-red-500">
+        <div id="userList" class="bg-gray-50 border border-gray-300 rounded-lg p-2 h-20 overflow-y-auto space-y-1"></div>
+      </div>
+
+      <div class="flex flex-col gap-1">
         <!-- Search (product name) -->
         <div class="flex flex-col gap-1">
           <!-- <label for="searchInput" class="font-medium text-gray-700">Search</label> -->

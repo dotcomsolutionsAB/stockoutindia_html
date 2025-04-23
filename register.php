@@ -146,7 +146,7 @@
   </div>
 
 <!-- ────────────────────────────────────────── JS ─────────────────── -->
-<script>
+<!-- <script>
   const BASE = `<?php echo BASE_URL; ?>`;
   const token = localStorage.getItem('authToken') ?? '';
 
@@ -272,6 +272,166 @@
     };
     alert(JSON.stringify(obj,null,2));
   };
+</script> -->
+<script>
+/* ─── Constants ───────────────────────────────────────────── */
+const BASE   = `<?php echo BASE_URL; ?>`;
+const token  = localStorage.getItem('authToken') ?? '';   // for the look-up APIs
+
+/* ─── Feather icons / eye toggles ─────────────────────────── */
+feather.replace();
+document.querySelectorAll('.eye').forEach(icon=>{
+  icon.onclick = () => {
+    const inp  = icon.previousElementSibling;
+    const open = inp.type === 'password';
+    inp.type   = open ? 'text' : 'password';
+    icon.setAttribute('data-feather', open ? 'eye-off' : 'eye');
+    feather.replace(icon);
+  };
+});
+
+/* ─── GST hide/show ───────────────────────────────────────── */
+const noGstChk = document.getElementById('noGstChk');
+const gstGrp   = document.getElementById('gstFieldGroup');
+const extraGrp = document.getElementById('extraGroup');
+const syncVis  = () => {
+  const hide = noGstChk.checked;
+  gstGrp.classList.toggle('hidden', hide);
+  extraGrp.classList.toggle('hidden', !hide);
+};
+noGstChk.onchange = syncVis; syncVis();
+
+/* ─── Dropdown data ───────────────────────────────────────── */
+const stateSel=document.getElementById('stateSelect');
+const citySel =document.getElementById('citySelect');
+const indSel  =document.getElementById('industrySelect');
+const subSel  =document.getElementById('subIndustrySelect');
+
+let states=[], cities=[], industries=[], subsCache=[];
+
+const fetchData = path =>
+  fetch(`${BASE}${path}`, { headers:{Authorization:`Bearer ${token}`}})
+    .then(r=>r.json()).then(j=>j.data);
+
+(async()=>{
+  [states,cities,industries] = await Promise.all([
+    fetchData('/states'), fetchData('/cities'), fetchData('/industry')
+  ]);
+  states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
+    `<option value="${s.id}" data-name="${s.name}">${s.name}</option>`));
+  industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
+    `<option value="${i.id}">${i.name}</option>`));
+})();
+
+stateSel.onchange = ()=>{
+  const stName = stateSel.selectedOptions[0]?.dataset.name || '';
+  citySel.innerHTML='<option value="">Select City</option>';
+  if(!stName){citySel.disabled=true;return;}
+  cities.filter(c=>c.state_name===stName)
+        .forEach(c=>citySel.insertAdjacentHTML('beforeend',
+          `<option value="${c.name}">${c.name}</option>`));
+  citySel.disabled=false;
+};
+
+indSel.onchange = async ()=>{
+  subSel.innerHTML='<option value="">Select Sub-industry</option>';
+  if(!indSel.value){subSel.disabled=true;return;}
+  if(!subsCache.length) subsCache = await fetchData('/sub_industry');
+  subsCache.filter(s=>String(s.industry_id??s.id).startsWith(indSel.value))
+           .forEach(s=>subSel.insertAdjacentHTML('beforeend',
+             `<option value="${s.id}">${s.name}</option>`));
+  subSel.disabled=false;
+};
+
+/* ─── GSTIN validate & autofill ───────────────────────────── */
+const gstInput=document.getElementById('gstin');
+const gstMsg  =document.getElementById('gstMsg');
+gstInput.addEventListener('blur', async()=>{
+  const v=gstInput.value.trim();
+  gstMsg.textContent=''; gstMsg.className='text-sm mt-1 h-5';
+  if(!v||noGstChk.checked) return;
+
+  gstMsg.textContent='Validating…'; gstMsg.classList.add('text-gray-500');
+  const fd=new FormData(); fd.append('gstin',v);
+  try{
+    const j = await fetch(`${BASE}/gst_details`,
+                {method:'POST',headers:{Authorization:`Bearer ${token}`},body:fd})
+                .then(r=>r.json());
+    if(j.success){
+      const d=j.data;
+      if(!document.getElementById('companyName').value)
+        document.getElementById('companyName').value=d.company_name||'';
+      if(!document.getElementById('fullName').value)
+        document.getElementById('fullName').value=d.name||'';
+      if(!document.getElementById('address').value)
+        document.getElementById('address').value=d.address||'';
+      if(!document.getElementById('pincode').value)
+        document.getElementById('pincode').value=d.pincode||'';
+
+      if(d.state){
+        const st=states.find(s=>s.name.toLowerCase()===d.state.toLowerCase());
+        if(st){stateSel.value=st.id; stateSel.onchange();}
+      }
+      setTimeout(()=>{ if(d.city) citySel.value=d.city; },60);
+
+      gstMsg.textContent='GSTIN verified & auto-filled';
+      gstMsg.className='text-sm mt-1 h-5 text-green-600';
+    }else throw new Error(j.message||'Invalid GSTIN');
+  }catch(err){
+    gstMsg.textContent=err.message;
+    gstMsg.className='text-sm mt-1 h-5 text-red-600';
+  }
+});
+
+/* ─── REGISTER submission ────────────────────────────────── */
+document.getElementById('registerForm').onsubmit = async e=>{
+  e.preventDefault();
+
+  /* build payload */
+  const body = {
+    gstin         : gstInput.value.trim(),                        // may be ""
+    phone         : document.getElementById('phone').value.trim(),
+    email         : document.getElementById('email').value.trim(),
+    password      : document.getElementById('pass').value,
+    google_id     : "",                                           // always empty for now
+    industry      : indSel.value,                                 // id string
+    sub_industry  : subSel.value                                  // id string
+  };
+
+  /* include optional fields only if user provided */
+  const optMap = {
+    name         : 'fullName',
+    company_name : 'companyName',
+    address      : 'address',
+    pincode      : 'pincode',
+    city         : 'citySelect',
+    state        : 'stateSelect'          // already holds numeric id
+  };
+  Object.entries(optMap).forEach(([k, id])=>{
+    const val = document.getElementById(id).value;
+    if(val) body[k] = val;
+  });
+
+  /* POST to /register */
+  try{
+    const res  = await fetch(`${BASE}/register`,{
+      method :'POST',
+      headers:{'Content-Type':'application/json'},
+      body   : JSON.stringify(body)
+    });
+    const json = await res.json();
+
+    if(json.success){
+      alert('Registration successful!');    // replace with redirect if needed
+      // location.href = 'login.php';
+    }else{
+      throw new Error(json.message||'Registration failed');
+    }
+  }catch(err){
+    alert(`❌ ${err.message}`);
+  }
+};
 </script>
+
 </body>
 </html>

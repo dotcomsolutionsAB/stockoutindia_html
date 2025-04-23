@@ -12,6 +12,7 @@
 
   <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
 </head>
+<?php include("configs/config_static_data.php"); ?>
 <body class="bg-cover bg-center bg-no-repeat"
       style="background-image:url('https://www.stockoutindia.com/assets/img/contact-bg.png')">
 
@@ -146,16 +147,18 @@
   <script>
     feather.replace();                                // draw icons once
 
+
     /* 1. password eye toggles */
     document.querySelectorAll('.toggleEye').forEach(icon => {
       icon.addEventListener('click', () => {
-        const input = icon.previousElementSibling;
-        const show  = input.type === 'password';
-        input.type  = show ? 'text' : 'password';
-        icon.setAttribute('data-feather', show ? 'eye-off' : 'eye');
-        feather.replace(icon);                       // redraw just this icon
+        const input   = icon.previousElementSibling;       // the <input>
+        const showing = input.type === 'text';             // is it visible *now*?
+        input.type    = showing ? 'password' : 'text';     // flip it
+        icon.setAttribute('data-feather', showing ? 'eye' : 'eye-off');
+        feather.replace(icon);                             // redraw just this icon
       });
     });
+
 
     /* 2. show / hide GST + extra group */
     const noGstChk = document.getElementById('noGstChk');
@@ -184,10 +187,10 @@
     }
     (async () => {
       [states,cities,industries,subIndustries] = await Promise.all([
-        fetchJSON('/states'),
-        fetchJSON('/cities'),
-        fetchJSON('/industry'),
-        fetchJSON('/sub_industry')
+        fetchJSON('<?php echo BASE_URL; ?>/states'),
+        fetchJSON('<?php echo BASE_URL; ?>/cities'),
+        fetchJSON('<?php echo BASE_URL; ?>/industry'),
+        fetchJSON('<?php echo BASE_URL; ?>/sub_industry')
       ]);
 
       // states

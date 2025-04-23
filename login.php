@@ -213,57 +213,6 @@
         });
     });
   </script>
-
-<!-- <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCkoJq5Gvhop48v2pXLbSUi1po4SLfjvkQ",
-    authDomain: "stockoutindia-3636e.firebaseapp.com",
-    projectId: "stockoutindia-3636e",
-    storageBucket: "stockoutindia-3636e.firebaseapp.com",
-    messagingSenderId: "1070850746164",
-    appId: "1:1070850746164:web:2a48bc7949577f6236e761",
-    measurementId: "G-7TXB99B3J2"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  document.getElementById('googleSignInBtn').addEventListener('click', () => {
-    const provider = new GoogleAuthProvider();
-
-    signInWithPopup(auth, provider)
-    .then(async (result) => {
-      const user = result.user;
-      const idToken = await user.getIdToken();
-
-      const userData = {
-        uid: user.uid,
-        name: user.displayName,
-        email: user.email,
-        photo_url: user.photoURL,
-        token: idToken,
-        timestamp: new Date().toISOString()
-      };
-
-      // 🔽 This part must be inside the same block
-      fetch("save_g_user.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData)
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-      });
-
-    });
-
-  });
-</script> -->
-<!-- Firebase and Google Sign-In Script -->
 <!-- Firebase SDKs - Use UMD build (NOT type="module") -->
 <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>

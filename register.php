@@ -5,22 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stockout India – Register</title>
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Feather icons -->
   <script src="https://unpkg.com/feather-icons"></script>
 
-  <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/x-icon"
+        href="uploads/favicon/apple-touch-icon.png">
 </head>
 <body class="bg-cover bg-center bg-no-repeat"
       style="background-image:url('https://www.stockoutindia.com/assets/img/contact-bg.png')">
 
   <div class="bg-red-900 bg-opacity-80 min-h-screen flex items-center justify-center">
 
-    <!-- ── Left banner (hidden ≤ md) ──────────────────────────────── -->
+    <!-- Left banner (hidden ≤ md) -->
     <div class="w-1/2 text-white px-10 hidden md:block">
       <div class="max-w-md">
-        <img src="uploads/stockout_logo.png" alt="Logo" class="mb-4 w-28">
+        <img src="uploads/stockout_logo.png" class="mb-4 w-28" alt="logo">
         <h1 class="text-4xl font-bold mb-4">Stockout India</h1>
         <p class="text-lg leading-relaxed">
           The easiest way to sell your dead stock. <br>
@@ -29,7 +28,7 @@
       </div>
     </div>
 
-    <!-- ── Register card ─────────────────────────────────────────── -->
+    <!-- Register card -->
     <div class="w-full md:w-1/2 px-4 md:px-10">
       <div class="bg-white rounded-xl p-8 md:p-8 shadow-lg max-w-2xl mx-auto">
 
@@ -37,7 +36,7 @@
           Sign up to Stockout India
         </h2>
 
-        <!-- ╭─ FORM ────────────────────────────────────────────────╮ -->
+        <!-- ── FORM ─────────────────────────────────────────────── -->
         <form id="registerForm" class="space-y-6">
 
           <!-- GST toggle -->
@@ -46,14 +45,14 @@
             I&nbsp;don’t have a&nbsp;GSTIN
           </label>
 
-          <!-- GST field + status message -->
+          <!-- GSTIN group -->
           <div id="gstFieldGroup">
             <input id="gstin" type="text" placeholder="GSTIN"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
             <p id="gstMsg" class="text-sm mt-1 h-5"></p>
           </div>
 
-          <!-- Extra details (shown only when GST not provided) -->
+          <!-- Extra fields (hidden when GSTIN required) -->
           <div id="extraGroup" class="hidden">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <input id="fullName"    type="text" placeholder="Full Name"
@@ -79,14 +78,13 @@
             </div>
           </div>
 
-          <!-- Always-visible fields -->
+          <!-- Fields always shown -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <input id="phone" type="text" placeholder="Phone"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
             <input id="email" type="email" placeholder="Email"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
 
-            <!-- pwd + eye -->
             <div class="relative">
               <input id="pass" type="password" placeholder="Password"
                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
@@ -101,7 +99,6 @@
             </div>
           </div>
 
-          <!-- Industry selects -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <select id="industrySelect"
                     class="w-full border border-gray-400 px-3 py-2 rounded-md">
@@ -129,7 +126,7 @@
             Register
           </button>
         </form>
-        <!-- ╰────────────────────────────────────────────────────────╯ -->
+        <!-- ──────────────────────────────────────────────────────── -->
 
         <!-- Google sign-up -->
         <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mt-6 hover:shadow-md">
@@ -146,161 +143,139 @@
     </div>
   </div>
 
-  <!-- ── JS ─────────────────────────────────────────────────────── -->
+  <!-- ── SCRIPT ─────────────────────────────────────────────────── -->
   <script>
     const BASE_URL = `<?php echo BASE_URL; ?>`;
     const token    = localStorage.getItem('authToken') ?? '';
 
-    feather.replace();                                      // draw icons
+    feather.replace();
 
-    /* 1. eye toggles */
-    document.querySelectorAll('.eye').forEach(eye=>{
-      eye.onclick = () =>{
-        const inp  = eye.previousElementSibling;
-        const show = inp.type === 'password';
-        inp.type   = show ? 'text':'password';
-        eye.setAttribute('data-feather', show ? 'eye-off':'eye');
-        feather.replace(eye);
+    /* eye toggle */
+    document.querySelectorAll('.eye').forEach(icon=>{
+      icon.onclick = ()=>{
+        const inp = icon.previousElementSibling;
+        const on  = inp.type === 'password';
+        inp.type  = on ? 'text':'password';
+        icon.setAttribute('data-feather', on ? 'eye-off':'eye');
+        feather.replace(icon);
       };
     });
 
-    /* 2. GST toggle */
+    /* GST toggle */
     const noGstChk = document.getElementById('noGstChk');
     const gstGrp   = document.getElementById('gstFieldGroup');
     const extraGrp = document.getElementById('extraGroup');
-    const syncVis  = () => {
+    const syncVis  = () =>{
       const hide = noGstChk.checked;
       gstGrp.classList.toggle('hidden', hide);
       extraGrp.classList.toggle('hidden', !hide);
     };
     noGstChk.onchange = syncVis; syncVis();
 
-    /* 3. Load reference data */
+    /* dropdown refs */
     const stateSel = document.getElementById('stateSelect');
     const citySel  = document.getElementById('citySelect');
     const indSel   = document.getElementById('industrySelect');
     const subSel   = document.getElementById('subIndustrySelect');
 
-    let states=[], cities=[], industries=[];
+    let states=[], cities=[], industries=[], subCache=[];
 
-    async function fetchData(url){
-      const r = await fetch(url,{headers:{Authorization:`Bearer ${token}`}});
+    async function fetchData(path){
+      const r = await fetch(`${BASE_URL}${path}`,{
+        headers:{Authorization:`Bearer ${token}`}
+      });
       return (await r.json()).data;
     }
+
+    /* load states, cities, industries */
     (async()=>{
       [states,cities,industries] = await Promise.all([
-        fetchData(`${BASE_URL}/states`),
-        fetchData(`${BASE_URL}/cities`),
-        fetchData(`${BASE_URL}/industry`),
+        fetchData('/states'),
+        fetchData('/cities'),
+        fetchData('/industry')
       ]);
-
-      states.forEach(s=>{
-        stateSel.insertAdjacentHTML('beforeend',
-          `<option value="${s.name}">${s.name}</option>`);
-      });
-      industries.forEach(i=>{
-        indSel.insertAdjacentHTML('beforeend',
-          `<option value="${i.id}">${i.name}</option>`);
-      });
+      states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
+        `<option value="${s.name}">${s.name}</option>`));
+      industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
+        `<option value="${i.id}">${i.name}</option>`));
     })();
 
-    /* 4. State → Cities */
+    /* state → city */
     stateSel.onchange = ()=>{
-      citySel.innerHTML = '<option value="">Select City</option>';
-      if(!stateSel.value){ citySel.disabled=true; return; }
+      citySel.innerHTML='<option value="">Select City</option>';
+      if(!stateSel.value){citySel.disabled=true;return;}
       cities.filter(c=>c.state_name===stateSel.value)
             .forEach(c=>citySel.insertAdjacentHTML('beforeend',
               `<option value="${c.name}">${c.name}</option>`));
       citySel.disabled=false;
     };
 
-    /* 5. Industry → Sub-industry */
-    indSel.onchange = async()=>{
-      subSel.innerHTML = '<option value="">Select Sub-industry</option>';
-      if(!indSel.value){ subSel.disabled=true; return; }
-      // fetch sub-industries on demand to keep payload small
-      const subs = (await fetchData(`${BASE_URL}/sub_industry`))
-                    .filter(s=>String(s.industry_id??s.id).startsWith(indSel.value));
-      subs.forEach(s=>subSel.insertAdjacentHTML('beforeend',
-        `<option value="${s.id}">${s.name}</option>`));
+    /* industry → sub-industry (with cache) */
+    indSel.onchange = async ()=>{
+      subSel.innerHTML='<option value="">Select Sub-industry</option>';
+      if(!indSel.value){subSel.disabled=true;return;}
+      if(!subCache.length) subCache = await fetchData('/sub_industry');
+      subCache.filter(s=>String(s.industry_id??s.id).startsWith(indSel.value))
+              .forEach(s=>subSel.insertAdjacentHTML('beforeend',
+                `<option value="${s.id}">${s.name}</option>`));
       subSel.disabled=false;
     };
 
-    /* 6. GSTIN validation & autofill */
+    /* GST validate + auto-fill */
     const gstInput = document.getElementById('gstin');
     const gstMsg   = document.getElementById('gstMsg');
 
-    async function validateGSTIN(){
-      const gstin = gstInput.value.trim();
+    gstInput.addEventListener('blur',async()=>{
+      const g = gstInput.value.trim();
       gstMsg.textContent=''; gstMsg.className='text-sm mt-1 h-5';
+      if(!g) return;
 
-      if(!gstin) return;                               // empty → do nothing
-
-      gstMsg.textContent = 'Validating…';
-      gstMsg.classList.add('text-gray-500');
-
-      const fd = new FormData(); fd.append('gstin', gstin);
+      gstMsg.textContent='Validating…'; gstMsg.classList.add('text-gray-500');
+      const fd=new FormData(); fd.append('gstin',g);
 
       try{
-        const res  = await fetch(`${BASE_URL}/gst_details`,{
-          method:'POST',
-          headers:{Authorization:`Bearer ${token}`},
-          body:fd
-        });
-        const json = await res.json();
+        const res = await fetch(`${BASE_URL}/gst_details`,{
+          method:'POST', headers:{Authorization:`Bearer ${token}`}, body:fd});
+        const j   = await res.json();
 
-        if(json.success){
-          const d = json.data;
-          // fill fields
-          document.getElementById('companyName').value = d.company_name || '';
-          document.getElementById('fullName')  .value = d.name          || '';
-          document.getElementById('address')   .value = d.address       || '';
-          document.getElementById('pincode')   .value = d.pincode       || '';
+        if(j.success){
+          const d=j.data;
+          document.getElementById('companyName').value = d.company_name||'';
+          document.getElementById('fullName')  .value = d.name         ||'';
+          document.getElementById('address')   .value = d.address      ||'';
+          document.getElementById('pincode')   .value = d.pincode      ||'';
+          if(d.state){stateSel.value=d.state;stateSel.onchange();}
+          setTimeout(()=>{ if(d.city) citySel.value=d.city; },60);
 
-          // set state & trigger city list
-          if(d.state){
-            stateSel.value = d.state;
-            stateSel.onchange();
-          }
-          // set city if found in list
-          if(d.city){
-            // slight delay until city list ready
-            setTimeout(()=>{
-              citySel.value = d.city;
-            },50);
-          }
-
-          gstMsg.textContent = 'GSTIN verified & details auto-filled';
-          gstMsg.className   = 'text-sm mt-1 h-5 text-green-600';
+          gstMsg.textContent='GSTIN verified & auto-filled';
+          gstMsg.className='text-sm mt-1 h-5 text-green-600';
         }else{
-          throw new Error(json.message || 'Invalid GSTIN');
+          throw new Error(j.message||'Invalid GSTIN');
         }
       }catch(err){
-        gstMsg.textContent = err.message || 'Invalid GSTIN';
-        gstMsg.className   = 'text-sm mt-1 h-5 text-red-600';
+        gstMsg.textContent=err.message;
+        gstMsg.className='text-sm mt-1 h-5 text-red-600';
       }
-    }
-    gstInput.addEventListener('blur', validateGSTIN);
-
-    /* 7. Demo submit – show alert with payload */
-    document.getElementById('registerForm').addEventListener('submit',e=>{
-      e.preventDefault();
-      const data = {
-        gstin           : gstInput.value || null,
-        full_name       : document.getElementById('fullName').value    || null,
-        company_name    : document.getElementById('companyName').value || null,
-        address         : document.getElementById('address').value     || null,
-        pincode         : document.getElementById('pincode').value     || null,
-        state           : stateSel.value || null,
-        city            : citySel.value  || null,
-        phone           : document.getElementById('phone').value,
-        email           : document.getElementById('email').value,
-        password        : document.getElementById('pass').value,
-        industry_id     : indSel.value || null,
-        sub_industry_id : subSel.value || null
-      };
-      alert(JSON.stringify(data,null,2));
     });
+
+    /* demo submit */
+    document.getElementById('registerForm').onsubmit = e=>{
+      e.preventDefault();
+      const obj={
+        gstin:gstInput.value||null,
+        full_name:document.getElementById('fullName').value||null,
+        company_name:document.getElementById('companyName').value||null,
+        address:document.getElementById('address').value||null,
+        pincode:document.getElementById('pincode').value||null,
+        state:stateSel.value||null, city:citySel.value||null,
+        phone:document.getElementById('phone').value,
+        email:document.getElementById('email').value,
+        password:document.getElementById('pass').value,
+        industry_id:indSel.value||null,
+        sub_industry_id:subSel.value||null
+      };
+      alert(JSON.stringify(obj,null,2));
+    };
   </script>
 </body>
 </html>

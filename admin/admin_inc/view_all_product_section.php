@@ -163,7 +163,20 @@
   </template>
 
 </div>
+<style>
+  /* 𝗘𝗠𝗣𝗧𝗬 𝗦𝗧𝗔𝗧𝗘 ---------------------------------------------- */
+  .empty-state {
+    text-align:center;
+    padding:3rem 1rem;
+    color:#9ca3af;                /* tailwind: text-gray-400 */
+  }
+  .empty-state svg {
+    width:48px; height:48px;
+    margin:0 auto 0.75rem;
+    stroke:#9ca3af;               /* same muted gray */
+  }
 
+</style>
 <script>
   /* ───────────────────────────── GLOBALS ──────────────────────────── */
   lucide.createIcons();                                   // icons once
@@ -270,31 +283,100 @@
   const rupee = new Intl.NumberFormat('en-IN',
     {style:'currency',currency:'INR',maximumFractionDigits:0});
 
-  function renderTable(rows) {
-    const tbody = $('#tableBody'); tbody.innerHTML='';
-    const tmpl  = $('#rowTemplate');
+  // function renderTable(rows) {
+  //   const tbody = $('#tableBody'); tbody.innerHTML='';
+  //   const tmpl  = $('#rowTemplate');
 
+  //   rows.forEach(r => {
+  //     const tr = tmpl.content.cloneNode(true);
+
+  //     tr.querySelector('[data-field="image"]').src =
+  //       Array.isArray(r.image) && r.image.length ? r.image[0]
+  //                                                : '../uploads/placeholder.png';
+  //     tr.querySelector('[data-field="product_name"]').textContent = r.product_name||'';
+  //     tr.querySelector('[data-field="offer_quantity"]').textContent   = r.offer_quantity   ?? '-';
+  //     tr.querySelector('[data-field="minimum_quantity"]').textContent = r.minimum_quantity ?? '-';
+  //     tr.querySelector('[data-field="original_price"]').textContent   =
+  //       r.original_price!=null ? rupee.format(r.original_price) : '–';
+  //     tr.querySelector('[data-field="selling_price"]').textContent    =
+  //       r.selling_price !=null  ? rupee.format(r.selling_price)  : '–';
+
+  //     /* status dropdown */
+  //     const sTd = tr.querySelector('[data-field="status"]');
+  //     const sel = document.createElement('select');
+  //     sel.className = 'border rounded px-2 py-1 text-sm';
+  //     ['active','in-active','sold'].forEach(st=>{
+  //       const o=document.createElement('option'); o.value=st;
+  //       o.textContent = st[0].toUpperCase()+st.slice(1);
+  //       if(r.status===st) o.selected=true; sel.appendChild(o);
+  //     });
+  //     sel.onchange = () => updateStatus(r.id, sel, r.status);
+  //     sTd.innerHTML=''; sTd.appendChild(sel);
+
+  //     tr.querySelector('[data-field="unit"]').textContent        = r.unit        ?? '-';
+  //     tr.querySelector('[data-field="validity"]').textContent    = r.validity    ?? '-';
+  //     tr.querySelector('[data-field="industry"]').textContent    = r.industry?.name     ?? '-';
+  //     tr.querySelector('[data-field="sub_industry"]').textContent= r.sub_industry?.name ?? '-';
+
+  //     tr.querySelector('.viewBtn')  .onclick = () => alert(`View #${r.id}`);
+  //     tr.querySelector('.updateBtn').onclick = () => alert(`Update #${r.id}`);
+  //     tr.querySelector('.deleteBtn').onclick = () =>
+  //       confirm(`Delete #${r.id}?`) && alert('Perform delete…');
+
+  //     tbody.appendChild(tr);
+  //   });
+  //   lucide.createIcons();
+  // }
+  function renderTable(rows) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    const tmpl = document.getElementById('rowTemplate');
+
+    /* ───────── SHOW EMPTY-STATE IF NO ROWS ───────── */
+    if (!rows.length) {
+      const tr  = document.createElement('tr');
+      const td  = document.createElement('td');
+      td.colSpan = 11;                                  // ← span all table columns
+      td.innerHTML = `
+        <div class="empty-state">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.6">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 3h2l.4 2M7 13h14l-1.5 8H6.5L5 6h16" />
+            <circle cx="9"  cy="21" r="1" />
+            <circle cx="19" cy="21" r="1" />
+          </svg>
+          <p class="text-lg font-medium">No Products Found</p>
+          <p class="text-sm">Try adjusting your filters</p>
+        </div>`;
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      lucide.createIcons();       // keep icons fresh (for other rows later)
+      return;                     // nothing else to render
+    }
+
+    /* ───────── RENDER NORMAL ROWS WHEN PRESENT ───────── */
     rows.forEach(r => {
       const tr = tmpl.content.cloneNode(true);
 
       tr.querySelector('[data-field="image"]').src =
         Array.isArray(r.image) && r.image.length ? r.image[0]
-                                                 : '../uploads/placeholder.png';
+                                                : '../uploads/placeholder.png';
       tr.querySelector('[data-field="product_name"]').textContent = r.product_name||'';
       tr.querySelector('[data-field="offer_quantity"]').textContent   = r.offer_quantity   ?? '-';
       tr.querySelector('[data-field="minimum_quantity"]').textContent = r.minimum_quantity ?? '-';
-      tr.querySelector('[data-field="original_price"]').textContent   =
-        r.original_price!=null ? rupee.format(r.original_price) : '–';
-      tr.querySelector('[data-field="selling_price"]').textContent    =
-        r.selling_price !=null  ? rupee.format(r.selling_price)  : '–';
 
-      /* status dropdown */
+      tr.querySelector('[data-field="original_price"]').textContent =
+        r.original_price!=null ? rupee.format(r.original_price) : '–';
+      tr.querySelector('[data-field="selling_price"]').textContent  =
+        r.selling_price !=null ? rupee.format(r.selling_price)  : '–';
+
+      /* status dropdown, unit, validity, etc. (unchanged) */
       const sTd = tr.querySelector('[data-field="status"]');
       const sel = document.createElement('select');
       sel.className = 'border rounded px-2 py-1 text-sm';
       ['active','in-active','sold'].forEach(st=>{
-        const o=document.createElement('option'); o.value=st;
-        o.textContent = st[0].toUpperCase()+st.slice(1);
+        const o=document.createElement('option');
+        o.value=st; o.textContent=st[0].toUpperCase()+st.slice(1);
         if(r.status===st) o.selected=true; sel.appendChild(o);
       });
       sel.onchange = () => updateStatus(r.id, sel, r.status);
@@ -312,6 +394,7 @@
 
       tbody.appendChild(tr);
     });
+
     lucide.createIcons();
   }
 

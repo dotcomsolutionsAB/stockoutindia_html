@@ -40,17 +40,18 @@
         <!-- ╭─ FORM ───────────────────────────────────────────────╮ -->
         <form id="registerForm" class="space-y-6">
 
+          <!-- GSTIN toggle -->
+          <label class="flex items-center gap-2 text-sm select-none">
+            <input id="noGstChk" type="checkbox" class="accent-red-600 rounded">
+            I&nbsp;don’t have a&nbsp;GSTIN
+          </label>
+
           <!-- GSTIN group -->
           <div id="gstFieldGroup">
             <input id="gstin" type="text" placeholder="GSTIN"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
             <p id="gstMsg" class="text-sm mt-1 h-5"></p>
           </div>
-          <!-- GSTIN toggle -->
-          <label class="flex items-center gap-2 text-sm select-none">
-            <input id="noGstChk" type="checkbox" class="accent-red-600 rounded">
-            I&nbsp;don’t have a&nbsp;GSTIN
-          </label>
 
           <!-- Extra details (only when no GSTIN) -->
           <div id="extraGroup" class="hidden">

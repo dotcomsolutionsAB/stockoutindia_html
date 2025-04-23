@@ -55,14 +55,18 @@
           <div id="gstFieldGroup">
             <input id="gstin" type="text" placeholder="GSTIN" class="w-full border border-gray-400 px-3 py-2 rounded-md">
           </div>
-            <!-- GSTIN toggle -->
-            <label class="flex items-center gap-2 text-sm select-none">
+          
+          <!-- GSTIN toggle -->
+          <label class="flex items-center gap-2 text-sm mt0 justify-between select-none">
+            <div class="check_box">
               <input id="noGstChk" type="checkbox" class="accent-red-600 rounded">
               I&nbsp;don’t have a&nbsp;GSTIN
-            </label>
+            </div>
             <p id="gstMsg" class="text-sm mt0 h-5"></p>
+          </label>
+            
           <!-- Extra details (only when no GSTIN) -->
-          <div id="extraGroup" class="hidden">
+          <div id="extraGroup" class="hidden mt0">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <input id="fullName"    type="text" placeholder="Full Name"
                      class="w-full border border-gray-400 px-3 py-2 rounded-md">

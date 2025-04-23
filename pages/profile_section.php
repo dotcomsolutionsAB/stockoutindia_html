@@ -26,7 +26,7 @@
     <!-- New password -->
     <div class="acc-user-group relative">
       <label for="newPassword">New Password</label>
-      <input type="password" id="newPassword" class="acc-user-input pr-10" minlength="8" />
+      <input type="text" id="newPassword" class="acc-user-input pr-10" minlength="8" />
       <button type="button" onclick="togglePwd('newPassword')" class="pwd-toggle">👁</button>
     </div>
 
@@ -54,7 +54,7 @@
   }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   /* ─────────── Prefill read-only fields ─────────── */
     document.addEventListener('DOMContentLoaded', () => {

@@ -47,6 +47,13 @@
       </div>
 
       <div class="flex flex-col gap-1">
+        <!-- Select User -->
+        <div class="flex flex-col gap-1">
+          <select id="userFilter" class="bg-gray-50 border border-gray-300 rounded-lg p-2 focus:ring-red-500 focus:border-red-500">
+            <option value="">-Select User-</option>
+            <option value="26">Abcd</option>
+          </select>
+        </div>
         <!-- Search (product name) -->
         <div class="flex flex-col gap-1">
           <!-- <label for="searchInput" class="font-medium text-gray-700">Search</label> -->
@@ -213,26 +220,57 @@
   }
 
   /* ------------------------------------------------------------------
+     BUILD USER LIST  – runs once, adds <option> elements
+  ------------------------------------------------------------------ */
+  async function initUserFilter() {
+    const token = localStorage.getItem('authToken');
+    try {
+      const res  = await fetch('<?php echo BASE_URL; ?>/admin/users_with_products', {
+        method : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body   : '{}'          // POST endpoint, but no payload needed
+      });
+
+      const json = await res.json();
+      if (!json.success) throw new Error(json.message || 'Failed to load users');
+
+      const select = document.getElementById('userFilter');
+      json.data.forEach(u => {
+        const opt   = document.createElement('option');
+        opt.value   = u.user_id;                 // ← backend expects numeric id
+        opt.textContent = u.name || u.username;  // fallback if name null
+        select.appendChild(opt);
+      });
+    } catch (err) {
+      console.error('User list load error:', err);
+    }
+  }
+  /* ------------------------------------------------------------------
     FETCH PRODUCTS
   ------------------------------------------------------------------ */
   async function fetchProducts() {
-    const token = localStorage.getItem('authToken');
-    const search = document.getElementById('searchInput').value.trim();
-    const status = document.getElementById('statusFilter').value;
-    const minP = document.getElementById('minPrice').value;
-    const maxP = document.getElementById('maxPrice').value;
-    const indIds = [...document.querySelectorAll('.industryChk:checked')].map(c => c.value).join(',');
-    const subIds = [...document.querySelectorAll('.subChk:checked')].map(c => c.value).join(',');
+    const token   = localStorage.getItem('authToken');
+    const search  = document.getElementById('searchInput').value.trim();
+    const status  = document.getElementById('statusFilter').value;
+    const minP    = document.getElementById('minPrice').value;
+    const maxP    = document.getElementById('maxPrice').value;
+    const userId  = document.getElementById('userFilter').value;          // ➊ NEW
+    const indIds  = [...document.querySelectorAll('.industryChk:checked')].map(c => c.value).join(',');
+    const subIds  = [...document.querySelectorAll('.subChk:checked')].map(c => c.value).join(',');
 
     const payload = {
-      product_name: search || undefined,
-      industry: indIds || undefined,
-      sub_industry: subIds || undefined,
-      status: status || undefined,
-      min_amount: minP ? Number(minP) : undefined,
-      max_amount: maxP ? Number(maxP) : undefined,
+      product_name : search || undefined,
+      industry     : indIds || undefined,
+      sub_industry : subIds || undefined,
+      user         : userId  || undefined,         // ➋ NEW (backend field name)
+      status       : status || undefined,
+      min_amount   : minP ? Number(minP) : undefined,
+      max_amount   : maxP ? Number(maxP) : undefined,
       limitt,
-      offset: (currentPage_allPro - 1) * limitt
+      offset       : (currentPage_allPro - 1) * limitt
     };
     Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
@@ -410,15 +448,29 @@
   /* ------------------------------------------------------------------
     INITIALISE
   ------------------------------------------------------------------ */
+  // (async () => {
+  //   await initCheckList(INDUSTRY_URL, document.getElementById('industryList'),
+  //     'industryChk', i => i.name);
+  //   await initCheckList(SUB_INDUSTRY_URL, document.getElementById('subIndustryList'),
+  //     'subChk', s => s.name);
+
+  //   attachSearch('industrySearch', 'industryList');
+  //   attachSearch('subIndustrySearch', 'subIndustryList');
+
+  //   fetchProducts();   // first load
+  // })();
   (async () => {
     await initCheckList(INDUSTRY_URL, document.getElementById('industryList'),
       'industryChk', i => i.name);
     await initCheckList(SUB_INDUSTRY_URL, document.getElementById('subIndustryList'),
       'subChk', s => s.name);
 
+    await initUserFilter();                   // ← add this line
+
     attachSearch('industrySearch', 'industryList');
     attachSearch('subIndustrySearch', 'subIndustryList');
 
-    fetchProducts();   // first load
+    fetchProducts();                          // first load
   })();
+
 </script>

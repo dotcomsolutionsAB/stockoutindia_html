@@ -1,172 +1,141 @@
-<!-- ╔════════════ Account Information ════════════╗ -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Account Info</title>
+<!-- ═══════════ Account Information ═══════════ -->
+<div class="acc-user-info-box">
+  <h2 class="acc-user-title">Account Information</h2>
 
-  <!-- Tailwind CDN (v3) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Lucide icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4">
-
-  <div class="acc-user-info-box max-w-3xl w-full mx-auto p-6 bg-white border rounded-lg shadow">
-    <h2 class="text-xl font-semibold mb-6">Account Information</h2>
-
-    <!-- ❶ Read-only details -->
-    <div class="grid md:grid-cols-3 gap-4 mb-6">
-      <div>
-        <label class="block mb-1 font-medium text-gray-700">Name</label>
-        <input id="name" class="w-full p-2 rounded border bg-gray-100" readonly>
-      </div>
-      <div>
-        <label class="block mb-1 font-medium text-gray-700">Username</label>
-        <input id="username" class="w-full p-2 rounded border bg-gray-100" readonly>
-      </div>
-      <div>
-        <label class="block mb-1 font-medium text-gray-700">Role</label>
-        <input id="role" class="w-full p-2 rounded border bg-gray-100" readonly>
-      </div>
+  <!-- ─── 1st-row (read-only user data) ─── -->
+  <div class="acc-user-row">
+    <div class="acc-user-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" class="acc-user-input bg-gray-100" readonly />
     </div>
-
-    <input type="hidden" id="id"><!-- (kept for future use) -->
-
-    <!-- ❷ Password change -->
-    <div class="grid md:grid-cols-3 gap-4 mb-8">
-      <!-- New password -->
-      <div class="relative">
-        <label class="block mb-1 font-medium text-gray-700">New Password</label>
-        <input type="password" id="newPassword" minlength="8"
-               class="w-full p-2 pr-12 rounded border focus:ring-2 focus:ring-red-500"
-               placeholder="Min 8 characters">
-        <button type="button" class="pwd-toggle absolute inset-y-0 right-0 flex items-center px-3"
-                data-target="newPassword" title="Show / Hide">
-          <i data-lucide="eye" class="w-5 h-5 text-gray-500"></i>
-        </button>
-      </div>
-
-      <!-- Confirm password -->
-      <div class="relative">
-        <label class="block mb-1 font-medium text-gray-700">Confirm Password</label>
-        <input type="password" id="confirmPassword" minlength="8"
-               class="w-full p-2 pr-12 rounded border focus:ring-2 focus:ring-red-500"
-               placeholder="Repeat password">
-        <button type="button" class="pwd-toggle absolute inset-y-0 right-0 flex items-center px-3"
-                data-target="confirmPassword" title="Show / Hide">
-          <i data-lucide="eye" class="w-5 h-5 text-gray-500"></i>
-        </button>
-      </div>
-
-      <!-- spacer for equal grid -->
-      <div></div>
+    <div class="acc-user-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" class="acc-user-input bg-gray-100" readonly />
     </div>
-
-    <button class="bg-red-600 text-white font-semibold px-6 py-3 rounded hover:bg-red-700 transition"
-            onclick="updatePassword()">
-      Update Password
-    </button>
+    <div class="acc-user-group">
+      <label for="role">Role</label>
+      <input type="text" id="role" class="acc-user-input bg-gray-100" readonly />
+    </div>
   </div>
 
-  <script>
-    /* ─── Prefill read-only fields ─── */
+  <!-- hidden id (in case you need it later) -->
+  <input type="hidden" id="id" />
+
+  <!-- ─── 2nd-row (password change) ─── -->
+  <div class="acc-user-row">
+    <!-- New password -->
+    <div class="acc-user-group relative">
+      <label for="newPassword">New Password</label>
+      <input type="password" id="newPassword" class="acc-user-input pr-10" minlength="8" />
+      <button type="button" onclick="togglePwd('newPassword')" class="pwd-toggle">👁</button>
+    </div>
+
+    <!-- Confirm password -->
+    <div class="acc-user-group relative">
+      <label for="confirmPassword">Confirm Password</label>
+      <input type="password" id="confirmPassword" class="acc-user-input pr-10" minlength="8" />
+      <button type="button" onclick="togglePwd('confirmPassword')" class="pwd-toggle">👁</button>
+    </div>
+
+    <!-- empty cell to balance grid -->
+    <div class="acc-user-group"></div>
+  </div>
+
+  <!-- Update button -->
+  <button class="acc-user-btn" onclick="updatePassword()">Update Password</button>
+</div>
+
+<style>
+  /* tiny helper for eye button */
+  .pwd-toggle{
+    position:absolute; right:8px; top:34px;
+    background:none; border:none; cursor:pointer; font-size:1rem; line-height:1;
+    color:#6b7280;
+  }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  /* ─────────── Prefill read-only fields ─────────── */
     document.addEventListener('DOMContentLoaded', () => {
-      ['name', 'username', 'role', 'user_id'].forEach(k => {
-        const el = document.getElementById(k === 'user_id' ? 'id' : k);
-        if (el) el.value = localStorage.getItem(k) || '';
-      });
-      lucide.createIcons();
+      document.getElementById('name').value     = localStorage.getItem('name')     || '';
+      document.getElementById('username').value = localStorage.getItem('username') || '';
+      document.getElementById('role').value     = localStorage.getItem('role')     || '';
     });
 
-    /* ─── Eye toggle ─── */
-    document.addEventListener('click', e => {
-      const btn = e.target.closest('.pwd-toggle');
-      if (!btn) return;
+  /* ─────────── Show / hide password ─────────── */
+  function togglePwd(id){
+    const inp = document.getElementById(id);
+    inp.type  = inp.type === 'password' ? 'text' : 'password';
+  }
 
-      const input = document.getElementById(btn.dataset.target);
-      if (!input) return;
+  /* ─────────── Live validation colours ─────────── */
+  ['newPassword','confirmPassword'].forEach(id=>{
+    document.getElementById(id).addEventListener('input', validatePwds);
+  });
+  function validatePwds(){
+    const np  = document.getElementById('newPassword');
+    const cp  = document.getElementById('confirmPassword');
 
-      const show = input.type === 'password';
-      input.type = show ? 'text' : 'password';
+    // both ≥8 chars?
+    const longEnough = np.value.length>=8 && cp.value.length>=8;
 
-      // swap icon
-      const icon = btn.querySelector('i');
-      icon.setAttribute('data-lucide', show ? 'eye-off' : 'eye');
-      lucide.createIcons({ icons: { 'eye': lucide.icons.eye, 'eye-off': lucide.icons['eye-off'] } });
-    });
+    // match status
+    const match = np.value === cp.value && longEnough;
 
-    /* ─── Live validation colours ─── */
-    ['newPassword', 'confirmPassword'].forEach(id => {
-      document.getElementById(id).addEventListener('input', validatePwds);
-    });
+    const okCol   = '#16a34a';   // green-500
+    const warnCol = '#f97316';   // orange-500
+    const neutral = '#d1d5db';   // gray-300
 
-    function validatePwds() {
-      const np = document.getElementById('newPassword');
-      const cp = document.getElementById('confirmPassword');
-      const minLenOK = np.value.length >= 8 && cp.value.length >= 8;
-      const match = np.value === cp.value && minLenOK;
+    np.style.borderColor = neutral;
+    cp.style.borderColor = neutral;
+    if (np.value || cp.value){
+      np.style.borderColor = longEnough ? neutral : warnCol;
+      cp.style.borderColor = match      ? okCol    : warnCol;
+    }
+    return match;
+  }
 
-      const warn = 'border-orange-400';
-      const ok   = 'border-green-500';
-      const neutral = 'border-gray-300';
-
-      // util to swap Tailwind border classes
-      const setBorder = (el, cls) => {
-        el.classList.remove(warn, ok, neutral);
-        el.classList.add(cls);
-      };
-
-      setBorder(np, np.value.length && np.value.length < 8 ? warn : neutral);
-      setBorder(cp, cp.value ? (match ? ok : warn) : neutral);
-      return match;
+  /* ─────────── Update password only ─────────── */
+  function updatePassword(){
+    if(!validatePwds()){
+      Swal.fire('Oops','Passwords must be at least 8 characters and match.','warning');
+      return;
     }
 
-    /* ─── Update password ─── */
-    async function updatePassword() {
-      if (!validatePwds()) {
-        Swal.fire('Oops', 'Passwords must be at least 8 characters and match.', 'warning');
-        return;
-      }
-
-      const uid   = localStorage.getItem('user_id');
-      const token = localStorage.getItem('authToken');
-      if (!uid || !token) {
-        Swal.fire('Error', 'Not logged in.', 'error');
-        return;
-      }
-
-      Swal.showLoading();
-
-      try {
-        const res = await fetch(`${BASE_URL}/user/${uid}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ password: document.getElementById('newPassword').value })
-        });
-        const json = await res.json();
-
-        if (json.success) {
-          Swal.fire('Success', 'Password updated!', 'success');
-          document.getElementById('newPassword').value = '';
-          document.getElementById('confirmPassword').value = '';
-          validatePwds();
-        } else {
-          throw new Error(json.message || 'Update failed');
-        }
-      } catch (err) {
-        console.error(err);
-        Swal.fire('Error', err.message || 'Server error', 'error');
-      }
+    const password = document.getElementById('newPassword').value;
+    const userId = localStorage.getItem('user_id');   
+    const token    = localStorage.getItem('authToken');
+    if(!token){
+      Swal.fire('Error','You are not logged in.','error');
+      return;
     }
-  </script>
-</body>
-</html>
-<!-- ╚══════════════════════════════════════════════╝ -->
+
+    Swal.showLoading();
+
+    fetch(`<?php echo BASE_URL; ?>/user/${userId}`, {
+      method :'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'Authorization':`Bearer ${token}`
+      },
+      body: JSON.stringify({ password })
+    })
+    .then(r => r.json())
+    .then(res => {
+      if(res.success){
+        Swal.fire('Success','Password updated successfully!','success');
+        // clear inputs for safety
+        document.getElementById('newPassword').value     = '';
+        document.getElementById('confirmPassword').value = '';
+        validatePwds();
+      }else{
+        throw new Error(res.message || 'API error');
+      }
+    })
+    .catch(err=>{
+      console.error(err);
+      Swal.fire('Error', err.message || 'Server error', 'error');
+    });
+  }
+</script>

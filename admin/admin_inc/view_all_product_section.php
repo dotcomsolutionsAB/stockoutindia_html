@@ -47,12 +47,11 @@
       </div>
 
       <div class="flex flex-col gap-1">
-        <!-- Select User -->
+        <!-- User list (multi-select) -->
         <div class="flex flex-col gap-1">
-          <select id="userFilter" class="bg-gray-50 border border-gray-300 rounded-lg p-2 focus:ring-red-500 focus:border-red-500">
-            <option value="">-Select User-</option>
-            <option value="26">Abcd</option>
-          </select>
+          <input id="userSearch" type="text" placeholder="Search User"
+                class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2 text-sm focus:ring-red-500 focus:border-red-500">
+          <div id="userList" class="bg-gray-50 border border-gray-300 rounded-lg p-2 h-20 overflow-y-auto space-y-1"></div>
         </div>
         <!-- Search (product name) -->
         <div class="flex flex-col gap-1">
@@ -164,121 +163,93 @@
 
 </div>
 
-<!-- ╭─ JAVASCRIPT ─────────────────────────────────────────────────────────╮ -->
 <script>
+  /*  ─────────────────────────── GLOBALS  ──────────────────────────── */
   lucide.createIcons();
 
-  /* ------------------------------------------------------------------
-    BASE URL from PHP
-  ------------------------------------------------------------------ */
-  const API_URL = `<?php echo BASE_URL; ?>/admin/products`;
-  const INDUSTRY_URL = `<?php echo BASE_URL; ?>/industry`;
-  const SUB_INDUSTRY_URL = `<?php echo BASE_URL; ?>/sub_industry`;
+  const API_URL         = `<?php echo BASE_URL; ?>/admin/products`;
+  const INDUSTRY_URL    = `<?php echo BASE_URL; ?>/industry`;
+  const SUB_INDUSTRY_URL= `<?php echo BASE_URL; ?>/sub_industry`;
+  const USERS_URL       = `<?php echo BASE_URL; ?>/admin/users_with_products`;
 
-  /* ------------------------------------------------------------------
-    STATE & CONSTANTS
-  ------------------------------------------------------------------ */
   const limitt = 10;
   let currentPage_allPro = 1;
   let totalResults_allPro = 0;
 
-  /* ------------------------------------------------------------------
-    HELPER – checkbox element
-  ------------------------------------------------------------------ */
-  const makeCheckbox_allPro = (value, label, cls) => {
+  /*  ──────────────────────── HELPERS  ─────────────────────────────── */
+  const makeCheckbox = (value, label, cls) => {
     const lbl = document.createElement('label');
     lbl.className = 'inline-flex items-center gap-2 w-full text-gray-700';
     lbl.innerHTML =
       `<input type="checkbox" value="${value}" class="${cls} accent-red-600 rounded">
-    <span>${label}</span>`;
+       <span>${label}</span>`;
     return lbl;
   };
 
-  /* ------------------------------------------------------------------
-    BUILD INDUSTRY & SUB‑INDUSTRY LISTS
-  ------------------------------------------------------------------ */
-  async function initCheckList(url, wrapEl, cls, labelFormatter) {
+  async function initCheckList(url, wrapEl, cls, labelFormatter, isPost = false) {
     try {
       const token = localStorage.getItem('authToken');
-      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
-      const json = await res.json();
-      if (!json.success) throw new Error('Failed list load');
-      json.data.forEach(item => wrapEl.appendChild(makeCheckbox_allPro(item.id, labelFormatter(item), cls)));
+      const res   = await fetch(url, {
+        method : isPost ? 'POST' : 'GET',
+        headers: { 'Content-Type':'application/json',
+                   'Authorization': `Bearer ${token}` },
+        body   : isPost ? '{}' : undefined
+      });
+      const json  = await res.json();
+      if (!json.success) throw new Error(json.message || 'List error');
+      json.data.forEach(item =>
+        wrapEl.appendChild(makeCheckbox(item.id, labelFormatter(item), cls))
+      );
     } catch (err) { console.error(err); }
   }
 
-  /* Simple live‑search for the checkbox lists */
   function attachSearch(inputId, listId) {
     const search = document.getElementById(inputId);
-    const list = document.getElementById(listId);
+    const list   = document.getElementById(listId);
     search.addEventListener('input', () => {
       const term = search.value.trim().toLowerCase();
       list.querySelectorAll('label').forEach(lbl =>
-        lbl.classList.toggle('hidden', !lbl.textContent.toLowerCase().includes(term))
+        lbl.classList.toggle('hidden',
+          !lbl.textContent.toLowerCase().includes(term))
       );
     });
   }
 
-  /* ------------------------------------------------------------------
-     BUILD USER LIST  – runs once, adds <option> elements
-  ------------------------------------------------------------------ */
-  async function initUserFilter() {
-    const token = localStorage.getItem('authToken');
-    try {
-      const res  = await fetch('<?php echo BASE_URL; ?>/admin/users_with_products', {
-        method : 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body   : '{}'          // POST endpoint, but no payload needed
-      });
-
-      const json = await res.json();
-      if (!json.success) throw new Error(json.message || 'Failed to load users');
-
-      const select = document.getElementById('userFilter');
-      json.data.forEach(u => {
-        const opt   = document.createElement('option');
-        opt.value   = u.user_id || u.id;                 // ← backend expects numeric id
-        opt.textContent = u.name || u.username;  // fallback if name null
-        select.appendChild(opt);
-      });
-    } catch (err) {
-      console.error('User list load error:', err);
-    }
-  }
-  /* ------------------------------------------------------------------
-    FETCH PRODUCTS
-  ------------------------------------------------------------------ */
+  /*  ─────────────────────── FETCH PRODUCTS  ───────────────────────── */
   async function fetchProducts() {
     const token   = localStorage.getItem('authToken');
     const search  = document.getElementById('searchInput').value.trim();
     const status  = document.getElementById('statusFilter').value;
     const minP    = document.getElementById('minPrice').value;
     const maxP    = document.getElementById('maxPrice').value;
-    const userId  = document.getElementById('userFilter').value;          // ➊ NEW
-    const indIds  = [...document.querySelectorAll('.industryChk:checked')].map(c => c.value).join(',');
-    const subIds  = [...document.querySelectorAll('.subChk:checked')].map(c => c.value).join(',');
+
+    const indIds  = [...document.querySelectorAll('.industryChk:checked')]
+                      .map(c => c.value).join(',');
+    const subIds  = [...document.querySelectorAll('.subChk:checked')]
+                      .map(c => c.value).join(',');
+    const userIds = [...document.querySelectorAll('.userChk:checked')]
+                      .map(c => c.value).join(',');
 
     const payload = {
       product_name : search || undefined,
       industry     : indIds || undefined,
       sub_industry : subIds || undefined,
-      user         : userId  || undefined,         // ➋ NEW (backend field name)
+      user         : userIds || undefined,      // <-- multi-select users
       status       : status || undefined,
       min_amount   : minP ? Number(minP) : undefined,
       max_amount   : maxP ? Number(maxP) : undefined,
       limitt,
       offset       : (currentPage_allPro - 1) * limitt
     };
+    // strip undefined keys
     Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
     try {
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(payload)
+      const res  = await fetch(API_URL, {
+        method : 'POST',
+        headers: { 'Content-Type':'application/json',
+                   'Authorization': `Bearer ${token}` },
+        body   : JSON.stringify(payload)
       });
       const json = await res.json();
       if (!json.success) throw new Error(json.message || 'API error');
@@ -289,19 +260,15 @@
       totalResults_allPro = 0;
       renderTable([]);
     }
+
     renderPagination();
     document.getElementById('resultCount').textContent =
       `${totalResults_allPro} result${totalResults_allPro !== 1 ? 's' : ''}`;
   }
 
-  /* ------------------------------------------------------------------
-    RENDER TABLE
-  ------------------------------------------------------------------ */
-  // helper once, outside renderTable():
-  const rupee_allPro = new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0       // change if you need paise
+  /*  ────────────────────── RENDER TABLE  ──────────────────────────── */
+  const rupeeFmt = new Intl.NumberFormat('en-IN', {
+    style:'currency', currency:'INR', maximumFractionDigits:0
   });
 
   function renderTable(rows) {
@@ -311,92 +278,45 @@
 
     rows.forEach(row => {
       const tr = tmpl.content.cloneNode(true);
-      const imgEl = tr.querySelector('[data-field="image"]');
-      const nameEl = tr.querySelector('[data-field="product_name"]');
 
-      const imgSrc = Array.isArray(row.image) && row.image.length
-        ? row.image[0]
-        : '../uploads/placeholder.png';
-
-      imgEl.src = imgSrc;
-      nameEl.textContent = row.product_name || '';
+      // image + name
+      tr.querySelector('[data-field="image"]').src =
+        Array.isArray(row.image) && row.image.length
+          ? row.image[0]
+          : '../uploads/placeholder.png';
+      tr.querySelector('[data-field="product_name"]').textContent =
+        row.product_name || '';
 
       tr.querySelector('[data-field="offer_quantity"]').textContent = row.offer_quantity ?? '-';
       tr.querySelector('[data-field="minimum_quantity"]').textContent = row.minimum_quantity ?? '-';
-      tr.querySelector('[data-field="original_price"]').textContent = row.original_price != null ? rupee_allPro.format(row.original_price) : '–';
-      tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price != null ? rupee_allPro.format(row.selling_price) : '–';
+      tr.querySelector('[data-field="original_price"]').textContent =
+        row.original_price != null ? rupeeFmt.format(row.original_price) : '–';
+      tr.querySelector('[data-field="selling_price"]').textContent =
+        row.selling_price  != null ? rupeeFmt.format(row.selling_price)  : '–';
 
-      // ✅ STATUS SELECT BOX LOGIC
-      const statusTd = tr.querySelector('[data-field="status"]');
-      const statusSelect = document.createElement('select');
-      statusSelect.className = 'border rounded px-2 py-1 text-sm';
-
-      const statusOptions = ['active', 'in-active', 'sold'];
-
-      statusOptions.forEach(status => {
-        const option = document.createElement('option');
-        option.value = status;
-        option.textContent = status.charAt(0).toUpperCase() + status.slice(1);
-        if (row.status === status) {
-          option.selected = true;
-        }
-        statusSelect.appendChild(option);
+      /* ---------- STATUS DROPDOWN ---------- */
+      const statusTd   = tr.querySelector('[data-field="status"]');
+      const statusSel  = document.createElement('select');
+      statusSel.className = 'border rounded px-2 py-1 text-sm';
+      ['active','in-active','sold'].forEach(st => {
+        const o = document.createElement('option');
+        o.value = st;   o.textContent = st.charAt(0).toUpperCase()+st.slice(1);
+        if (row.status === st) o.selected = true;
+        statusSel.appendChild(o);
       });
+      statusSel.addEventListener('change', () => updateStatus(row.id, statusSel, row.status));
+      statusTd.innerHTML = ''; statusTd.appendChild(statusSel);
 
-      statusSelect.addEventListener('change', () => {
-        const selectedStatus = statusSelect.value;
+      tr.querySelector('[data-field="unit"]').textContent       = row.unit ?? '-';
+      tr.querySelector('[data-field="validity"]').textContent   = row.validity ?? '-';
+      tr.querySelector('[data-field="industry"]').textContent   = row.industry?.name ?? '-';
+      tr.querySelector('[data-field="sub_industry"]').textContent= row.sub_industry?.name ?? '-';
 
-        const token = localStorage.getItem('authToken');
-        const payload = {
-          product_id: row.id,
-          product_status: selectedStatus // 'active', 'in-active', or 'sold'
-        };
-        
-        fetch('<?php echo BASE_URL; ?>/admin/product_toggle_status', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify(payload)
-        })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              alert(`Status updated to "${selectedStatus}"`);
-            } else {
-              alert('Failed to update status.');
-              statusSelect.value = row.status; // rollback
-            }
-          })
-          .catch(error => {
-            console.error('Error updating status:', error);
-            alert('Something went wrong.');
-            statusSelect.value = row.status; // rollback
-          });
-      });
-
-      statusTd.innerHTML = '';
-      statusTd.appendChild(statusSelect);
-
-      tr.querySelector('[data-field="unit"]').textContent = row.unit || '-';
-      tr.querySelector('[data-field="validity"]').textContent = row.validity || '-';
-      tr.querySelector('[data-field="industry"]').textContent = row.industry?.name ?? '-';
-      tr.querySelector('[data-field="sub_industry"]').textContent = row.sub_industry?.name ?? '-';
-
-      tr.querySelector('.viewBtn').addEventListener('click', () => {
-        alert(`View product #${row.id}`);
-      });
-
-      tr.querySelector('.updateBtn').addEventListener('click', () => {
-        alert(`Update product #${row.id}`);
-      });
-
-      tr.querySelector('.deleteBtn').addEventListener('click', () => {
-        if (confirm(`Delete product #${row.id}?`)) {
-          alert('Perform delete here…');
-        }
-      });
+      /* ---------- ACTION BUTTONS ---------- */
+      tr.querySelector('.viewBtn')  .onclick = () => alert(`View product #${row.id}`);
+      tr.querySelector('.updateBtn').onclick = () => alert(`Update product #${row.id}`);
+      tr.querySelector('.deleteBtn').onclick = () =>
+        confirm(`Delete product #${row.id}?`) && alert('Perform delete…');
 
       tbody.appendChild(tr);
     });
@@ -404,73 +324,77 @@
     lucide.createIcons();
   }
 
+  function updateStatus(prodId, selectEl, oldStatus) {
+    const token = localStorage.getItem('authToken');
+    fetch('<?php echo BASE_URL; ?>/admin/product_toggle_status', {
+      method : 'POST',
+      headers: { 'Content-Type':'application/json',
+                 'Authorization': `Bearer ${token}` },
+      body   : JSON.stringify({ product_id: prodId,
+                                product_status: selectEl.value })
+    })
+    .then(r => r.json())
+    .then(j => {
+      if (!j.success) throw new Error('DB update failed');
+      alert(`Status updated to “${selectEl.value}”`);
+    })
+    .catch(err => {
+      console.error(err);
+      alert('Failed to update status'); selectEl.value = oldStatus;
+    });
+  }
 
-  /* ------------------------------------------------------------------
-    PAGINATION
-  ------------------------------------------------------------------ */
+  /*  ───────────────────── PAGINATION  ─────────────────────────────── */
   function renderPagination() {
     const nav = document.getElementById('pagination');
     nav.innerHTML = '';
     const totalPages = Math.max(1, Math.ceil(totalResults_allPro / limitt));
 
-    const btn = (label, page, disabled = false) => {
+    const mkBtn = (label, page, disabled=false) => {
       const b = document.createElement('button');
-      b.textContent = label;
-      b.dataset.page = page;
-      b.disabled = disabled;
-      b.className =
-        `px-3 py-1.5 rounded-md border transition ${page === currentPage_allPro
+      b.textContent = label; b.dataset.page = page; b.disabled = disabled;
+      b.className = `px-3 py-1.5 rounded-md border transition ${
+        page === currentPage_allPro
           ? 'bg-red-600 text-white border-red-600'
           : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
-        } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+      } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
       return b;
     };
 
-    nav.appendChild(btn('Prev', Math.max(1, currentPage_allPro - 1), currentPage_allPro === 1));
-    for (let p = 1; p <= totalPages; p++) nav.appendChild(btn(p, p));
-    nav.appendChild(btn('Next', Math.min(totalPages, currentPage_allPro + 1), currentPage_allPro === totalPages));
+    nav.appendChild(mkBtn('Prev', Math.max(1, currentPage_allPro-1), currentPage_allPro===1));
+    for (let p=1;p<=totalPages;p++) nav.appendChild(mkBtn(p,p));
+    nav.appendChild(mkBtn('Next', Math.min(totalPages,currentPage_allPro+1),
+                                 currentPage_allPro===totalPages));
   }
 
-  /* ------------------------------------------------------------------
-    EVENT HANDLERS
-  ------------------------------------------------------------------ */
-  document.getElementById('applyFilters').addEventListener('click', () => {
-    currentPage_allPro = 1;
-    fetchProducts();
-  });
-  document.getElementById('pagination').addEventListener('click', e => {
+  /*  ───────────────────── EVENT HANDLERS  ─────────────────────────── */
+  document.getElementById('applyFilters').onclick = () => {
+    currentPage_allPro = 1; fetchProducts();
+  };
+  document.getElementById('pagination').onclick = e => {
     if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
-      currentPage_allPro = Number(e.target.dataset.page);
-      fetchProducts();
+      currentPage_allPro = Number(e.target.dataset.page); fetchProducts();
     }
-  });
+  };
 
-  /* ------------------------------------------------------------------
-    INITIALISE
-  ------------------------------------------------------------------ */
-  // (async () => {
-  //   await initCheckList(INDUSTRY_URL, document.getElementById('industryList'),
-  //     'industryChk', i => i.name);
-  //   await initCheckList(SUB_INDUSTRY_URL, document.getElementById('subIndustryList'),
-  //     'subChk', s => s.name);
-
-  //   attachSearch('industrySearch', 'industryList');
-  //   attachSearch('subIndustrySearch', 'subIndustryList');
-
-  //   fetchProducts();   // first load
-  // })();
+  /*  ─────────────────────── INIT  ─────────────────────────────────── */
   (async () => {
-    await initCheckList(INDUSTRY_URL, document.getElementById('industryList'),
+    await initCheckList(INDUSTRY_URL,
+      document.getElementById('industryList'),
       'industryChk', i => i.name);
-    await initCheckList(SUB_INDUSTRY_URL, document.getElementById('subIndustryList'),
+
+    await initCheckList(SUB_INDUSTRY_URL,
+      document.getElementById('subIndustryList'),
       'subChk', s => s.name);
 
-    await initUserFilter();                   // ← add this line
+    await initCheckList(USERS_URL,
+      document.getElementById('userList'),
+      'userChk', u => u.name || u.username, true);   // <-- POST endpoint
 
-    attachSearch('industrySearch', 'industryList');
-    attachSearch('subIndustrySearch', 'subIndustryList');
+    attachSearch('industrySearch',   'industryList');
+    attachSearch('subIndustrySearch','subIndustryList');
+    attachSearch('userSearch',       'userList');
 
-    fetchProducts();                          // first load
+    fetchProducts();     // first page load
   })();
-
 </script>

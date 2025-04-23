@@ -188,31 +188,18 @@
       fetchData('/states'),fetchData('/cities'),fetchData('/industry')
     ]);
     states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
-      `<option value="${s.name}" data-name="${s.name}">${s.name}</option>`));
+      `<option value="${s.name}">${s.name}</option>`));
     industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
       `<option value="${i.id}">${i.name}</option>`));
   })();
 
-  // stateSel.onchange=()=>{
-  //   citySel.innerHTML='<option value="">Select City</option>';
-  //   if(!stateSel.value){citySel.disabled=true;return;}
-  //   cities.filter(c=>c.state_name===stateSel.value)
-  //         .forEach(c=>citySel.insertAdjacentHTML('beforeend',
-  //           `<option value="${c.name}">${c.name}</option>`));
-  //   citySel.disabled=false;
-  // };
-  stateSel.onchange = () => {
-    const selectedName = stateSel.selectedOptions[0]?.dataset.name || '';
-    citySel.innerHTML = '<option value="">Select City</option>';
-
-    if (!selectedName) { citySel.disabled = true; return; }
-
-    cities
-      .filter(c => c.state_name === selectedName)
-      .forEach(c =>
-        citySel.insertAdjacentHTML('beforeend',
-          `<option value="${c.name}">${c.name}</option>`));
-    citySel.disabled = false;
+  stateSel.onchange=()=>{
+    citySel.innerHTML='<option value="">Select City</option>';
+    if(!stateSel.value){citySel.disabled=true;return;}
+    cities.filter(c=>c.state_name===stateSel.value)
+          .forEach(c=>citySel.insertAdjacentHTML('beforeend',
+            `<option value="${c.name}">${c.name}</option>`));
+    citySel.disabled=false;
   };
 
   indSel.onchange=async()=>{
@@ -254,10 +241,7 @@
         if(!document.getElementById('pincode').value)
           document.getElementById('pincode').value=d.pincode||'';
 
-          if (d.state) {
-            const st = states.find(s => s.name.toLowerCase() === d.state.toLowerCase());
-            if (st) { stateSel.value = st.id; stateSel.onchange(); }
-          }
+        if(d.state){stateSel.value=d.state;stateSel.onchange();}
         setTimeout(()=>{if(d.city) citySel.value=d.city;},60);
 
         gstMsg.textContent='GSTIN verified & auto-filled';

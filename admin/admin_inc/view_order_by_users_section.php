@@ -88,7 +88,7 @@
     </tr>
   </template>
 
-  <script>
+  <!-- <script>
     (() => {
       lucide.createIcons();
 
@@ -263,6 +263,218 @@
       /* ---------- INIT ---------- */
       fetchOrders();
     })();
-  </script>
+  </script> -->
+<script>
+  (() => {
+    lucide.createIcons();               /* (re-run after each render) */
+
+    /* ---------- CONFIG ---------- */
+    const BASE_URL   = '<?php echo BASE_URL; ?>';
+    const ORDERS_API = `${BASE_URL}/admin/user_orders`;
+
+    /* ---------- STATE ---------- */
+    let limit  = 10;
+    let offset = 0;
+    let total  = 0;
+    let selectedUserId = null;
+    let cachedUsers    = [];            // populated once for suggestions
+
+    /* ---------- HELPERS ---------- */
+    const rupee    = new Intl.NumberFormat('en-IN', { style:'currency', currency:'INR', maximumFractionDigits:0 });
+    const debounce = (fn, ms=300) => { let t; return (...a) => { clearTimeout(t); t=setTimeout(() => fn(...a), ms); }; };
+
+    /* ---------- USER SUGGESTIONS ---------- */
+    async function loadUsersForSuggest () {
+      if (cachedUsers.length) return;   // already cached
+
+      const token = localStorage.getItem('authToken');
+      const res   = await fetch(ORDERS_API, {
+        method : 'POST',
+        headers: { 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
+        body   : JSON.stringify({ limit:100_000, offset:0 })
+      });
+
+      const json = await res.json();
+      if (!json.success || !Array.isArray(json.data)) return;
+
+      const seen = new Set();
+      cachedUsers = json.data
+        .map(d => d.user)
+        .filter(u => u && u.id && !seen.has(u.id) && (seen.add(u.id), true));
+    }
+
+    function showSuggestions (term) {
+      const box = document.getElementById('uo-suggest');
+      box.innerHTML = '';
+
+      /* hide list when < 3 chars */
+      if (term.length < 3) { box.classList.add('hidden'); return; }
+
+      const lowTerm = term.toLowerCase();
+
+      cachedUsers
+        .filter(u => (u.name || '').toLowerCase().includes(lowTerm))
+        .slice(0, 25)
+        .forEach(u => {
+          const li      = document.createElement('li');
+          li.className  = 'px-3 py-2 hover:bg-gray-100 cursor-pointer';
+          li.textContent= `${u.name || 'No Name'} (ID ${u.id})`;
+          li.onclick    = () => {
+            document.getElementById('uo-search').value = u.name || '';
+            selectedUserId = u.id;
+            box.classList.add('hidden');
+            offset = 0;
+            fetchOrders();
+          };
+          box.appendChild(li);
+        });
+
+      box.classList.toggle('hidden', box.childElementCount === 0);
+    }
+
+    /* ---------- INPUT HANDLER ---------- */
+    document.getElementById('uo-search')
+      .addEventListener('input', debounce(async e => {
+        const term = e.target.value.trim();
+
+        // reset chosen user until a suggestion is explicitly picked
+        selectedUserId = null;
+
+        /* when the field is < 3 chars → treat as “show all orders” */
+        if (term.length < 3) {
+          document.getElementById('uo-suggest').classList.add('hidden');
+          offset = 0;
+          fetchOrders();
+          return;
+        }
+
+        await loadUsersForSuggest();
+        showSuggestions(term);
+      }, 200));
+
+    /* close suggestion list on outside click */
+    document.addEventListener('click', e => {
+      if (!document.getElementById('uo-suggest').contains(e.target) &&
+          e.target.id !== 'uo-search') {
+        document.getElementById('uo-suggest').classList.add('hidden');
+      }
+    });
+
+    /* ---------- FETCH ORDERS ---------- */
+    async function fetchOrders () {
+      const token = localStorage.getItem('authToken');
+      const body  = { limit, offset };
+      if (selectedUserId) body.user_id = selectedUserId;
+
+      try {
+        const res  = await fetch(ORDERS_API, {
+          method : 'POST',
+          headers: { 'Content-Type':'application/json', Authorization:`Bearer ${token}` },
+          body   : JSON.stringify(body)
+        });
+
+        const json = await res.json();
+        if (!json.success) throw new Error();
+
+        total = json.total_count ?? json.data.length;
+        renderTable(json.data);
+      } catch {
+        total = 0;
+        renderTable([]);
+      }
+
+      renderPagination();
+      document.getElementById('uo-count').textContent =
+        `${total} result${total !== 1 ? 's' : ''}`;
+    }
+
+    /* ---------- TABLE RENDER ---------- */
+    function renderTable (rows) {
+      const body = document.getElementById('uo-body');
+      body.innerHTML = '';
+      const tmpl = document.getElementById('uo-tmpl');
+
+      rows.forEach(item => {
+        const tr = tmpl.content.cloneNode(true);
+        const u  = item.user   ?? { name:'—', email:'—' };
+        const o  = item.orders ?? {};
+
+        tr.querySelector('[data-f="name"]').textContent  = u.name  ?? '—';
+        tr.querySelector('[data-f="email"]').textContent = u.email ?? '—';
+        tr.querySelector('[data-f="oid"]').textContent   = o.order_id          ?? '–';
+        tr.querySelector('[data-f="razor-pay-id"]').textContent = o.razorpay_order_id ?? '–';
+        tr.querySelector('[data-f="date"]').textContent        = o.date   ?? '–';
+        tr.querySelector('[data-f="amount"]').textContent      = o.amount != null ? rupee.format(o.amount) : '–';
+
+        const st = o.status ?? '–';
+        tr.querySelector('[data-f="status"]').innerHTML =
+          `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
+              st==='created' ? 'bg-yellow-100 text-yellow-800' :
+              st==='paid'    ? 'bg-green-100 text-green-800'  :
+                              'bg-gray-100 text-gray-700'
+          }">${st}</span>`;
+
+        /* demo buttons */
+        tr.querySelector('.view').onclick = () => alert('View order '  + (o.order_id ?? ''));
+        tr.querySelector('.edit').onclick = () => alert('Edit order '  + (o.order_id ?? ''));
+        tr.querySelector('.del' ).onclick = () => {
+          if (confirm('Delete order ' + (o.order_id ?? '') + '?')) alert('delete API');
+        };
+
+        body.appendChild(tr);
+      });
+
+      lucide.createIcons();            // refresh icons inside new rows
+    }
+
+    /* ---------- PAGINATION ---------- */
+    function renderPagination () {
+      const nav     = document.getElementById('uo-page');
+      nav.innerHTML = '';
+
+      const current = Math.floor(offset / limit) + 1;
+      const pages   = Math.max(1, Math.ceil(total / limit));
+
+      const makeBtn = (lbl, p, disabled=false) => {
+        const b = document.createElement('button');
+        b.textContent = lbl;
+        b.dataset.p   = p;
+        b.disabled    = disabled;
+        b.className   = `px-3 py-1.5 rounded-md border transition ${
+            p===current ? 'bg-red-600 text-white border-red-600' :
+                          'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
+          } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+        return b;
+      };
+
+      nav.appendChild(makeBtn('Prev', current-1, current===1));
+
+      /* show up to 5 page numbers (can be tweaked) */
+      const start = Math.max(1, current - 2);
+      const end   = Math.min(pages, start + 4);
+      for (let p = start; p <= end; p++) nav.appendChild(makeBtn(p, p));
+
+      nav.appendChild(makeBtn('Next', current+1, current===pages));
+    }
+
+    /* page-button click */
+    document.getElementById('uo-page').addEventListener('click', e => {
+      if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
+        offset = (Number(e.target.dataset.p) - 1) * limit;
+        fetchOrders();
+      }
+    });
+
+    /* rows-per-page change */
+    document.getElementById('uo-rows').addEventListener('change', () => {
+      limit  = Number(document.getElementById('uo-rows').value) || 10;
+      offset = 0;
+      fetchOrders();
+    });
+
+    /* ---------- INIT ---------- */
+    fetchOrders();
+  })();
+</script>
 
 </div>

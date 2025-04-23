@@ -47,13 +47,13 @@
     document.getElementById('forgetPasswordForm').addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      const email = document.getElementById('email').value.trim();
+      const username = document.getElementById('email').value.trim();
 
       try {
         const response = await fetch('<?php echo BASE_URL; ?>/forget_password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({ username })
         });
 
         const result = await response.json();

@@ -31,3 +31,22 @@
 
   <button class="acc-user-btn" onclick="updateAccountInfo()">Update</button>
 </div>
+
+<script>
+  // Auto-fill inputs from localStorage on page load
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('name').value = localStorage.getItem('name') || '';
+    document.getElementById('id').value = localStorage.getItem('user_id') || '';
+    document.getElementById('role').value = localStorage.getItem('role') || '';
+    document.getElementById('username').value = localStorage.getItem('username') || '';
+  });
+
+  // Update localStorage from input values
+  function updateAccountInfo() {
+    localStorage.setItem('name', document.getElementById('name').value);
+    localStorage.setItem('id', document.getElementById('user_id').value);
+    localStorage.setItem('role', document.getElementById('role').value);
+    localStorage.setItem('username', document.getElementById('username').value);
+    alert('Account information updated successfully!');
+  }
+</script>

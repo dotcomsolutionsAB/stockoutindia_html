@@ -1,7 +1,7 @@
 <div id="view-products" class="tab-content">
   <div class="max-w-7xl mx-auto space-y-8">
     <!-- ╭─ FILTER PANEL ───────────────────────────────────────────────────╮ -->
-    <section id="filters" class="bg-white shadow rounded-2xl p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <section id="filters" class="bg-white shadow rounded-2xl p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
       <div class="flex flex-col gap-1">
         <!-- Status -->
         <div class="flex flex-col gap-1">

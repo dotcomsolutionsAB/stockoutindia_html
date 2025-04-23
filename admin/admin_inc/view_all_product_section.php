@@ -164,45 +164,56 @@
 </div>
 
 <script>
-  /*  ─────────────────────────── GLOBALS  ──────────────────────────── */
+  /*  ───────────────────────────── GLOBALS ───────────────────────────── */
   lucide.createIcons();
 
-  const API_URL         = `<?php echo BASE_URL; ?>/admin/products`;
-  const INDUSTRY_URL    = `<?php echo BASE_URL; ?>/industry`;
-  const SUB_INDUSTRY_URL= `<?php echo BASE_URL; ?>/sub_industry`;
-  const USERS_URL       = `<?php echo BASE_URL; ?>/admin/users_with_products`;
+  const API_URL          = `<?php echo BASE_URL; ?>/admin/products`;
+  const INDUSTRY_URL     = `<?php echo BASE_URL; ?>/industry`;
+  const SUB_INDUSTRY_URL = `<?php echo BASE_URL; ?>/sub_industry`;
+  const USERS_URL        = `<?php echo BASE_URL; ?>/admin/users_with_products`;
 
   const limitt = 10;
-  let currentPage_allPro = 1;
-  let totalResults_allPro = 0;
+  let currentPage_allPro   = 1;
+  let totalResults_allPro  = 0;
 
-  /*  ──────────────────────── HELPERS  ─────────────────────────────── */
+  /*  ──────────────────────────── HELPERS ────────────────────────────── */
   const makeCheckbox = (value, label, cls) => {
-    const lbl = document.createElement('label');
-    lbl.className = 'inline-flex items-center gap-2 w-full text-gray-700';
-    lbl.innerHTML =
+    const lbl        = document.createElement('label');
+    lbl.className    = 'inline-flex items-center gap-2 w-full text-gray-700';
+    lbl.innerHTML    =
       `<input type="checkbox" value="${value}" class="${cls} accent-red-600 rounded">
        <span>${label}</span>`;
     return lbl;
   };
 
-  async function initCheckList(url, wrapEl, cls, labelFormatter, isPost = false) {
+  /**
+   * Build a checklist from an endpoint.
+   * @param {string}   url           – endpoint
+   * @param {Element}  wrapEl        – container to receive <label>
+   * @param {string}   cls           – common class for all checkboxes
+   * @param {function} valueSel(item)– returns the value to put in <input value="">
+   * @param {function} labelSel(item)– returns the visible label text
+   * @param {boolean}  post          – true = POST, false = GET
+   */
+  async function initCheckList(url, wrapEl, cls, valueSel, labelSel, post=false) {
     try {
       const token = localStorage.getItem('authToken');
       const res   = await fetch(url, {
-        method : isPost ? 'POST' : 'GET',
+        method : post ? 'POST' : 'GET',
         headers: { 'Content-Type':'application/json',
                    'Authorization': `Bearer ${token}` },
-        body   : isPost ? '{}' : undefined
+        body   : post ? '{}' : undefined
       });
       const json  = await res.json();
       if (!json.success) throw new Error(json.message || 'List error');
+
       json.data.forEach(item =>
-        wrapEl.appendChild(makeCheckbox(item.id, labelFormatter(item), cls))
+        wrapEl.appendChild(makeCheckbox(valueSel(item), labelSel(item), cls))
       );
     } catch (err) { console.error(err); }
   }
 
+  /* live-search a checklist */
   function attachSearch(inputId, listId) {
     const search = document.getElementById(inputId);
     const list   = document.getElementById(listId);
@@ -215,7 +226,7 @@
     });
   }
 
-  /*  ─────────────────────── FETCH PRODUCTS  ───────────────────────── */
+  /*  ─────────────────────── FETCH PRODUCTS ──────────────────────────── */
   async function fetchProducts() {
     const token   = localStorage.getItem('authToken');
     const search  = document.getElementById('searchInput').value.trim();
@@ -234,14 +245,13 @@
       product_name : search || undefined,
       industry     : indIds || undefined,
       sub_industry : subIds || undefined,
-      user         : userIds || undefined,      // <-- multi-select users
+      user         : userIds || undefined,        // ✅ fixed
       status       : status || undefined,
       min_amount   : minP ? Number(minP) : undefined,
       max_amount   : maxP ? Number(maxP) : undefined,
       limitt,
       offset       : (currentPage_allPro - 1) * limitt
     };
-    // strip undefined keys
     Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
     try {
@@ -266,7 +276,7 @@
       `${totalResults_allPro} result${totalResults_allPro !== 1 ? 's' : ''}`;
   }
 
-  /*  ────────────────────── RENDER TABLE  ──────────────────────────── */
+  /*  ──────────────────────── RENDER TABLE ───────────────────────────── */
   const rupeeFmt = new Intl.NumberFormat('en-IN', {
     style:'currency', currency:'INR', maximumFractionDigits:0
   });
@@ -279,44 +289,41 @@
     rows.forEach(row => {
       const tr = tmpl.content.cloneNode(true);
 
-      // image + name
       tr.querySelector('[data-field="image"]').src =
         Array.isArray(row.image) && row.image.length
           ? row.image[0]
           : '../uploads/placeholder.png';
-      tr.querySelector('[data-field="product_name"]').textContent =
-        row.product_name || '';
+      tr.querySelector('[data-field="product_name"]').textContent = row.product_name || '';
 
-      tr.querySelector('[data-field="offer_quantity"]').textContent = row.offer_quantity ?? '-';
+      tr.querySelector('[data-field="offer_quantity"]').textContent   = row.offer_quantity ?? '-';
       tr.querySelector('[data-field="minimum_quantity"]').textContent = row.minimum_quantity ?? '-';
-      tr.querySelector('[data-field="original_price"]').textContent =
+      tr.querySelector('[data-field="original_price"]').textContent   =
         row.original_price != null ? rupeeFmt.format(row.original_price) : '–';
-      tr.querySelector('[data-field="selling_price"]').textContent =
+      tr.querySelector('[data-field="selling_price"]').textContent    =
         row.selling_price  != null ? rupeeFmt.format(row.selling_price)  : '–';
 
-      /* ---------- STATUS DROPDOWN ---------- */
-      const statusTd   = tr.querySelector('[data-field="status"]');
-      const statusSel  = document.createElement('select');
-      statusSel.className = 'border rounded px-2 py-1 text-sm';
+      /* status dropdown */
+      const statusTd  = tr.querySelector('[data-field="status"]');
+      const sel       = document.createElement('select');
+      sel.className   = 'border rounded px-2 py-1 text-sm';
       ['active','in-active','sold'].forEach(st => {
         const o = document.createElement('option');
-        o.value = st;   o.textContent = st.charAt(0).toUpperCase()+st.slice(1);
+        o.value = st; o.textContent = st[0].toUpperCase()+st.slice(1);
         if (row.status === st) o.selected = true;
-        statusSel.appendChild(o);
+        sel.appendChild(o);
       });
-      statusSel.addEventListener('change', () => updateStatus(row.id, statusSel, row.status));
-      statusTd.innerHTML = ''; statusTd.appendChild(statusSel);
+      sel.onchange = () => updateStatus(row.id, sel, row.status);
+      statusTd.innerHTML=''; statusTd.appendChild(sel);
 
-      tr.querySelector('[data-field="unit"]').textContent       = row.unit ?? '-';
-      tr.querySelector('[data-field="validity"]').textContent   = row.validity ?? '-';
-      tr.querySelector('[data-field="industry"]').textContent   = row.industry?.name ?? '-';
+      tr.querySelector('[data-field="unit"]').textContent        = row.unit ?? '-';
+      tr.querySelector('[data-field="validity"]').textContent    = row.validity ?? '-';
+      tr.querySelector('[data-field="industry"]').textContent    = row.industry?.name ?? '-';
       tr.querySelector('[data-field="sub_industry"]').textContent= row.sub_industry?.name ?? '-';
 
-      /* ---------- ACTION BUTTONS ---------- */
-      tr.querySelector('.viewBtn')  .onclick = () => alert(`View product #${row.id}`);
-      tr.querySelector('.updateBtn').onclick = () => alert(`Update product #${row.id}`);
+      tr.querySelector('.viewBtn').onclick   = () => alert(`View #${row.id}`);
+      tr.querySelector('.updateBtn').onclick = () => alert(`Update #${row.id}`);
       tr.querySelector('.deleteBtn').onclick = () =>
-        confirm(`Delete product #${row.id}?`) && alert('Perform delete…');
+        confirm(`Delete #${row.id}?`) && alert('Perform delete…');
 
       tbody.appendChild(tr);
     });
@@ -324,77 +331,78 @@
     lucide.createIcons();
   }
 
-  function updateStatus(prodId, selectEl, oldStatus) {
+  function updateStatus(id, sel, oldVal) {
     const token = localStorage.getItem('authToken');
     fetch('<?php echo BASE_URL; ?>/admin/product_toggle_status', {
       method : 'POST',
       headers: { 'Content-Type':'application/json',
                  'Authorization': `Bearer ${token}` },
-      body   : JSON.stringify({ product_id: prodId,
-                                product_status: selectEl.value })
+      body   : JSON.stringify({ product_id:id, product_status:sel.value })
     })
-    .then(r => r.json())
-    .then(j => {
-      if (!j.success) throw new Error('DB update failed');
-      alert(`Status updated to “${selectEl.value}”`);
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Failed to update status'); selectEl.value = oldStatus;
-    });
+    .then(r=>r.json())
+    .then(j=>{ if(!j.success) throw new Error('Fail'); alert('Updated'); })
+    .catch(_=>{ alert('Error'); sel.value = oldVal; });
   }
 
-  /*  ───────────────────── PAGINATION  ─────────────────────────────── */
+  /*  ──────────────────────── PAGINATION ─────────────────────────────── */
   function renderPagination() {
     const nav = document.getElementById('pagination');
-    nav.innerHTML = '';
-    const totalPages = Math.max(1, Math.ceil(totalResults_allPro / limitt));
+    nav.innerHTML='';
+    const totalPages = Math.max(1, Math.ceil(totalResults_allPro/limitt));
 
-    const mkBtn = (label, page, disabled=false) => {
-      const b = document.createElement('button');
-      b.textContent = label; b.dataset.page = page; b.disabled = disabled;
+    const mk = (label,page,dis=false)=>{
+      const b=document.createElement('button');
+      b.textContent=label; b.dataset.page=page; b.disabled=dis;
       b.className = `px-3 py-1.5 rounded-md border transition ${
-        page === currentPage_allPro
+        page===currentPage_allPro
           ? 'bg-red-600 text-white border-red-600'
           : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
-      } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
+      } ${dis?'opacity-50 cursor-not-allowed':''}`;
       return b;
     };
 
-    nav.appendChild(mkBtn('Prev', Math.max(1, currentPage_allPro-1), currentPage_allPro===1));
-    for (let p=1;p<=totalPages;p++) nav.appendChild(mkBtn(p,p));
-    nav.appendChild(mkBtn('Next', Math.min(totalPages,currentPage_allPro+1),
-                                 currentPage_allPro===totalPages));
+    nav.appendChild(mk('Prev',Math.max(1,currentPage_allPro-1),currentPage_allPro===1));
+    for(let p=1;p<=totalPages;p++) nav.appendChild(mk(p,p));
+    nav.appendChild(mk('Next',Math.min(totalPages,currentPage_allPro+1),
+                            currentPage_allPro===totalPages));
   }
 
-  /*  ───────────────────── EVENT HANDLERS  ─────────────────────────── */
+  /*  ───────────────────── EVENT HANDLERS ────────────────────────────── */
   document.getElementById('applyFilters').onclick = () => {
     currentPage_allPro = 1; fetchProducts();
   };
-  document.getElementById('pagination').onclick = e => {
-    if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
-      currentPage_allPro = Number(e.target.dataset.page); fetchProducts();
+  document.getElementById('pagination').onclick = e=>{
+    if(e.target.tagName==='BUTTON'&&!e.target.disabled){
+      currentPage_allPro = +e.target.dataset.page; fetchProducts();
     }
   };
 
-  /*  ─────────────────────── INIT  ─────────────────────────────────── */
+  /*  ─────────────────────────── INIT ───────────────────────────────── */
   (async () => {
     await initCheckList(INDUSTRY_URL,
       document.getElementById('industryList'),
-      'industryChk', i => i.name);
+      'industryChk',
+      i=>i.id,
+      i=>i.name);
 
     await initCheckList(SUB_INDUSTRY_URL,
       document.getElementById('subIndustryList'),
-      'subChk', s => s.name);
+      'subChk',
+      s=>s.id,
+      s=>s.name);
 
     await initCheckList(USERS_URL,
       document.getElementById('userList'),
-      'userChk', u => u.name || u.username, true);   // <-- POST endpoint
+      'userChk',
+      u=>u.user_id,                       // ✔︎ correct id field
+      u=>u.name || u.username,
+      true);                              // POST
 
-    attachSearch('industrySearch',   'industryList');
+    attachSearch('industrySearch','industryList');
     attachSearch('subIndustrySearch','subIndustryList');
-    attachSearch('userSearch',       'userList');
+    attachSearch('userSearch','userList');
 
-    fetchProducts();     // first page load
+    fetchProducts();
   })();
 </script>
+

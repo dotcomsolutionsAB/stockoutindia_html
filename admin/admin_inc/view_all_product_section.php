@@ -260,7 +260,7 @@
     RENDER TABLE
   ------------------------------------------------------------------ */
   // helper once, outside renderTable():
-  const rupee = new Intl.NumberFormat('en-IN', {
+  const rupee_allPro = new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
     maximumFractionDigits: 0       // change if you need paise
@@ -285,8 +285,8 @@
 
       tr.querySelector('[data-field="offer_quantity"]').textContent = row.offer_quantity ?? '-';
       tr.querySelector('[data-field="minimum_quantity"]').textContent = row.minimum_quantity ?? '-';
-      tr.querySelector('[data-field="original_price"]').textContent = row.original_price != null ? rupee.format(row.original_price) : '–';
-      tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price != null ? rupee.format(row.selling_price) : '–';
+      tr.querySelector('[data-field="original_price"]').textContent = row.original_price != null ? rupee_allPro.format(row.original_price) : '–';
+      tr.querySelector('[data-field="selling_price"]').textContent = row.selling_price != null ? rupee_allPro.format(row.selling_price) : '–';
 
       // ✅ STATUS SELECT BOX LOGIC
       const statusTd = tr.querySelector('[data-field="status"]');

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>Stockout India</title>
+    <script src="loader.php?f=auth-js" type="text/javascript"></script>
     <meta name="description" content="StockOut">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
@@ -23,7 +24,6 @@
     </script>
     
     <!-- <script src="loader.php?f=locked-js" type="text/javascript"></script> -->
-    <script src="loader.php?f=auth-js" type="text/javascript"></script>
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 

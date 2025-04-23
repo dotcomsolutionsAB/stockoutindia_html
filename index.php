@@ -39,7 +39,7 @@
 
 <script>
   const apiUrl = `<?php echo BASE_URL; ?>/get_products`;
-  const token = localStorage.getItem("authtoken");
+  // const token = localStorage.getItem("authtoken");
   // const token = '100|MLh8ulMfLjjkcHPsUZ9WVI9xRb9B41oOdtm6cFOyed6e6744';
 
   async function fetchProducts() {

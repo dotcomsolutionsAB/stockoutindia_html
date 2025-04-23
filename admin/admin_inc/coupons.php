@@ -40,7 +40,7 @@
       </tbody>
     </table>
   </div>
-</div>
+
 
 <script> // Make sure this is echoed in PHP properly
   const couponMap = {};
@@ -239,3 +239,4 @@
     });
   }
 </script>
+</div>

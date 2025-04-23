@@ -5,30 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Stockout India – Register</title>
 
+  <!-- Tailwind & Feather -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/feather-icons"></script>
 
-  <link rel="icon" type="image/x-icon"
-        href="uploads/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
 </head>
+<?php include("configs/config_static_data.php"); ?>
 <body class="bg-cover bg-center bg-no-repeat"
       style="background-image:url('https://www.stockoutindia.com/assets/img/contact-bg.png')">
 
   <div class="bg-red-900 bg-opacity-80 min-h-screen flex items-center justify-center">
 
-    <!-- Left banner (hidden ≤ md) -->
+    <!-- ◂── Banner (hidden ≤ md) -->
     <div class="w-1/2 text-white px-10 hidden md:block">
       <div class="max-w-md">
-        <img src="uploads/stockout_logo.png" class="mb-4 w-28" alt="logo">
+        <img src="uploads/stockout_logo.png" class="w-28 mb-4" alt="logo">
         <h1 class="text-4xl font-bold mb-4">Stockout India</h1>
         <p class="text-lg leading-relaxed">
-          The easiest way to sell your dead stock. <br>
+          The easiest way to sell your dead stock.<br>
           Join thousands of interested buyers.
         </p>
       </div>
     </div>
 
-    <!-- Register card -->
+    <!-- ▸── Register card -->
     <div class="w-full md:w-1/2 px-4 md:px-10">
       <div class="bg-white rounded-xl p-8 md:p-8 shadow-lg max-w-2xl mx-auto">
 
@@ -36,10 +37,10 @@
           Sign up to Stockout India
         </h2>
 
-        <!-- ── FORM ─────────────────────────────────────────────── -->
+        <!-- ╭─ FORM ───────────────────────────────────────────────╮ -->
         <form id="registerForm" class="space-y-6">
 
-          <!-- GST toggle -->
+          <!-- GSTIN toggle -->
           <label class="flex items-center gap-2 text-sm select-none">
             <input id="noGstChk" type="checkbox" class="accent-red-600 rounded">
             I&nbsp;don’t have a&nbsp;GSTIN
@@ -52,7 +53,7 @@
             <p id="gstMsg" class="text-sm mt-1 h-5"></p>
           </div>
 
-          <!-- Extra fields (hidden when GSTIN required) -->
+          <!-- Extra details (only when no GSTIN) -->
           <div id="extraGroup" class="hidden">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <input id="fullName"    type="text" placeholder="Full Name"
@@ -78,13 +79,14 @@
             </div>
           </div>
 
-          <!-- Fields always shown -->
+          <!-- Always-visible block -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <input id="phone" type="text" placeholder="Phone"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
             <input id="email" type="email" placeholder="Email"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
 
+            <!-- pwd + eye -->
             <div class="relative">
               <input id="pass" type="password" placeholder="Password"
                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
@@ -126,7 +128,7 @@
             Register
           </button>
         </form>
-        <!-- ──────────────────────────────────────────────────────── -->
+        <!-- ╰────────────────────────────────────────────────────────╯ -->
 
         <!-- Google sign-up -->
         <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mt-6 hover:shadow-md">
@@ -143,139 +145,133 @@
     </div>
   </div>
 
-  <!-- ── SCRIPT ─────────────────────────────────────────────────── -->
-  <script>
-    const BASE_URL = `<?php echo BASE_URL; ?>`;
-    const token    = localStorage.getItem('authToken') ?? '';
+<!-- ────────────────────────────────────────── JS ─────────────────── -->
+<script>
+  const BASE = `<?php echo BASE_URL; ?>`;
+  const token = localStorage.getItem('authToken') ?? '';
 
-    feather.replace();
+  feather.replace();
 
-    /* eye toggle */
-    document.querySelectorAll('.eye').forEach(icon=>{
-      icon.onclick = ()=>{
-        const inp = icon.previousElementSibling;
-        const on  = inp.type === 'password';
-        inp.type  = on ? 'text':'password';
-        icon.setAttribute('data-feather', on ? 'eye-off':'eye');
-        feather.replace(icon);
-      };
-    });
-
-    /* GST toggle */
-    const noGstChk = document.getElementById('noGstChk');
-    const gstGrp   = document.getElementById('gstFieldGroup');
-    const extraGrp = document.getElementById('extraGroup');
-    const syncVis  = () =>{
-      const hide = noGstChk.checked;
-      gstGrp.classList.toggle('hidden', hide);
-      extraGrp.classList.toggle('hidden', !hide);
+  /* eye toggles */
+  document.querySelectorAll('.eye').forEach(icon=>{
+    icon.onclick=()=>{
+      const inp=icon.previousElementSibling;
+      const open=inp.type==='password';
+      inp.type=open?'text':'password';
+      icon.setAttribute('data-feather',open?'eye-off':'eye');
+      feather.replace(icon);
     };
-    noGstChk.onchange = syncVis; syncVis();
+  });
 
-    /* dropdown refs */
-    const stateSel = document.getElementById('stateSelect');
-    const citySel  = document.getElementById('citySelect');
-    const indSel   = document.getElementById('industrySelect');
-    const subSel   = document.getElementById('subIndustrySelect');
+  /* GST toggle */
+  const noGstChk=document.getElementById('noGstChk');
+  const gstGrp=document.getElementById('gstFieldGroup');
+  const extraGrp=document.getElementById('extraGroup');
+  const syncVis=()=>{const hide=noGstChk.checked;
+    gstGrp.classList.toggle('hidden',hide);
+    extraGrp.classList.toggle('hidden',!hide);};
+  noGstChk.onchange=syncVis; syncVis();
 
-    let states=[], cities=[], industries=[], subCache=[];
+  /* dropdown refs */
+  const stateSel=document.getElementById('stateSelect');
+  const citySel=document.getElementById('citySelect');
+  const indSel=document.getElementById('industrySelect');
+  const subSel=document.getElementById('subIndustrySelect');
 
-    async function fetchData(path){
-      const r = await fetch(`${BASE_URL}${path}`,{
-        headers:{Authorization:`Bearer ${token}`}
-      });
-      return (await r.json()).data;
+  let states=[],cities=[],industries=[],subsCache=[];
+
+  const fetchData=path=>fetch(`${BASE}${path}`,{
+     headers:{Authorization:`Bearer ${token}`} }).then(r=>r.json()).then(j=>j.data);
+
+  (async()=>{
+    [states,cities,industries]=await Promise.all([
+      fetchData('/states'),fetchData('/cities'),fetchData('/industry')
+    ]);
+    states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
+      `<option value="${s.name}">${s.name}</option>`));
+    industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
+      `<option value="${i.id}">${i.name}</option>`));
+  })();
+
+  stateSel.onchange=()=>{
+    citySel.innerHTML='<option value="">Select City</option>';
+    if(!stateSel.value){citySel.disabled=true;return;}
+    cities.filter(c=>c.state_name===stateSel.value)
+          .forEach(c=>citySel.insertAdjacentHTML('beforeend',
+            `<option value="${c.name}">${c.name}</option>`));
+    citySel.disabled=false;
+  };
+
+  indSel.onchange=async()=>{
+    subSel.innerHTML='<option value="">Select Sub-industry</option>';
+    if(!indSel.value){subSel.disabled=true;return;}
+    if(!subsCache.length) subsCache = await fetchData('/sub_industry');
+    subsCache.filter(s=>String(s.industry_id??s.id).startsWith(indSel.value))
+             .forEach(s=>subSel.insertAdjacentHTML('beforeend',
+               `<option value="${s.id}">${s.name}</option>`));
+    subSel.disabled=false;
+  };
+
+  /* GST validation & auto-fill */
+  const gstInput=document.getElementById('gstin');
+  const gstMsg=document.getElementById('gstMsg');
+
+  gstInput.addEventListener('blur',async()=>{
+    const v=gstInput.value.trim();
+    gstMsg.textContent=''; gstMsg.className='text-sm mt-1 h-5';
+    if(!v||noGstChk.checked) return;
+
+    gstMsg.textContent='Validating…'; gstMsg.classList.add('text-gray-500');
+    const fd=new FormData(); fd.append('gstin',v);
+
+    try{
+      const res=await fetch(`${BASE}/gst_details`,{
+        method:'POST', headers:{Authorization:`Bearer ${token}`}, body:fd});
+      const j=await res.json();
+
+      if(j.success){
+        const d=j.data;
+        // auto-fill target fields (only if empty)
+        if(!document.getElementById('companyName').value)
+          document.getElementById('companyName').value=d.company_name||'';
+        if(!document.getElementById('fullName').value)
+          document.getElementById('fullName').value=d.name||'';
+        if(!document.getElementById('address').value)
+          document.getElementById('address').value=d.address||'';
+        if(!document.getElementById('pincode').value)
+          document.getElementById('pincode').value=d.pincode||'';
+
+        if(d.state){stateSel.value=d.state;stateSel.onchange();}
+        setTimeout(()=>{if(d.city) citySel.value=d.city;},60);
+
+        gstMsg.textContent='GSTIN verified & auto-filled';
+        gstMsg.className='text-sm mt-1 h-5 text-green-600';
+      }else throw new Error(j.message||'Invalid GSTIN');
+    }catch(err){
+      gstMsg.textContent=err.message;
+      gstMsg.className='text-sm mt-1 h-5 text-red-600';
     }
+  });
 
-    /* load states, cities, industries */
-    (async()=>{
-      [states,cities,industries] = await Promise.all([
-        fetchData('/states'),
-        fetchData('/cities'),
-        fetchData('/industry')
-      ]);
-      states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
-        `<option value="${s.name}">${s.name}</option>`));
-      industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
-        `<option value="${i.id}">${i.name}</option>`));
-    })();
-
-    /* state → city */
-    stateSel.onchange = ()=>{
-      citySel.innerHTML='<option value="">Select City</option>';
-      if(!stateSel.value){citySel.disabled=true;return;}
-      cities.filter(c=>c.state_name===stateSel.value)
-            .forEach(c=>citySel.insertAdjacentHTML('beforeend',
-              `<option value="${c.name}">${c.name}</option>`));
-      citySel.disabled=false;
+  /* submit demo */
+  document.getElementById('registerForm').onsubmit=e=>{
+    e.preventDefault();
+    const obj={
+      gstin:gstInput.value||null,
+      full_name:document.getElementById('fullName').value||null,
+      company_name:document.getElementById('companyName').value||null,
+      address:document.getElementById('address').value||null,
+      pincode:document.getElementById('pincode').value||null,
+      state:stateSel.value||null,
+      city:citySel.value||null,
+      phone:document.getElementById('phone').value,
+      email:document.getElementById('email').value,
+      password:document.getElementById('pass').value,
+      industry_id:indSel.value||null,
+      sub_industry_id:subSel.value||null
     };
-
-    /* industry → sub-industry (with cache) */
-    indSel.onchange = async ()=>{
-      subSel.innerHTML='<option value="">Select Sub-industry</option>';
-      if(!indSel.value){subSel.disabled=true;return;}
-      if(!subCache.length) subCache = await fetchData('/sub_industry');
-      subCache.filter(s=>String(s.industry_id??s.id).startsWith(indSel.value))
-              .forEach(s=>subSel.insertAdjacentHTML('beforeend',
-                `<option value="${s.id}">${s.name}</option>`));
-      subSel.disabled=false;
-    };
-
-    /* GST validate + auto-fill */
-    const gstInput = document.getElementById('gstin');
-    const gstMsg   = document.getElementById('gstMsg');
-
-    gstInput.addEventListener('blur',async()=>{
-      const g = gstInput.value.trim();
-      gstMsg.textContent=''; gstMsg.className='text-sm mt-1 h-5';
-      if(!g) return;
-
-      gstMsg.textContent='Validating…'; gstMsg.classList.add('text-gray-500');
-      const fd=new FormData(); fd.append('gstin',g);
-
-      try{
-        const res = await fetch(`${BASE_URL}/gst_details`,{
-          method:'POST', headers:{Authorization:`Bearer ${token}`}, body:fd});
-        const j   = await res.json();
-
-        if(j.success){
-          const d=j.data;
-          document.getElementById('companyName').value = d.company_name||'';
-          document.getElementById('fullName')  .value = d.name         ||'';
-          document.getElementById('address')   .value = d.address      ||'';
-          document.getElementById('pincode')   .value = d.pincode      ||'';
-          if(d.state){stateSel.value=d.state;stateSel.onchange();}
-          setTimeout(()=>{ if(d.city) citySel.value=d.city; },60);
-
-          gstMsg.textContent='GSTIN verified & auto-filled';
-          gstMsg.className='text-sm mt-1 h-5 text-green-600';
-        }else{
-          throw new Error(j.message||'Invalid GSTIN');
-        }
-      }catch(err){
-        gstMsg.textContent=err.message;
-        gstMsg.className='text-sm mt-1 h-5 text-red-600';
-      }
-    });
-
-    /* demo submit */
-    document.getElementById('registerForm').onsubmit = e=>{
-      e.preventDefault();
-      const obj={
-        gstin:gstInput.value||null,
-        full_name:document.getElementById('fullName').value||null,
-        company_name:document.getElementById('companyName').value||null,
-        address:document.getElementById('address').value||null,
-        pincode:document.getElementById('pincode').value||null,
-        state:stateSel.value||null, city:citySel.value||null,
-        phone:document.getElementById('phone').value,
-        email:document.getElementById('email').value,
-        password:document.getElementById('pass').value,
-        industry_id:indSel.value||null,
-        sub_industry_id:subSel.value||null
-      };
-      alert(JSON.stringify(obj,null,2));
-    };
-  </script>
+    alert(JSON.stringify(obj,null,2));
+  };
+</script>
 </body>
 </html>

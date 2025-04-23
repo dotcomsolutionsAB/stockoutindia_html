@@ -42,8 +42,7 @@
   </div>
 </div>
 
-<script>
-  const BASE_URL = "<?php echo BASE_URL; ?>"; // Make sure this is echoed in PHP properly
+<script> // Make sure this is echoed in PHP properly
   const couponMap = {};
 
   // Load Coupons on Page Load
@@ -56,7 +55,7 @@
       return;
     }
 
-    fetch(`${BASE_URL}/coupon/index`, {
+    fetch(`<?php echo BASE_URL; ?>/coupon/index`, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -106,7 +105,7 @@
       cancelButtonText: "Cancel"
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`${BASE_URL}/coupon/${id}`, {
+        fetch(`<?php echo BASE_URL; ?>/coupon/${id}`, {
           method: "DELETE",
           headers: {
             "Authorization": `Bearer ${token}`
@@ -161,7 +160,7 @@
       if (result.isConfirmed && result.value) {
         const token = localStorage.getItem("authToken");
 
-        fetch(`${BASE_URL}/coupon/edit/${id}`, {
+        fetch(`<?php echo BASE_URL; ?>/coupon/edit/${id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -200,7 +199,7 @@
       return;
     }
 
-    fetch(`${BASE_URL}/coupon/add`, {
+    fetch(`<?php echo BASE_URL; ?>/coupon/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

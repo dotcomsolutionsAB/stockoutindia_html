@@ -41,10 +41,10 @@
         <form id="registerForm" class="space-y-6">
 
           <!-- GSTIN toggle -->
-          <label class="flex items-center gap-2 text-sm select-none">
+          <!-- <label class="flex items-center gap-2 text-sm select-none">
             <input id="noGstChk" type="checkbox" class="accent-red-600 rounded">
             I&nbsp;don’t have a&nbsp;GSTIN
-          </label>
+          </label> -->
 
           <!-- GSTIN group -->
           <div id="gstFieldGroup">

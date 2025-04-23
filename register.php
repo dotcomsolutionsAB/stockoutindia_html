@@ -45,17 +45,11 @@
         <!-- ╭─ FORM ───────────────────────────────────────────────╮ -->
         <form id="registerForm" class="space-y-6">
 
-          <!-- GSTIN toggle -->
-          <!-- <label class="flex items-center gap-2 text-sm select-none">
-            <input id="noGstChk" type="checkbox" class="accent-red-600 rounded">
-            I&nbsp;don’t have a&nbsp;GSTIN
-          </label> -->
-
           <!-- GSTIN group -->
           <div id="gstFieldGroup">
             <input id="gstin" type="text" placeholder="GSTIN" class="w-full border border-gray-400 px-3 py-2 rounded-md">
           </div>
-          
+
           <!-- GSTIN toggle -->
           <label class="flex items-center gap-2 text-sm mt0 justify-between select-none">
             <div class="check_box">
@@ -92,7 +86,7 @@
           </div>
 
           <!-- Always-visible block -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt0">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <input id="phone" type="text" placeholder="Phone"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
             <input id="email" type="email" placeholder="Email"

@@ -275,43 +275,42 @@
 </script> -->
 <script>
 /* ─── Constants ───────────────────────────────────────────── */
-const BASE   = `<?php echo BASE_URL; ?>`;
-const token  = localStorage.getItem('authToken') ?? '';   // for the look-up APIs
+const BASE  = `<?php echo BASE_URL; ?>`;
+const token = localStorage.getItem('authToken') ?? '';
 
-/* ─── Feather icons / eye toggles ─────────────────────────── */
+/* ─── Feather / eye toggles ───────────────────────────────── */
 feather.replace();
 document.querySelectorAll('.eye').forEach(icon=>{
-  icon.onclick = () => {
-    const inp  = icon.previousElementSibling;
+  icon.onclick = ()=>{
+    const inp = icon.previousElementSibling;
     const open = inp.type === 'password';
-    inp.type   = open ? 'text' : 'password';
+    inp.type = open ? 'text' : 'password';
     icon.setAttribute('data-feather', open ? 'eye-off' : 'eye');
     feather.replace(icon);
   };
 });
 
-/* ─── GST hide/show ───────────────────────────────────────── */
+/* ─── GST toggle (no GSTIN) ──────────────────────────────── */
 const noGstChk = document.getElementById('noGstChk');
 const gstGrp   = document.getElementById('gstFieldGroup');
 const extraGrp = document.getElementById('extraGroup');
-const syncVis  = () => {
+const syncVis  = () =>{
   const hide = noGstChk.checked;
   gstGrp.classList.toggle('hidden', hide);
   extraGrp.classList.toggle('hidden', !hide);
 };
 noGstChk.onchange = syncVis; syncVis();
 
-/* ─── Dropdown data ───────────────────────────────────────── */
+/* ─── Load states, cities, industries ─────────────────────── */
 const stateSel=document.getElementById('stateSelect');
 const citySel =document.getElementById('citySelect');
 const indSel  =document.getElementById('industrySelect');
 const subSel  =document.getElementById('subIndustrySelect');
 
-let states=[], cities=[], industries=[], subsCache=[];
-
-const fetchData = path =>
-  fetch(`${BASE}${path}`, { headers:{Authorization:`Bearer ${token}`}})
-    .then(r=>r.json()).then(j=>j.data);
+let states=[],cities=[],industries=[],subsCache=[];
+const fetchData = path => fetch(`${BASE}${path}`,
+  {headers:{Authorization:`Bearer ${token}`}})
+  .then(r=>r.json()).then(j=>j.data);
 
 (async()=>{
   [states,cities,industries] = await Promise.all([
@@ -325,7 +324,7 @@ const fetchData = path =>
 
 stateSel.onchange = ()=>{
   const stName = stateSel.selectedOptions[0]?.dataset.name || '';
-  citySel.innerHTML='<option value="">Select City</option>';
+  citySel.innerHTML = '<option value="">Select City</option>';
   if(!stName){citySel.disabled=true;return;}
   cities.filter(c=>c.state_name===stName)
         .forEach(c=>citySel.insertAdjacentHTML('beforeend',
@@ -333,7 +332,7 @@ stateSel.onchange = ()=>{
   citySel.disabled=false;
 };
 
-indSel.onchange = async ()=>{
+indSel.onchange = async()=>{
   subSel.innerHTML='<option value="">Select Sub-industry</option>';
   if(!indSel.value){subSel.disabled=true;return;}
   if(!subsCache.length) subsCache = await fetchData('/sub_industry');
@@ -343,7 +342,7 @@ indSel.onchange = async ()=>{
   subSel.disabled=false;
 };
 
-/* ─── GSTIN validate & autofill ───────────────────────────── */
+/* ─── GST validation & auto-fill ─────────────────────────── */
 const gstInput=document.getElementById('gstin');
 const gstMsg  =document.getElementById('gstMsg');
 gstInput.addEventListener('blur', async()=>{
@@ -353,10 +352,11 @@ gstInput.addEventListener('blur', async()=>{
 
   gstMsg.textContent='Validating…'; gstMsg.classList.add('text-gray-500');
   const fd=new FormData(); fd.append('gstin',v);
+
   try{
-    const j = await fetch(`${BASE}/gst_details`,
-                {method:'POST',headers:{Authorization:`Bearer ${token}`},body:fd})
-                .then(r=>r.json());
+    const j=await fetch(`${BASE}/gst_details`,
+             {method:'POST',headers:{Authorization:`Bearer ${token}`},body:fd})
+             .then(r=>r.json());
     if(j.success){
       const d=j.data;
       if(!document.getElementById('companyName').value)
@@ -383,47 +383,46 @@ gstInput.addEventListener('blur', async()=>{
   }
 });
 
-/* ─── REGISTER submission ────────────────────────────────── */
+/* ─── REGISTER API call ──────────────────────────────────── */
 document.getElementById('registerForm').onsubmit = async e=>{
   e.preventDefault();
 
-  /* build payload */
-  const body = {
-    gstin         : gstInput.value.trim(),                        // may be ""
-    phone         : document.getElementById('phone').value.trim(),
-    email         : document.getElementById('email').value.trim(),
-    password      : document.getElementById('pass').value,
-    google_id     : "",                                           // always empty for now
-    industry      : indSel.value,                                 // id string
-    sub_industry  : subSel.value                                  // id string
+  const payload = {
+    gstin        : gstInput.value.trim(),
+    phone        : document.getElementById('phone').value.trim(),
+    email        : document.getElementById('email').value.trim(),
+    password     : document.getElementById('pass').value,
+    google_id    : "",
+    role         : "user",                       // ← default role
+    industry     : indSel.value,
+    sub_industry : subSel.value
   };
 
-  /* include optional fields only if user provided */
-  const optMap = {
+  /* Optional extras */
+  const extras = {
     name         : 'fullName',
     company_name : 'companyName',
     address      : 'address',
     pincode      : 'pincode',
     city         : 'citySelect',
-    state        : 'stateSelect'          // already holds numeric id
+    state        : 'stateSelect'                 // already numeric id
   };
-  Object.entries(optMap).forEach(([k, id])=>{
-    const val = document.getElementById(id).value;
-    if(val) body[k] = val;
+  Object.entries(extras).forEach(([k,id])=>{
+    const val=document.getElementById(id).value;
+    if(val) payload[k]=val;
   });
 
-  /* POST to /register */
   try{
-    const res  = await fetch(`${BASE}/register`,{
+    const res = await fetch(`${BASE}/register`,{
       method :'POST',
       headers:{'Content-Type':'application/json'},
-      body   : JSON.stringify(body)
+      body   : JSON.stringify(payload)
     });
     const json = await res.json();
 
     if(json.success){
-      alert('Registration successful!');    // replace with redirect if needed
-      // location.href = 'login.php';
+      alert('Registration successful! Redirecting to login…');
+      location.href = 'login.php';               // ← redirect
     }else{
       throw new Error(json.message||'Registration failed');
     }
@@ -432,6 +431,7 @@ document.getElementById('registerForm').onsubmit = async e=>{
   }
 };
 </script>
+
 
 </body>
 </html>

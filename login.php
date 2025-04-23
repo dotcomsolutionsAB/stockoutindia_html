@@ -326,7 +326,7 @@
           alert("Google Sign-In failed.");
         });
     });
-  </script>
+</script>
 
 
 

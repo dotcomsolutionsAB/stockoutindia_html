@@ -172,7 +172,7 @@
     STATE & CONSTANTS
   ------------------------------------------------------------------ */
   const limitt = 10;
-  let currentPage = 1;
+  let currentPage_allPro = 1;
   let totalResults = 0;
 
   /* ------------------------------------------------------------------
@@ -232,7 +232,7 @@
       min_amount: minP ? Number(minP) : undefined,
       max_amount: maxP ? Number(maxP) : undefined,
       limitt,
-      offset: (currentPage - 1) * limitt
+      offset: (currentPage_allPro - 1) * limitt
     };
     Object.keys(payload).forEach(k => payload[k] === undefined && delete payload[k]);
 
@@ -381,28 +381,28 @@
       b.dataset.page = page;
       b.disabled = disabled;
       b.className =
-        `px-3 py-1.5 rounded-md border transition ${page === currentPage
+        `px-3 py-1.5 rounded-md border transition ${page === currentPage_allPro
           ? 'bg-red-600 text-white border-red-600'
           : 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
         } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`;
       return b;
     };
 
-    nav.appendChild(btn('Prev', Math.max(1, currentPage - 1), currentPage === 1));
+    nav.appendChild(btn('Prev', Math.max(1, currentPage_allPro - 1), currentPage_allPro === 1));
     for (let p = 1; p <= totalPages; p++) nav.appendChild(btn(p, p));
-    nav.appendChild(btn('Next', Math.min(totalPages, currentPage + 1), currentPage === totalPages));
+    nav.appendChild(btn('Next', Math.min(totalPages, currentPage_allPro + 1), currentPage_allPro === totalPages));
   }
 
   /* ------------------------------------------------------------------
     EVENT HANDLERS
   ------------------------------------------------------------------ */
   document.getElementById('applyFilters').addEventListener('click', () => {
-    currentPage = 1;
+    currentPage_allPro = 1;
     fetchProducts();
   });
   document.getElementById('pagination').addEventListener('click', e => {
     if (e.target.tagName === 'BUTTON' && !e.target.disabled) {
-      currentPage = Number(e.target.dataset.page);
+      currentPage_allPro = Number(e.target.dataset.page);
       fetchProducts();
     }
   });

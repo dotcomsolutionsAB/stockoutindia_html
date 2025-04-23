@@ -240,7 +240,7 @@
       const select = document.getElementById('userFilter');
       json.data.forEach(u => {
         const opt   = document.createElement('option');
-        opt.value   = u.user_id;                 // ← backend expects numeric id
+        opt.value   = u.user_id || u.id;                 // ← backend expects numeric id
         opt.textContent = u.name || u.username;  // fallback if name null
         select.appendChild(opt);
       });

@@ -173,7 +173,7 @@
   ------------------------------------------------------------------ */
   const limitt = 10;
   let currentPage_allPro = 1;
-  let totalResults = 0;
+  let totalResults_allPro = 0;
 
   /* ------------------------------------------------------------------
     HELPER – checkbox element
@@ -244,16 +244,16 @@
       });
       const json = await res.json();
       if (!json.success) throw new Error(json.message || 'API error');
-      totalResults = json.total_count || json.data.length;
+      totalResults_allPro = json.total_count || json.data.length;
       renderTable(json.data);
     } catch (err) {
       console.error(err);
-      totalResults = 0;
+      totalResults_allPro = 0;
       renderTable([]);
     }
     renderPagination();
     document.getElementById('resultCount').textContent =
-      `${totalResults} result${totalResults !== 1 ? 's' : ''}`;
+      `${totalResults_allPro} result${totalResults_allPro !== 1 ? 's' : ''}`;
   }
 
   /* ------------------------------------------------------------------
@@ -373,7 +373,7 @@
   function renderPagination() {
     const nav = document.getElementById('pagination');
     nav.innerHTML = '';
-    const totalPages = Math.max(1, Math.ceil(totalResults / limitt));
+    const totalPages = Math.max(1, Math.ceil(totalResults_allPro / limitt));
 
     const btn = (label, page, disabled = false) => {
       const b = document.createElement('button');

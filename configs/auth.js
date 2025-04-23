@@ -26,8 +26,8 @@
 
   // Admin-only pages
   const adminPages = [
-    "../admin/configurations.php",
-    "../admin/admin_index.php",
+    "/admin/configurations.php",
+    "/admin/admin_index.php",
     "../admin/tables.php"
   ];
 

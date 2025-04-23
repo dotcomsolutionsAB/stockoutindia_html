@@ -26,9 +26,9 @@
 
   // Admin-only pages
   const adminPages = [
-    "/admin/configurations.php",
-    "/admin/admin_index.php",
-    "/admin/tables.php"
+    "../admin/configurations.php",
+    "../admin/admin_index.php",
+    "../admin/tables.php"
   ];
 
   // Check if path starts with any pattern (for dynamic pages)

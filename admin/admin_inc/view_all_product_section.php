@@ -368,15 +368,26 @@
         Swal.fire({
           title: `Update Product #${r.id}`,
           html: `
-            <input id="swal_name" class="swal2-input" placeholder="Product Name" value="${r.product_name}">
-            <input id="swal_price" class="swal2-input" type="number" placeholder="Selling Price" value="${r.selling_price}">
-            <input id="swal_offer" class="swal2-input" type="number" placeholder="Offer Quantity" value="${r.offer_quantity}">
-            <input id="swal_dim" class="swal2-input" placeholder="Dimensions" value="${r.dimensions || ''}">
-            <select id="swal_status" class="swal2-input">
-              <option value="active" ${r.status==='active'?'selected':''}>Active</option>
-              <option value="in-active" ${r.status==='in-active'?'selected':''}>In-active</option>
-              <option value="sold" ${r.status==='sold'?'selected':''}>Sold</option>
-            </select>
+             <div style="text-align:left">
+              <label for="swal_name">Product Name</label>
+              <input id="swal_name" class="swal2-input" value="${r.product_name}">
+
+              <label for="swal_price">Selling Price</label>
+              <input id="swal_price" class="swal2-input" type="number" value="${r.selling_price}">
+
+              <label for="swal_offer">Offer Quantity</label>
+              <input id="swal_offer" class="swal2-input" type="number" value="${r.offer_quantity}">
+
+              <label for="swal_dim">Dimensions</label>
+              <input id="swal_dim" class="swal2-input" value="${r.dimensions || ''}">
+
+              <label for="swal_status">Status</label>
+              <select id="swal_status" class="swal2-input">
+                <option value="active" ${r.status==='active' ? 'selected' : ''}>Active</option>
+                <option value="in-active" ${r.status==='in-active' ? 'selected' : ''}>In-active</option>
+                <option value="sold" ${r.status==='sold' ? 'selected' : ''}>Sold</option>
+              </select>
+            </div>
           `,
           confirmButtonText: 'Update',
           focusConfirm: false,
@@ -419,8 +430,8 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(result => {
           if (result.isConfirmed) {
-            fetch(`<?php echo BASE_URL; ?>/product/${r.id}`, {
-              method: 'DELETE',
+            fetch(`<?php echo BASE_URL; ?>/product/temp_delete/${r.id}`, {
+              method: 'PATCH',
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`
               }

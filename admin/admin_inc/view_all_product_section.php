@@ -389,7 +389,7 @@
               status: document.getElementById('swal_status').value
             };
 
-            return fetch(`/product/update/${r.id}`, {
+            return fetch(`<?php echo BASE_URL; ?>/product/update/${r.id}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -419,7 +419,7 @@
           confirmButtonText: 'Yes, delete it!'
         }).then(result => {
           if (result.isConfirmed) {
-            fetch(`/product/${r.id}`, {
+            fetch(`<?php echo BASE_URL; ?>/product/${r.id}`, {
               method: 'DELETE',
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('authToken')}`

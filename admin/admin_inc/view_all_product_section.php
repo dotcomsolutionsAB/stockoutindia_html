@@ -283,50 +283,6 @@
   const rupee = new Intl.NumberFormat('en-IN',
     {style:'currency',currency:'INR',maximumFractionDigits:0});
 
-  // function renderTable(rows) {
-  //   const tbody = $('#tableBody'); tbody.innerHTML='';
-  //   const tmpl  = $('#rowTemplate');
-
-  //   rows.forEach(r => {
-  //     const tr = tmpl.content.cloneNode(true);
-
-  //     tr.querySelector('[data-field="image"]').src =
-  //       Array.isArray(r.image) && r.image.length ? r.image[0]
-  //                                                : '../uploads/placeholder.png';
-  //     tr.querySelector('[data-field="product_name"]').textContent = r.product_name||'';
-  //     tr.querySelector('[data-field="offer_quantity"]').textContent   = r.offer_quantity   ?? '-';
-  //     tr.querySelector('[data-field="minimum_quantity"]').textContent = r.minimum_quantity ?? '-';
-  //     tr.querySelector('[data-field="original_price"]').textContent   =
-  //       r.original_price!=null ? rupee.format(r.original_price) : '–';
-  //     tr.querySelector('[data-field="selling_price"]').textContent    =
-  //       r.selling_price !=null  ? rupee.format(r.selling_price)  : '–';
-
-  //     /* status dropdown */
-  //     const sTd = tr.querySelector('[data-field="status"]');
-  //     const sel = document.createElement('select');
-  //     sel.className = 'border rounded px-2 py-1 text-sm';
-  //     ['active','in-active','sold'].forEach(st=>{
-  //       const o=document.createElement('option'); o.value=st;
-  //       o.textContent = st[0].toUpperCase()+st.slice(1);
-  //       if(r.status===st) o.selected=true; sel.appendChild(o);
-  //     });
-  //     sel.onchange = () => updateStatus(r.id, sel, r.status);
-  //     sTd.innerHTML=''; sTd.appendChild(sel);
-
-  //     tr.querySelector('[data-field="unit"]').textContent        = r.unit        ?? '-';
-  //     tr.querySelector('[data-field="validity"]').textContent    = r.validity    ?? '-';
-  //     tr.querySelector('[data-field="industry"]').textContent    = r.industry?.name     ?? '-';
-  //     tr.querySelector('[data-field="sub_industry"]').textContent= r.sub_industry?.name ?? '-';
-
-  //     tr.querySelector('.viewBtn')  .onclick = () => alert(`View #${r.id}`);
-  //     tr.querySelector('.updateBtn').onclick = () => alert(`Update #${r.id}`);
-  //     tr.querySelector('.deleteBtn').onclick = () =>
-  //       confirm(`Delete #${r.id}?`) && alert('Perform delete…');
-
-  //     tbody.appendChild(tr);
-  //   });
-  //   lucide.createIcons();
-  // }
   function renderTable(rows) {
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
@@ -387,10 +343,96 @@
       tr.querySelector('[data-field="industry"]').textContent    = r.industry?.name     ?? '-';
       tr.querySelector('[data-field="sub_industry"]').textContent= r.sub_industry?.name ?? '-';
 
-      tr.querySelector('.viewBtn')  .onclick = () => alert(`View #${r.id}`);
-      tr.querySelector('.updateBtn').onclick = () => alert(`Update #${r.id}`);
-      tr.querySelector('.deleteBtn').onclick = () =>
-        confirm(`Delete #${r.id}?`) && alert('Perform delete…');
+      // tr.querySelector('.viewBtn')  .onclick = () => alert(`View #${r.id}`);
+      // tr.querySelector('.updateBtn').onclick = () => alert(`Update #${r.id}`);
+      // tr.querySelector('.deleteBtn').onclick = () =>
+      //   confirm(`Delete #${r.id}?`) && alert('Perform delete…');
+
+      // View product details in SweetAlert
+      tr.querySelector('.viewBtn').onclick = () => {
+        Swal.fire({
+          title: `Product #${r.id}`,
+          html: `
+            <strong>Name:</strong> ${r.product_name}<br>
+            <strong>Selling Price:</strong> ₹${r.selling_price}<br>
+            <strong>Offer Quantity:</strong> ${r.offer_quantity}<br>
+            <strong>Status:</strong> ${r.status}<br>
+            <strong>Dimensions:</strong> ${r.dimensions || '-'}<br>
+          `,
+          icon: 'info'
+        });
+      };
+
+      // Update product via SweetAlert form
+      tr.querySelector('.updateBtn').onclick = () => {
+        Swal.fire({
+          title: `Update Product #${r.id}`,
+          html: `
+            <input id="swal_name" class="swal2-input" placeholder="Product Name" value="${r.product_name}">
+            <input id="swal_price" class="swal2-input" type="number" placeholder="Selling Price" value="${r.selling_price}">
+            <input id="swal_offer" class="swal2-input" type="number" placeholder="Offer Quantity" value="${r.offer_quantity}">
+            <input id="swal_dim" class="swal2-input" placeholder="Dimensions" value="${r.dimensions || ''}">
+            <select id="swal_status" class="swal2-input">
+              <option value="active" ${r.status==='active'?'selected':''}>Active</option>
+              <option value="in-active" ${r.status==='in-active'?'selected':''}>In-active</option>
+              <option value="sold" ${r.status==='sold'?'selected':''}>Sold</option>
+            </select>
+          `,
+          confirmButtonText: 'Update',
+          focusConfirm: false,
+          preConfirm: () => {
+            const data = {
+              product_name: document.getElementById('swal_name').value,
+              selling_price: parseFloat(document.getElementById('swal_price').value),
+              offer_quantity: parseInt(document.getElementById('swal_offer').value),
+              dimensions: document.getElementById('swal_dim').value,
+              status: document.getElementById('swal_status').value
+            };
+
+            return fetch(`/product/update/${r.id}`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+              },
+              body: JSON.stringify(data)
+            }).then(res => {
+              if (!res.ok) throw new Error('Failed to update');
+              return res.json();
+            }).then(() => {
+              Swal.fire('Updated!', 'Product updated successfully.', 'success').then(() => location.reload());
+            }).catch(err => {
+              Swal.showValidationMessage(`Request failed: ${err}`);
+            });
+          }
+        });
+      };
+
+      // Delete product
+      tr.querySelector('.deleteBtn').onclick = () => {
+        Swal.fire({
+          title: `Delete Product #${r.id}?`,
+          text: 'This action cannot be undone.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then(result => {
+          if (result.isConfirmed) {
+            fetch(`/product/${r.id}`, {
+              method: 'DELETE',
+              headers: {
+                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+              }
+            }).then(res => {
+              if (!res.ok) throw new Error('Failed to delete');
+              Swal.fire('Deleted!', 'Product has been deleted.', 'success').then(() => location.reload());
+            }).catch(err => {
+              Swal.fire('Error!', `Delete failed: ${err}`, 'error');
+            });
+          }
+        });
+      };
 
       tbody.appendChild(tr);
     });

@@ -8,6 +8,9 @@
   <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
 </head>
 
 <?php include("configs/config_static_data.php"); ?>
@@ -213,75 +216,12 @@
         });
     });
   </script>
-<!-- Firebase SDKs - Use UMD build (NOT type="module") -->
-<!-- <script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/11.6.0/firebase-auth-compat.js"></script>
-
-<script>
-    // ✅ Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyCkoJq5Gvhop48v2pXLbSUi1po4SLfjvkQ",
-      authDomain: "stockoutindia-3636e.firebaseapp.com",
-      projectId: "stockoutindia-3636e",
-      storageBucket: "stockoutindia-3636e.firebaseapp.com",
-      messagingSenderId: "1070850746164",
-      appId: "1:1070850746164:web:2a48bc7949577f6236e761",
-      measurementId: "G-7TXB99B3J2"
-    };
-
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
-    document.getElementById('googleSignInBtn').addEventListener('click', function (e) {
-      e.preventDefault();
-
-      const provider = new firebase.auth.GoogleAuthProvider();
-
-      auth.signInWithPopup(provider)
-        .then(async (result) => {
-          const user = result.user;
-          const idToken = await user.getIdToken();
-
-          const userData = {
-            uid: user.uid,
-            name: user.displayName,
-            email: user.email,
-            photo_url: user.photoURL,
-            token: idToken,
-            timestamp: new Date().toISOString()
-          };
-
-          console.log("Sending to PHP:", userData);
-
-          fetch("save_g_user.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(userData)
-          })
-          .then(res => res.json())
-          .then(data => {
-            console.log("PHP response:", data);
-            if (data.success) {
-              alert("✅ Login successful and saved!");
-            } else {
-              alert("❌ Save failed: " + data.message);
-            }
-          });
-        })
-        .catch((error) => {
-          console.error("Google Sign-In error:", error);
-          alert("Google Sign-In failed.");
-        });
-    });
-</script> -->
 
 <!-- Firebase SDK v8 -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-<script>
+<!-- <script>
     // Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyCE5BPXYqHLQ0tgxYUoSHBHCDtBkr2547s",
@@ -336,6 +276,101 @@
                 if (data.account_created === false) {
                     // User not registered, redirect to registration page
                     window.location.href = 'register.php';
+                } else {
+                    // User found and logged in
+                    const { token, user_id, name, role, username } = data.data;
+
+                    // Store user data in localStorage
+                    localStorage.setItem('authToken', token);
+                    localStorage.setItem('user_id', user_id);
+                    localStorage.setItem('name', name);
+                    localStorage.setItem('role', role);
+                    localStorage.setItem('username', username);
+
+                    // Redirect based on user role
+                    if (role === 'admin') {
+                        window.location.href = 'admin/admin_index.php';
+                    } else {
+                        window.location.href = 'index.php';
+                    }
+                }
+            } else {
+                // Handle error response
+                alert(data.message || 'An error occurred, please try again.');
+            }
+        })
+        .catch((error) => {
+            console.error('Error sending data to backend:', error);
+            alert('An error occurred while processing your login.');
+        });
+    }
+</script> -->
+
+
+<script>
+    // Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyCE5BPXYqHLQ0tgxYUoSHBHCDtBkr2547s",
+        authDomain: "stockout-india.firebaseapp.com",
+        projectId: "stockout-india",
+        storageBucket: "stockout-india.firebasestorage.app",
+        messagingSenderId: "391240277268",
+        appId: "1:391240277268:web:9a11f9b8620cbc8a76b601"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    const googleSignInBtn = document.getElementById("googleSignInBtn");
+
+    googleSignInBtn.addEventListener("click", () => {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                const idToken = result.credential.idToken; // Get the ID token
+
+                // Send the ID token to the backend for verification
+                sendToBackend(idToken);
+            })
+            .catch((error) => {
+                console.error("Error signing in with Google:", error);
+            });
+    });
+
+    // Function to send the ID token to the backend
+    function sendToBackend(idToken) {
+        fetch('<?php echo BASE_URL; ?>/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                idToken: idToken,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Response from backend:', data);
+
+            if (data.success) {
+                if (data.account_created === false) {
+                    // Show SweetAlert popup when user is not registered
+                    Swal.fire({
+                        title: 'You Have no Account!',
+                        text: 'You have to register first.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Go to Register',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // If "Go to Register" is clicked, redirect to registration page
+                            window.location.href = 'register.php';
+                        } else {
+                            // If "Cancel" is clicked, stay on the login page
+                            console.log('User cancelled registration');
+                        }
+                    });
                 } else {
                     // User found and logged in
                     const { token, user_id, name, role, username } = data.data;

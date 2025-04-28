@@ -136,7 +136,7 @@
         <!-- ╰────────────────────────────────────────────────────────╯ -->
 
         <!-- Google sign-up -->
-        <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mt-6 hover:shadow-md">
+        <button id="googleSignUpBtn" class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mt-6 hover:shadow-md">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                class="w-5 h-5 mr-2" alt="Google">
           <span class="text-sm font-medium">Sign up with Google</span>
@@ -308,5 +308,71 @@
     }
   };
 </script>
+<!-- Firebase App (Core) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+<script>
+  // ─── Firebase Config ───
+  const firebaseConfig = {
+        apiKey: "AIzaSyCE5BPXYqHLQ0tgxYUoSHBHCDtBkr2547s",
+        authDomain: "stockout-india.firebaseapp.com",
+        projectId: "stockout-india",
+        storageBucket: "stockout-india.firebasestorage.app",
+        messagingSenderId: "391240277268",
+        appId: "1:391240277268:web:9a11f9b8620cbc8a76b601"
+    };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  // ─── Google Sign In Handler ───
+  document.getElementById('googleSignUpBtn').onclick = async () => {
+    try {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const result = await auth.signInWithPopup(provider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+
+      // Now prepare the full payload
+      const payload = {
+        idToken: idToken,
+        role: "user",
+        gstin: document.getElementById('gstin')?.value.trim() || null,
+        phone: document.getElementById('phone').value.trim(),
+        email: user.email || document.getElementById('email').value.trim(),
+        name: document.getElementById('fullName')?.value.trim() || user.displayName || "",
+        company_name: document.getElementById('companyName')?.value.trim() || "",
+        address: document.getElementById('address')?.value.trim() || "",
+        pincode: document.getElementById('pincode')?.value.trim() || "",
+        city: document.getElementById('citySelect')?.value.trim() || "",
+        state: document.getElementById('stateSelect')?.value || "",
+        industry: document.getElementById('industrySelect')?.value || "",
+        sub_industry: document.getElementById('subIndustrySelect')?.value || ""
+      };
+
+      // POST to register API
+      const res = await fetch(`${BASE}/register`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        alert('Registration successful via Google! Redirecting to login...');
+        location.href = 'login.php';
+      } else {
+        throw new Error(json.message || 'Registration failed');
+      }
+
+    } catch (error) {
+      console.error(error);
+      alert(`❌ ${error.message}`);
+    }
+  };
+</script>
+
 </body>
 </html>

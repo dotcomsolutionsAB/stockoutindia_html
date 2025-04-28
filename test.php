@@ -1,214 +1,312 @@
-<?php include("configs/config_static_data.php"); // defines BASE_URL ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin – Users & Products</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stockout India – Register</title>
+
+  <!-- Tailwind & Feather -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+
+  <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
+  <style>
+    .mt0{
+      margin-top:2px !important;
+    }
+  </style>
 </head>
+<?php include("configs/config_static_data.php"); ?>
+<body class="bg-cover bg-center bg-no-repeat"
+      style="background-image:url('https://www.stockoutindia.com/assets/img/contact-bg.png')">
 
-<body class="bg-gray-100 text-sm leading-relaxed antialiased">
-<div class="max-w-7xl mx-auto px-4 py-8 space-y-8">
-  <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Users with Products</h1>
+  <div class="bg-red-900 bg-opacity-80 min-h-screen flex items-center justify-center">
 
-  <!-- ╭─ FILTER BAR ──────────────────────────────────────────────────────╮ -->
-  <section
-    class="bg-white shadow rounded-2xl p-6 flex flex-wrap gap-4 items-end">
-
-    <!-- User‑IDs (comma list) -->
-    <div class="flex flex-col gap-1">
-      <label for="userIds" class="font-medium text-gray-700">User IDs (comma‑separated)</label>
-      <input id="userIds" type="text" placeholder="e.g. 1,6,5"
-             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-64
-                    focus:ring-red-500 focus:border-red-500">
+    <!-- ◂── Banner (hidden ≤ md) -->
+    <div class="w-1/2 text-white px-10 hidden md:block">
+      <div class="max-w-md">
+        <img src="uploads/stockout_logo.png" class="w-28 mb-4" alt="logo">
+        <h1 class="text-4xl font-bold mb-4">Stockout India</h1>
+        <p class="text-lg leading-relaxed">
+          The easiest way to sell your dead stock.<br>
+          Join thousands of interested buyers.
+        </p>
+      </div>
     </div>
 
-    <!-- Rows‑per‑page -->
-    <div class="flex flex-col gap-1">
-      <label for="rowsPerPage" class="font-medium text-gray-700">Show</label>
-      <select id="rowsPerPage"
-              class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 w-24
-                     focus:ring-red-500 focus:border-red-500">
-        <option value="10" selected>10</option>
-        <option value="20">20</option>
-        <option value="40">40</option>
-        <option value="50">50</option>
-      </select>
+    <!-- ▸── Register card -->
+    <div class="w-full md:w-1/2 px-4 md:px-10">
+      <div class="bg-white rounded-xl p-8 md:p-8 shadow-lg max-w-2xl mx-auto">
+
+        <h2 class="text-xl font-bold text-red-700 mb-6">
+          Sign up to Stockout India
+        </h2>
+
+        <!-- ╭─ FORM ───────────────────────────────────────────────╮ -->
+        <form id="registerForm" class="space-y-6">
+
+          <!-- GSTIN group -->
+          <div id="gstFieldGroup">
+            <input id="gstin" type="text" placeholder="GSTIN" class="w-full border border-gray-400 px-3 py-2 rounded-md">
+          </div>
+
+          <!-- GSTIN toggle -->
+          <label class="flex items-center gap-2 text-sm mt0 justify-between select-none">
+            <div class="check_box">
+              <input id="noGstChk" type="checkbox" class="accent-red-600 rounded">
+              I&nbsp;don’t have a&nbsp;GSTIN
+            </div>
+            <p id="gstMsg" class="text-sm mt0 h-5"></p>
+          </label>
+            
+          <!-- Extra details (only when no GSTIN) -->
+          <div id="extraGroup" class="hidden mt0">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <input id="fullName"    type="text" placeholder="Full Name"
+                     class="w-full border border-gray-400 px-3 py-2 rounded-md">
+              <input id="companyName" type="text" placeholder="Company Name"
+                     class="w-full border border-gray-400 px-3 py-2 rounded-md">
+            </div>
+
+            <textarea id="address" rows="3" placeholder="Complete Address"
+                      class="w-full border border-gray-400 px-3 py-2 rounded-md resize-none mt-4"></textarea>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+              <input id="pincode" type="text" placeholder="Pincode"
+                     class="w-full border border-gray-400 px-3 py-2 rounded-md">
+              <select id="stateSelect"
+                      class="w-full border border-gray-400 px-3 py-2 rounded-md">
+                <option value="">Select State</option>
+              </select>
+              <select id="citySelect" disabled
+                      class="w-full border border-gray-400 px-3 py-2 rounded-md">
+                <option value="">Select City</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Always-visible block -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <input id="phone" type="text" placeholder="Phone"
+                   class="w-full border border-gray-400 px-3 py-2 rounded-md">
+            <input id="email" type="email" placeholder="Email"
+                   class="w-full border border-gray-400 px-3 py-2 rounded-md">
+
+            <!-- pwd + eye -->
+            <div class="relative">
+              <input id="pass" type="password" placeholder="Password"
+                     class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                 data-feather="eye"></i>
+            </div>
+            <div class="relative">
+              <input id="cpass" type="password" placeholder="Confirm Password"
+                     class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                 data-feather="eye"></i>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <select id="industrySelect"
+                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
+              <option value="">Select Industry</option>
+            </select>
+            <select id="subIndustrySelect" disabled
+                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
+              <option value="">Select Sub-industry</option>
+            </select>
+          </div>
+
+          <!-- Terms -->
+          <label class="flex items-start gap-2 text-sm mt-2 select-none">
+            <input type="checkbox" required class="accent-red-600 rounded mt-1">
+            <span>
+              By registering you confirm that you accept the
+              <a href="pages/terms-condition.php" class="text-red-600 font-medium">Terms &amp; Conditions</a>
+              and the
+              <a href="pages/privacy-policy.php" class="text-red-600 font-medium">Privacy Policy</a>.
+            </span>
+          </label>
+
+          <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">
+            Register
+          </button>
+        </form>
+        <!-- ╰────────────────────────────────────────────────────────╯ -->
+
+        <!-- Google sign-up -->
+        <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mt-6 hover:shadow-md">
+          <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+               class="w-5 h-5 mr-2" alt="Google">
+          <span class="text-sm font-medium">Sign up with Google</span>
+        </button>
+
+        <p class="text-sm text-gray-600 mt-4">
+          Already have an account?
+          <a href="login.php" class="text-red-600 font-semibold">Sign in</a>
+        </p>
+      </div>
     </div>
+  </div>
 
-  </section>
-  <!-- ╰────────────────────────────────────────────────────────────────────╯ -->
-
-  <!-- ╭─ TABLE ────────────────────────────────────────────────────────────╮ -->
-  <section class="bg-white shadow rounded-2xl overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200">
-      <thead class="bg-gray-50 text-xs uppercase tracking-wider text-gray-600 sticky top-0 z-10">
-      <tr>
-        <th class="px-6 py-3 text-left w-1/5">Name</th>
-        <th class="px-6 py-3 text-left w-1/4">Email</th>
-        <th class="px-6 py-3 text-left">Products</th>
-      </tr>
-      </thead>
-      <tbody id="tableBody" class="divide-y divide-gray-100 bg-white"></tbody>
-    </table>
-  </section>
-  <!-- ╰────────────────────────────────────────────────────────────────────╯ -->
-
-  <footer class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-gray-700">
-    <div id="resultCount">0 results</div>
-    <nav id="pagination" class="flex items-center gap-2"></nav>
-  </footer>
-</div>
-
-<!-- Row template -->
-<template id="rowTemplate">
-  <tr class="hover:bg-gray-50">
-    <td class="px-6 py-4 font-medium text-gray-900" data-f="name"></td>
-    <td class="px-6 py-4 break-all text-gray-700"    data-f="email"></td>
-    <td class="px-6 py-4"                            data-f="products"></td>
-  </tr>
-</template>
-
-<!-- ╭─ JAVASCRIPT ─────────────────────────────────────────────────────────╮ -->
 <script>
-  lucide.createIcons();
+  /* ─── Constants ───────────────────────────────────────────── */
+  const BASE  = `<?php echo BASE_URL; ?>`;
+  const token = localStorage.getItem('authToken') ?? '';
 
-  /* ------------------------------------------------------------------
-     CONFIG
-  ------------------------------------------------------------------ */
-  const BASE_URL = '<?php echo BASE_URL; ?>';
-  const API_URL  = `${BASE_URL}/admin/users_with_products`;
-
-  /* ------------------------------------------------------------------
-     STATE
-  ------------------------------------------------------------------ */
-  let limit  = 10;
-  let offset = 0;
-  let total  = 0;
-  let currentIds = '';
-
-  /* ------------------------------------------------------------------
-     HELPERS
-  ------------------------------------------------------------------ */
-  const rupee = new Intl.NumberFormat('en-IN', {
-    style:'currency', currency:'INR', maximumFractionDigits:0
+  /* ─── Feather / eye toggles ───────────────────────────────── */
+  feather.replace();
+  document.querySelectorAll('.eye').forEach(icon=>{
+    icon.onclick = ()=>{
+      const inp = icon.previousElementSibling;
+      const open = inp.type === 'password';
+      inp.type = open ? 'text' : 'password';
+      icon.setAttribute('data-feather', open ? 'eye-off' : 'eye');
+      feather.replace(icon);
+    };
   });
-  const debounce = (fn,ms)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>fn(...a),ms)}};
 
-  /* ------------------------------------------------------------------
-     FETCH & RENDER
-  ------------------------------------------------------------------ */
-  async function fetchUsersProducts(){
-    const token = localStorage.getItem('authToken');
-    const body  = { limit, offset };
-    if(currentIds) body.user_ids = currentIds;
+  /* ─── GST toggle (no GSTIN) ──────────────────────────────── */
+  const noGstChk = document.getElementById('noGstChk');
+  const gstGrp   = document.getElementById('gstFieldGroup');
+  const extraGrp = document.getElementById('extraGroup');
+  const syncVis  = () =>{
+    const hide = noGstChk.checked;
+    gstGrp.classList.toggle('hidden', hide);
+    extraGrp.classList.toggle('hidden', !hide);
+  };
+  noGstChk.onchange = syncVis; syncVis();
+
+  /* ─── Load states, cities, industries ─────────────────────── */
+  const stateSel=document.getElementById('stateSelect');
+  const citySel =document.getElementById('citySelect');
+  const indSel  =document.getElementById('industrySelect');
+  const subSel  =document.getElementById('subIndustrySelect');
+
+  let states=[],cities=[],industries=[],subsCache=[];
+  const fetchData = path => fetch(`${BASE}${path}`,
+    {headers:{Authorization:`Bearer ${token}`}})
+    .then(r=>r.json()).then(j=>j.data);
+
+  (async()=>{
+    [states,cities,industries] = await Promise.all([
+      fetchData('/states'), fetchData('/cities'), fetchData('/industry')
+    ]);
+    states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
+      `<option value="${s.id}" data-name="${s.name}">${s.name}</option>`));
+    industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
+      `<option value="${i.id}">${i.name}</option>`));
+  })();
+
+  stateSel.onchange = ()=>{
+    const stName = stateSel.selectedOptions[0]?.dataset.name || '';
+    citySel.innerHTML = '<option value="">Select City</option>';
+    if(!stName){citySel.disabled=true;return;}
+    cities.filter(c=>c.state_name===stName)
+          .forEach(c=>citySel.insertAdjacentHTML('beforeend',
+            `<option value="${c.name}">${c.name}</option>`));
+    citySel.disabled=false;
+  };
+
+  indSel.onchange = async()=>{
+    subSel.innerHTML='<option value="">Select Sub-industry</option>';
+    if(!indSel.value){subSel.disabled=true;return;}
+    if(!subsCache.length) subsCache = await fetchData('/sub_industry');
+    subsCache.filter(s=>String(s.industry_id??s.id).startsWith(indSel.value))
+            .forEach(s=>subSel.insertAdjacentHTML('beforeend',
+              `<option value="${s.id}">${s.name}</option>`));
+    subSel.disabled=false;
+  };
+
+  /* ─── GST validation & auto-fill ─────────────────────────── */
+  const gstInput=document.getElementById('gstin');
+  const gstMsg  =document.getElementById('gstMsg');
+  gstInput.addEventListener('blur', async()=>{
+    const v=gstInput.value.trim();
+    gstMsg.textContent=''; gstMsg.className='text-sm mt-1 h-5';
+    if(!v||noGstChk.checked) return;
+
+    gstMsg.textContent='Validating…'; gstMsg.classList.add('text-gray-500');
+    const fd=new FormData(); fd.append('gstin',v);
 
     try{
-      const res  = await fetch(API_URL,{
-        method :'POST',
-        headers:{'Content-Type':'application/json', Authorization:`Bearer ${token}`},
-        body   : JSON.stringify(body)
-      });
-      const json = await res.json();
-      if(!json.success) throw 0;
+      const j=await fetch(`${BASE}/gst_details`,
+              {method:'POST',headers:{Authorization:`Bearer ${token}`},body:fd})
+              .then(r=>r.json());
+      if(j.success){
+        const d=j.data;
+        if(!document.getElementById('companyName').value)
+          document.getElementById('companyName').value=d.company_name||'';
+        if(!document.getElementById('fullName').value)
+          document.getElementById('fullName').value=d.name||'';
+        if(!document.getElementById('address').value)
+          document.getElementById('address').value=d.address||'';
+        if(!document.getElementById('pincode').value)
+          document.getElementById('pincode').value=d.pincode||'';
 
-      total = json.total_count || json.data.length;
-      renderTable(json.data);
-    }catch(e){
-      total = 0;
-      renderTable([]);
+        if(d.state){
+          const st=states.find(s=>s.name.toLowerCase()===d.state.toLowerCase());
+          if(st){stateSel.value=st.id; stateSel.onchange();}
+        }
+        setTimeout(()=>{ if(d.city) citySel.value=d.city; },60);
+
+        gstMsg.textContent='GSTIN verified & auto-filled';
+        gstMsg.className='text-sm mt-1 h-5 text-green-600';
+      }else throw new Error(j.message||'Invalid GSTIN');
+    }catch(err){
+      gstMsg.textContent=err.message;
+      gstMsg.className='text-sm mt-1 h-5 text-red-600';
     }
-    renderPagination();
-    document.getElementById('resultCount').textContent = `${total} result${total!==1?'s':''}`;
-  }
+  });
 
-  /* ---------------- TABLE ---------------- */
-  function renderTable(rows){
-    const tbody=document.getElementById('tableBody');
-    tbody.innerHTML='';
-    const tmpl=document.getElementById('rowTemplate');
+  /* ─── REGISTER API call ──────────────────────────────────── */
+  document.getElementById('registerForm').onsubmit = async e=>{
+    e.preventDefault();
 
-    rows.forEach(u=>{
-      const tr=tmpl.content.cloneNode(true);
-      tr.querySelector('[data-f="name"]').textContent  = u.name ?? '—';
-      tr.querySelector('[data-f="email"]').textContent = u.email ?? '—';
-
-      const cell = tr.querySelector('[data-f="products"]');
-      if(Array.isArray(u.products) && u.products.length){
-        const list = document.createElement('ul');
-        list.className='space-y-1';
-        u.products.forEach(p=>{
-          const li=document.createElement('li');
-          li.innerHTML = `
-            <div class="flex items-start gap-2">
-              <span class="font-medium">${p.name ?? 'Unnamed Product'}</span>
-              <span class="text-gray-500">${rupee.format(p.selling_price)}</span>
-            </div>
-            <div class="text-xs text-gray-500 ml-1">
-              ${p.industry?.name ?? ''} › ${p.sub_industry?.name ?? ''}
-            </div>`;
-          list.appendChild(li);
-        });
-        cell.appendChild(list);
-      }else{
-        cell.innerHTML='<span class="text-gray-400">No products</span>';
-      }
-      tbody.appendChild(tr);
-    });
-  }
-
-  /* ---------------- PAGINATION ---------------- */
-  function renderPagination(){
-    const nav=document.getElementById('pagination');
-    nav.innerHTML='';
-    const page=Math.floor(offset/limit)+1;
-    const pages=Math.max(1,Math.ceil(total/limit));
-
-    const makeBtn=(lab,p,dis=false)=>{
-      const b=document.createElement('button');
-      b.textContent=lab; b.dataset.p=p; b.disabled=dis;
-      b.className=`px-3 py-1.5 rounded-md border transition ${
-        p===page?'bg-red-600 text-white border-red-600':
-                 'bg-white text-gray-700 hover:bg-gray-50 border-gray-300'
-      } ${dis?'opacity-50 cursor-not-allowed':''}`;
-      return b;
+    const payload = {
+      gstin        : gstInput.value.trim(),
+      phone        : document.getElementById('phone').value.trim(),
+      email        : document.getElementById('email').value.trim(),
+      password     : document.getElementById('pass').value,
+      google_id    : "",
+      role         : "user",                       // ← default role
+      industry     : indSel.value,
+      sub_industry : subSel.value
     };
 
-    nav.appendChild(makeBtn('Prev',page-1,page===1));
-    for(let i=1;i<=pages;i++) nav.appendChild(makeBtn(i,i));
-    nav.appendChild(makeBtn('Next',page+1,page===pages));
-  }
-  document.getElementById('pagination')
-          .addEventListener('click',e=>{
-            if(e.target.tagName==='BUTTON'&&!e.target.disabled){
-              offset=(Number(e.target.dataset.p)-1)*limit;
-              fetchUsersProducts();
-            }
-          });
+    /* Optional extras */
+    const extras = {
+      name         : 'fullName',
+      company_name : 'companyName',
+      address      : 'address',
+      pincode      : 'pincode',
+      city         : 'citySelect',
+      state        : 'stateSelect'                 // already numeric id
+    };
+    Object.entries(extras).forEach(([k,id])=>{
+      const val=document.getElementById(id).value;
+      if(val) payload[k]=val;
+    });
 
-  /* ---------------- EVENTS ---------------- */
-  // rows per page
-  document.getElementById('rowsPerPage')
-          .addEventListener('change',()=>{
-            limit = Number(rowsPerPage.value);
-            offset=0;
-            fetchUsersProducts();
-          });
+    try{
+      const res = await fetch(`${BASE}/register`,{
+        method :'POST',
+        headers:{'Content-Type':'application/json'},
+        body   : JSON.stringify(payload)
+      });
+      const json = await res.json();
 
-  // user‑ids input
-  document.getElementById('userIds')
-          .addEventListener('input',debounce(e=>{
-            currentIds = e.target.value.replace(/\s+/g,''); // strip spaces
-            offset=0;
-            fetchUsersProducts();
-          },300));
-
-  /* ------------------------------------------------------------------
-     FIRST LOAD
-  ------------------------------------------------------------------ */
-  fetchUsersProducts();
+      if(json.success){
+        alert('Registration successful! Redirecting to login…');
+        location.href = 'login.php';               // ← redirect
+      }else{
+        throw new Error(json.message||'Registration failed');
+      }
+    }catch(err){
+      alert(`❌ ${err.message}`);
+    }
+  };
 </script>
 </body>
 </html>

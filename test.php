@@ -93,17 +93,19 @@
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
 
             <!-- pwd + eye -->
-            <div class="relative">
-              <input id="pass" type="password" placeholder="Password"
-                     class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                 data-feather="eye"></i>
-            </div>
-            <div class="relative">
-              <input id="cpass" type="password" placeholder="Confirm Password"
-                     class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                 data-feather="eye"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
+              <div class="relative">
+                <input id="pass" type="password" placeholder="Password"
+                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+                <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                  data-feather="eye"></i>
+              </div>
+              <div class="relative">
+                <input id="cpass" type="password" placeholder="Confirm Password"
+                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+                <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                  data-feather="eye"></i>
+              </div>
             </div>
           </div>
 
@@ -327,27 +329,33 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  // Store the idToken after Google Login
   let googleIdToken = '';
 
-  // ─── Google Sign In First ───
+  // ─── Google Sign In ───
   document.getElementById('googleSignUpBtn').onclick = async () => {
     try {
       const provider = new firebase.auth.GoogleAuthProvider();
       const result = await auth.signInWithPopup(provider);
       const user = result.user;
-      googleIdToken = await user.getIdToken(); // Save idToken
+      googleIdToken = await user.getIdToken();
 
-      // Auto check "I don't have GSTIN"
+      // Auto-fill email
+      const emailField = document.getElementById('email');
+      emailField.value = user.email || '';
+      emailField.disabled = true; // lock email
+
+      // Hide Google button
+      document.getElementById('googleSignUpBtn').classList.add('hidden');
+
+      // Auto check "No GSTIN"
       document.getElementById('noGstChk').checked = true;
       document.getElementById('gstFieldGroup').classList.add('hidden');
       document.getElementById('extraGroup').classList.remove('hidden');
 
-      // Auto fill email and name from Google
-      if (user.email) document.getElementById('email').value = user.email;
-      if (user.displayName) document.getElementById('fullName').value = user.displayName;
+      // Hide password fields
+      document.getElementById('passwordGroup').classList.add('hidden');
 
-      alert('Google authentication successful! Please complete the form and click Register.');
+      alert('Google authenticated! Fill the remaining details to complete registration.');
 
     } catch (error) {
       console.error(error);
@@ -355,20 +363,27 @@
     }
   };
 
-  // ─── Normal Register Form Submit ───
+  // ─── Normal or Google Register ───
   document.getElementById('registerForm').onsubmit = async (e) => {
     e.preventDefault();
 
-    if (!googleIdToken) {
-      alert('⚡ Please sign up with Google first.');
+    const noGst = document.getElementById('noGstChk').checked;
+    const isGoogleSignup = googleIdToken !== '';
+
+    // Validate basic fields
+    if (!document.getElementById('phone').value.trim()) {
+      alert('Phone number is required!');
       return;
     }
 
-    // Prepare full body
+    if (!isGoogleSignup && (!document.getElementById('pass').value || !document.getElementById('cpass').value)) {
+      alert('Password and Confirm Password required!');
+      return;
+    }
+
+    // Build Payload
     const payload = {
-      idToken      : googleIdToken,
       role         : "user",
-      gstin        : null,
       phone        : document.getElementById('phone').value.trim(),
       name         : document.getElementById('fullName').value.trim(),
       company_name : document.getElementById('companyName').value.trim(),
@@ -376,9 +391,18 @@
       pincode      : document.getElementById('pincode').value.trim(),
       city         : document.getElementById('citySelect').value,
       state        : parseInt(document.getElementById('stateSelect').value) || null,
+      gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
       industry     : parseInt(document.getElementById('industrySelect').value) || null,
       sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null
     };
+
+    if (isGoogleSignup) {
+      payload.idToken = googleIdToken;
+    } else {
+      payload.password = document.getElementById('pass').value;
+      payload.email    = document.getElementById('email').value.trim();
+      payload.google_id = ""; // normal signup
+    }
 
     try {
       const res = await fetch(`${BASE}/register`, {
@@ -389,17 +413,19 @@
       const json = await res.json();
 
       if (json.success) {
-        alert('✅ Registration successful via Google! Redirecting to login...');
+        alert('✅ Registration Successful! Redirecting...');
         location.href = 'login.php';
       } else {
         throw new Error(json.message || 'Registration failed');
       }
 
     } catch (err) {
+      console.error(err);
       alert(`❌ ${err.message}`);
     }
   };
 </script>
+
 
 
 </body>

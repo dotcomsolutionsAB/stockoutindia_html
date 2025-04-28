@@ -93,17 +93,19 @@
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
 
             <!-- pwd + eye -->
-            <div class="relative">
-              <input id="pass" type="password" placeholder="Password"
-                     class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                 data-feather="eye"></i>
-            </div>
-            <div class="relative">
-              <input id="cpass" type="password" placeholder="Confirm Password"
-                     class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                 data-feather="eye"></i>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
+              <div class="relative">
+                <input id="pass" type="password" placeholder="Password"
+                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+                <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                  data-feather="eye"></i>
+              </div>
+              <div class="relative">
+                <input id="cpass" type="password" placeholder="Confirm Password"
+                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+                <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                  data-feather="eye"></i>
+              </div>
             </div>
           </div>
 
@@ -136,10 +138,10 @@
         <!-- ╰────────────────────────────────────────────────────────╯ -->
 
         <!-- Google sign-up -->
-        <button class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mt-6 hover:shadow-md">
+        <button id="googleSignUpBtn" class="w-full border border-gray-300 flex items-center justify-center py-2 rounded-full mt-6 hover:shadow-md">
           <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
                class="w-5 h-5 mr-2" alt="Google">
-          <span class="text-sm font-medium">Sign in with Google</span>
+          <span class="text-sm font-medium">Sign up with Google</span>
         </button>
 
         <p class="text-sm text-gray-600 mt-4">
@@ -308,5 +310,123 @@
     }
   };
 </script>
+<!-- Firebase App (Core) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
+<!-- Firebase Auth -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+<script>
+  // ─── Firebase Config ───
+  const firebaseConfig = {
+        apiKey: "AIzaSyCE5BPXYqHLQ0tgxYUoSHBHCDtBkr2547s",
+        authDomain: "stockout-india.firebaseapp.com",
+        projectId: "stockout-india",
+        storageBucket: "stockout-india.firebasestorage.app",
+        messagingSenderId: "391240277268",
+        appId: "1:391240277268:web:9a11f9b8620cbc8a76b601"
+    };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  let googleIdToken = '';
+
+  // ─── Google Sign In ───
+  document.getElementById('googleSignUpBtn').onclick = async () => {
+    try {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const result = await auth.signInWithPopup(provider);
+      const user = result.user;
+      googleIdToken = await user.getIdToken();
+
+      // Auto-fill email
+      const emailField = document.getElementById('email');
+      emailField.value = user.email || '';
+      emailField.disabled = true; // lock email
+
+      // Hide Google button
+      document.getElementById('googleSignUpBtn').classList.add('hidden');
+
+      // Auto check "No GSTIN"
+      document.getElementById('noGstChk').checked = true;
+      document.getElementById('gstFieldGroup').classList.add('hidden');
+      document.getElementById('extraGroup').classList.remove('hidden');
+
+      // Hide password fields
+      document.getElementById('passwordGroup').classList.add('hidden');
+
+      alert('Google authenticated! Fill the remaining details to complete registration.');
+
+    } catch (error) {
+      console.error(error);
+      alert(`❌ Google Sign-in Failed: ${error.message}`);
+    }
+  };
+
+  // ─── Normal or Google Register ───
+  document.getElementById('registerForm').onsubmit = async (e) => {
+    e.preventDefault();
+
+    const noGst = document.getElementById('noGstChk').checked;
+    const isGoogleSignup = googleIdToken !== '';
+
+    // Validate basic fields
+    if (!document.getElementById('phone').value.trim()) {
+      alert('Phone number is required!');
+      return;
+    }
+
+    if (!isGoogleSignup && (!document.getElementById('pass').value || !document.getElementById('cpass').value)) {
+      alert('Password and Confirm Password required!');
+      return;
+    }
+
+    // Build Payload
+    const payload = {
+      role         : "user",
+      phone        : document.getElementById('phone').value.trim(),
+      name         : document.getElementById('fullName').value.trim(),
+      company_name : document.getElementById('companyName').value.trim(),
+      address      : document.getElementById('address').value.trim(),
+      pincode      : document.getElementById('pincode').value.trim(),
+      city         : document.getElementById('citySelect').value,
+      state        : parseInt(document.getElementById('stateSelect').value) || null,
+      gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
+      industry     : parseInt(document.getElementById('industrySelect').value) || null,
+      sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null
+    };
+
+    if (isGoogleSignup) {
+      payload.idToken = googleIdToken;
+    } else {
+      payload.password = document.getElementById('pass').value;
+      payload.email    = document.getElementById('email').value.trim();
+      payload.google_id = ""; // normal signup
+    }
+
+    try {
+      const res = await fetch(`${BASE}/register`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        alert('✅ Registration Successful! Redirecting...');
+        location.href = 'login.php';
+      } else {
+        throw new Error(json.message || 'Registration failed');
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert(`❌ ${err.message}`);
+    }
+  };
+</script>
+
+
+
 </body>
 </html>

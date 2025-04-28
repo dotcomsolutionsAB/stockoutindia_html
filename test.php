@@ -327,32 +327,60 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  // ─── Google Sign In Handler ───
+  // Store the idToken after Google Login
+  let googleIdToken = '';
+
+  // ─── Google Sign In First ───
   document.getElementById('googleSignUpBtn').onclick = async () => {
     try {
       const provider = new firebase.auth.GoogleAuthProvider();
       const result = await auth.signInWithPopup(provider);
       const user = result.user;
-      const idToken = await user.getIdToken();
+      googleIdToken = await user.getIdToken(); // Save idToken
 
-      // Now prepare the full payload
-      const payload = {
-        idToken: idToken,
-        role: "user",
-        gstin: document.getElementById('gstin')?.value.trim() || null,
-        phone: document.getElementById('phone').value.trim(),
-        email: user.email || document.getElementById('email').value.trim(),
-        name: document.getElementById('fullName')?.value.trim() || user.displayName || "",
-        company_name: document.getElementById('companyName')?.value.trim() || "",
-        address: document.getElementById('address')?.value.trim() || "",
-        pincode: document.getElementById('pincode')?.value.trim() || "",
-        city: document.getElementById('citySelect')?.value.trim() || "",
-        state: document.getElementById('stateSelect')?.value || "",
-        industry: document.getElementById('industrySelect')?.value || "",
-        sub_industry: document.getElementById('subIndustrySelect')?.value || ""
-      };
+      // Auto check "I don't have GSTIN"
+      document.getElementById('noGstChk').checked = true;
+      document.getElementById('gstFieldGroup').classList.add('hidden');
+      document.getElementById('extraGroup').classList.remove('hidden');
 
-      // POST to register API
+      // Auto fill email and name from Google
+      if (user.email) document.getElementById('email').value = user.email;
+      if (user.displayName) document.getElementById('fullName').value = user.displayName;
+
+      alert('Google authentication successful! Please complete the form and click Register.');
+
+    } catch (error) {
+      console.error(error);
+      alert(`❌ Google Sign-in Failed: ${error.message}`);
+    }
+  };
+
+  // ─── Normal Register Form Submit ───
+  document.getElementById('registerForm').onsubmit = async (e) => {
+    e.preventDefault();
+
+    if (!googleIdToken) {
+      alert('⚡ Please sign up with Google first.');
+      return;
+    }
+
+    // Prepare full body
+    const payload = {
+      idToken      : googleIdToken,
+      role         : "user",
+      gstin        : null,
+      phone        : document.getElementById('phone').value.trim(),
+      name         : document.getElementById('fullName').value.trim(),
+      company_name : document.getElementById('companyName').value.trim(),
+      address      : document.getElementById('address').value.trim(),
+      pincode      : document.getElementById('pincode').value.trim(),
+      city         : document.getElementById('citySelect').value,
+      state        : parseInt(document.getElementById('stateSelect').value) || null,
+      industry     : parseInt(document.getElementById('industrySelect').value) || null,
+      sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null
+    };
+
+    try {
       const res = await fetch(`${BASE}/register`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -361,18 +389,18 @@
       const json = await res.json();
 
       if (json.success) {
-        alert('Registration successful via Google! Redirecting to login...');
+        alert('✅ Registration successful via Google! Redirecting to login...');
         location.href = 'login.php';
       } else {
         throw new Error(json.message || 'Registration failed');
       }
 
-    } catch (error) {
-      console.error(error);
-      alert(`❌ ${error.message}`);
+    } catch (err) {
+      alert(`❌ ${err.message}`);
     }
   };
 </script>
+
 
 </body>
 </html>

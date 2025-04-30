@@ -173,7 +173,8 @@
         }
 
         const options = {
-        key: "rzp_test_EVVF2DggZF1FTZ",
+        // key: "rzp_test_EVVF2DggZF1FTZ",
+        key:"rzp_live_CC07wxD9OEBErz",
         amount: finalAmount * 100,
         currency: "INR",
         name: "Stockout India",

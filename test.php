@@ -91,24 +91,22 @@
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
             <input id="email" type="email" placeholder="Email"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
-
-            <!-- pwd + eye -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
-              <div class="relative">
-                <input id="pass" type="password" placeholder="Password"
-                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-                <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                  data-feather="eye"></i>
-              </div>
-              <div class="relative">
-                <input id="cpass" type="password" placeholder="Confirm Password"
-                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-                <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                  data-feather="eye"></i>
-              </div>
+          </div>
+          <!-- pwd + eye -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
+            <div class="relative">
+              <input id="pass" type="password" placeholder="Password"
+                    class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                data-feather="eye"></i>
+            </div>
+            <div class="relative">
+              <input id="cpass" type="password" placeholder="Confirm Password"
+                    class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                data-feather="eye"></i>
             </div>
           </div>
-
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <select id="industrySelect"
                     class="w-full border border-gray-400 px-3 py-2 rounded-md">
@@ -413,7 +411,9 @@
       const json = await res.json();
 
       if (json.success) {
-        alert('✅ Registration Successful! Redirecting...');
+        // alert('✅ Registration Successful! Redirecting...');
+        // ✅ Success – log the whole response (or only what you need)
+      console.log('Registration successful:', json);
         location.href = 'login.php';
       } else {
         throw new Error(json.message || 'Registration failed');
@@ -425,8 +425,6 @@
     }
   };
 </script>
-
-
 
 </body>
 </html>

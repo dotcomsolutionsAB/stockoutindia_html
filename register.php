@@ -91,21 +91,21 @@
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
             <input id="email" type="email" placeholder="Email"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
+          </div>
 
-            <!-- pwd + eye -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
-              <div class="relative">
-                <input id="pass" type="password" placeholder="Password"
-                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-                <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                  data-feather="eye"></i>
-              </div>
-              <div class="relative">
-                <input id="cpass" type="password" placeholder="Confirm Password"
-                      class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-                <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
-                  data-feather="eye"></i>
-              </div>
+          <!-- pwd + eye -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
+            <div class="relative">
+              <input id="pass" type="password" placeholder="Password"
+                    class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                data-feather="eye"></i>
+            </div>
+            <div class="relative">
+              <input id="cpass" type="password" placeholder="Confirm Password"
+                    class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                data-feather="eye"></i>
             </div>
           </div>
 
@@ -152,281 +152,279 @@
     </div>
   </div>
 
-<script>
-  /* ─── Constants ───────────────────────────────────────────── */
-  const BASE  = `<?php echo BASE_URL; ?>`;
-  const token = localStorage.getItem('authToken') ?? '';
+  <script>
+    /* ─── Constants ───────────────────────────────────────────── */
+    const BASE  = `<?php echo BASE_URL; ?>`;
+    const token = localStorage.getItem('authToken') ?? '';
 
-  /* ─── Feather / eye toggles ───────────────────────────────── */
-  feather.replace();
-  document.querySelectorAll('.eye').forEach(icon=>{
-    icon.onclick = ()=>{
-      const inp = icon.previousElementSibling;
-      const open = inp.type === 'password';
-      inp.type = open ? 'text' : 'password';
-      icon.setAttribute('data-feather', open ? 'eye-off' : 'eye');
-      feather.replace(icon);
-    };
-  });
-
-  /* ─── GST toggle (no GSTIN) ──────────────────────────────── */
-  const noGstChk = document.getElementById('noGstChk');
-  const gstGrp   = document.getElementById('gstFieldGroup');
-  const extraGrp = document.getElementById('extraGroup');
-  const syncVis  = () =>{
-    const hide = noGstChk.checked;
-    gstGrp.classList.toggle('hidden', hide);
-    extraGrp.classList.toggle('hidden', !hide);
-  };
-  noGstChk.onchange = syncVis; syncVis();
-
-  /* ─── Load states, cities, industries ─────────────────────── */
-  const stateSel=document.getElementById('stateSelect');
-  const citySel =document.getElementById('citySelect');
-  const indSel  =document.getElementById('industrySelect');
-  const subSel  =document.getElementById('subIndustrySelect');
-
-  let states=[],cities=[],industries=[],subsCache=[];
-  const fetchData = path => fetch(`${BASE}${path}`,
-    {headers:{Authorization:`Bearer ${token}`}})
-    .then(r=>r.json()).then(j=>j.data);
-
-  (async()=>{
-    [states,cities,industries] = await Promise.all([
-      fetchData('/states'), fetchData('/cities'), fetchData('/industry')
-    ]);
-    states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
-      `<option value="${s.id}" data-name="${s.name}">${s.name}</option>`));
-    industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
-      `<option value="${i.id}">${i.name}</option>`));
-  })();
-
-  stateSel.onchange = ()=>{
-    const stName = stateSel.selectedOptions[0]?.dataset.name || '';
-    citySel.innerHTML = '<option value="">Select City</option>';
-    if(!stName){citySel.disabled=true;return;}
-    cities.filter(c=>c.state_name===stName)
-          .forEach(c=>citySel.insertAdjacentHTML('beforeend',
-            `<option value="${c.name}">${c.name}</option>`));
-    citySel.disabled=false;
-  };
-
-  indSel.onchange = async()=>{
-    subSel.innerHTML='<option value="">Select Sub-industry</option>';
-    if(!indSel.value){subSel.disabled=true;return;}
-    if(!subsCache.length) subsCache = await fetchData('/sub_industry');
-    subsCache.filter(s=>String(s.industry_id??s.id).startsWith(indSel.value))
-            .forEach(s=>subSel.insertAdjacentHTML('beforeend',
-              `<option value="${s.id}">${s.name}</option>`));
-    subSel.disabled=false;
-  };
-
-  /* ─── GST validation & auto-fill ─────────────────────────── */
-  const gstInput=document.getElementById('gstin');
-  const gstMsg  =document.getElementById('gstMsg');
-  gstInput.addEventListener('blur', async()=>{
-    const v=gstInput.value.trim();
-    gstMsg.textContent=''; gstMsg.className='text-sm mt-1 h-5';
-    if(!v||noGstChk.checked) return;
-
-    gstMsg.textContent='Validating…'; gstMsg.classList.add('text-gray-500');
-    const fd=new FormData(); fd.append('gstin',v);
-
-    try{
-      const j=await fetch(`${BASE}/gst_details`,
-              {method:'POST',headers:{Authorization:`Bearer ${token}`},body:fd})
-              .then(r=>r.json());
-      if(j.success){
-        const d=j.data;
-        if(!document.getElementById('companyName').value)
-          document.getElementById('companyName').value=d.company_name||'';
-        if(!document.getElementById('fullName').value)
-          document.getElementById('fullName').value=d.name||'';
-        if(!document.getElementById('address').value)
-          document.getElementById('address').value=d.address||'';
-        if(!document.getElementById('pincode').value)
-          document.getElementById('pincode').value=d.pincode||'';
-
-        if(d.state){
-          const st=states.find(s=>s.name.toLowerCase()===d.state.toLowerCase());
-          if(st){stateSel.value=st.id; stateSel.onchange();}
-        }
-        setTimeout(()=>{ if(d.city) citySel.value=d.city; },60);
-
-        gstMsg.textContent='GSTIN verified & auto-filled';
-        gstMsg.className='text-sm mt-1 h-5 text-green-600';
-      }else throw new Error(j.message||'Invalid GSTIN');
-    }catch(err){
-      gstMsg.textContent=err.message;
-      gstMsg.className='text-sm mt-1 h-5 text-red-600';
-    }
-  });
-
-  /* ─── REGISTER API call ──────────────────────────────────── */
-  document.getElementById('registerForm').onsubmit = async e=>{
-    e.preventDefault();
-
-    const payload = {
-      gstin        : gstInput.value.trim(),
-      phone        : document.getElementById('phone').value.trim(),
-      email        : document.getElementById('email').value.trim(),
-      password     : document.getElementById('pass').value,
-      google_id    : "",
-      role         : "user",                       // ← default role
-      industry     : indSel.value,
-      sub_industry : subSel.value
-    };
-
-    /* Optional extras */
-    const extras = {
-      name         : 'fullName',
-      company_name : 'companyName',
-      address      : 'address',
-      pincode      : 'pincode',
-      city         : 'citySelect',
-      state        : 'stateSelect'                 // already numeric id
-    };
-    Object.entries(extras).forEach(([k,id])=>{
-      const val=document.getElementById(id).value;
-      if(val) payload[k]=val;
+    /* ─── Feather / eye toggles ───────────────────────────────── */
+    feather.replace();
+    document.querySelectorAll('.eye').forEach(icon=>{
+      icon.onclick = ()=>{
+        const inp = icon.previousElementSibling;
+        const open = inp.type === 'password';
+        inp.type = open ? 'text' : 'password';
+        icon.setAttribute('data-feather', open ? 'eye-off' : 'eye');
+        feather.replace(icon);
+      };
     });
 
-    try{
-      const res = await fetch(`${BASE}/register`,{
-        method :'POST',
-        headers:{'Content-Type':'application/json'},
-        body   : JSON.stringify(payload)
-      });
-      const json = await res.json();
+    /* ─── GST toggle (no GSTIN) ──────────────────────────────── */
+    const noGstChk = document.getElementById('noGstChk');
+    const gstGrp   = document.getElementById('gstFieldGroup');
+    const extraGrp = document.getElementById('extraGroup');
+    const syncVis  = () =>{
+      const hide = noGstChk.checked;
+      gstGrp.classList.toggle('hidden', hide);
+      extraGrp.classList.toggle('hidden', !hide);
+    };
+    noGstChk.onchange = syncVis; syncVis();
 
-      if(json.success){
-        alert('Registration successful! Redirecting to login…');
-        location.href = 'login.php';               // ← redirect
-      }else{
-        throw new Error(json.message||'Registration failed');
+    /* ─── Load states, cities, industries ─────────────────────── */
+    const stateSel=document.getElementById('stateSelect');
+    const citySel =document.getElementById('citySelect');
+    const indSel  =document.getElementById('industrySelect');
+    const subSel  =document.getElementById('subIndustrySelect');
+
+    let states=[],cities=[],industries=[],subsCache=[];
+    const fetchData = path => fetch(`${BASE}${path}`,
+      {headers:{Authorization:`Bearer ${token}`}})
+      .then(r=>r.json()).then(j=>j.data);
+
+    (async()=>{
+      [states,cities,industries] = await Promise.all([
+        fetchData('/states'), fetchData('/cities'), fetchData('/industry')
+      ]);
+      states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
+        `<option value="${s.id}" data-name="${s.name}">${s.name}</option>`));
+      industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
+        `<option value="${i.id}">${i.name}</option>`));
+    })();
+
+    stateSel.onchange = ()=>{
+      const stName = stateSel.selectedOptions[0]?.dataset.name || '';
+      citySel.innerHTML = '<option value="">Select City</option>';
+      if(!stName){citySel.disabled=true;return;}
+      cities.filter(c=>c.state_name===stName)
+            .forEach(c=>citySel.insertAdjacentHTML('beforeend',
+              `<option value="${c.name}">${c.name}</option>`));
+      citySel.disabled=false;
+    };
+
+    indSel.onchange = async()=>{
+      subSel.innerHTML='<option value="">Select Sub-industry</option>';
+      if(!indSel.value){subSel.disabled=true;return;}
+      if(!subsCache.length) subsCache = await fetchData('/sub_industry');
+      subsCache.filter(s=>String(s.industry_id??s.id).startsWith(indSel.value))
+              .forEach(s=>subSel.insertAdjacentHTML('beforeend',
+                `<option value="${s.id}">${s.name}</option>`));
+      subSel.disabled=false;
+    };
+
+    /* ─── GST validation & auto-fill ─────────────────────────── */
+    const gstInput=document.getElementById('gstin');
+    const gstMsg  =document.getElementById('gstMsg');
+    gstInput.addEventListener('blur', async()=>{
+      const v=gstInput.value.trim();
+      gstMsg.textContent=''; gstMsg.className='text-sm mt-1 h-5';
+      if(!v||noGstChk.checked) return;
+
+      gstMsg.textContent='Validating…'; gstMsg.classList.add('text-gray-500');
+      const fd=new FormData(); fd.append('gstin',v);
+
+      try{
+        const j=await fetch(`${BASE}/gst_details`,
+                {method:'POST',headers:{Authorization:`Bearer ${token}`},body:fd})
+                .then(r=>r.json());
+        if(j.success){
+          const d=j.data;
+          if(!document.getElementById('companyName').value)
+            document.getElementById('companyName').value=d.company_name||'';
+          if(!document.getElementById('fullName').value)
+            document.getElementById('fullName').value=d.name||'';
+          if(!document.getElementById('address').value)
+            document.getElementById('address').value=d.address||'';
+          if(!document.getElementById('pincode').value)
+            document.getElementById('pincode').value=d.pincode||'';
+
+          if(d.state){
+            const st=states.find(s=>s.name.toLowerCase()===d.state.toLowerCase());
+            if(st){stateSel.value=st.id; stateSel.onchange();}
+          }
+          setTimeout(()=>{ if(d.city) citySel.value=d.city; },60);
+
+          gstMsg.textContent='GSTIN verified & auto-filled';
+          gstMsg.className='text-sm mt-1 h-5 text-green-600';
+        }else throw new Error(j.message||'Invalid GSTIN');
+      }catch(err){
+        gstMsg.textContent=err.message;
+        gstMsg.className='text-sm mt-1 h-5 text-red-600';
       }
-    }catch(err){
-      alert(`❌ ${err.message}`);
-    }
-  };
-</script>
-<!-- Firebase App (Core) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    });
 
-<!-- Firebase Auth -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    /* ─── REGISTER API call ──────────────────────────────────── */
+    document.getElementById('registerForm').onsubmit = async e=>{
+      e.preventDefault();
 
-<script>
-  // ─── Firebase Config ───
-  const firebaseConfig = {
-        apiKey: "AIzaSyCE5BPXYqHLQ0tgxYUoSHBHCDtBkr2547s",
-        authDomain: "stockout-india.firebaseapp.com",
-        projectId: "stockout-india",
-        storageBucket: "stockout-india.firebasestorage.app",
-        messagingSenderId: "391240277268",
-        appId: "1:391240277268:web:9a11f9b8620cbc8a76b601"
-    };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
+      const payload = {
+        gstin        : gstInput.value.trim(),
+        phone        : document.getElementById('phone').value.trim(),
+        email        : document.getElementById('email').value.trim(),
+        password     : document.getElementById('pass').value,
+        google_id    : "",
+        role         : "user",                       // ← default role
+        industry     : indSel.value,
+        sub_industry : subSel.value
+      };
 
-  let googleIdToken = '';
-
-  // ─── Google Sign In ───
-  document.getElementById('googleSignUpBtn').onclick = async () => {
-    try {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      const result = await auth.signInWithPopup(provider);
-      const user = result.user;
-      googleIdToken = await user.getIdToken();
-
-      // Auto-fill email
-      const emailField = document.getElementById('email');
-      emailField.value = user.email || '';
-      emailField.disabled = true; // lock email
-
-      // Hide Google button
-      document.getElementById('googleSignUpBtn').classList.add('hidden');
-
-      // Auto check "No GSTIN"
-      document.getElementById('noGstChk').checked = true;
-      document.getElementById('gstFieldGroup').classList.add('hidden');
-      document.getElementById('extraGroup').classList.remove('hidden');
-
-      // Hide password fields
-      document.getElementById('passwordGroup').classList.add('hidden');
-
-      alert('Google authenticated! Fill the remaining details to complete registration.');
-
-    } catch (error) {
-      console.error(error);
-      alert(`❌ Google Sign-in Failed: ${error.message}`);
-    }
-  };
-
-  // ─── Normal or Google Register ───
-  document.getElementById('registerForm').onsubmit = async (e) => {
-    e.preventDefault();
-
-    const noGst = document.getElementById('noGstChk').checked;
-    const isGoogleSignup = googleIdToken !== '';
-
-    // Validate basic fields
-    if (!document.getElementById('phone').value.trim()) {
-      alert('Phone number is required!');
-      return;
-    }
-
-    if (!isGoogleSignup && (!document.getElementById('pass').value || !document.getElementById('cpass').value)) {
-      alert('Password and Confirm Password required!');
-      return;
-    }
-
-    // Build Payload
-    const payload = {
-      role         : "user",
-      phone        : document.getElementById('phone').value.trim(),
-      name         : document.getElementById('fullName').value.trim(),
-      company_name : document.getElementById('companyName').value.trim(),
-      address      : document.getElementById('address').value.trim(),
-      pincode      : document.getElementById('pincode').value.trim(),
-      city         : document.getElementById('citySelect').value,
-      state        : parseInt(document.getElementById('stateSelect').value) || null,
-      gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
-      industry     : parseInt(document.getElementById('industrySelect').value) || null,
-      sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null
-    };
-
-    if (isGoogleSignup) {
-      payload.idToken = googleIdToken;
-    } else {
-      payload.password = document.getElementById('pass').value;
-      payload.email    = document.getElementById('email').value.trim();
-      payload.google_id = ""; // normal signup
-    }
-
-    try {
-      const res = await fetch(`${BASE}/register`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
+      /* Optional extras */
+      const extras = {
+        name         : 'fullName',
+        company_name : 'companyName',
+        address      : 'address',
+        pincode      : 'pincode',
+        city         : 'citySelect',
+        state        : 'stateSelect'                 // already numeric id
+      };
+      Object.entries(extras).forEach(([k,id])=>{
+        const val=document.getElementById(id).value;
+        if(val) payload[k]=val;
       });
-      const json = await res.json();
 
-      if (json.success) {
-        alert('✅ Registration Successful! Redirecting...');
-        location.href = 'login.php';
+      try{
+        const res = await fetch(`${BASE}/register`,{
+          method :'POST',
+          headers:{'Content-Type':'application/json'},
+          body   : JSON.stringify(payload)
+        });
+        const json = await res.json();
+
+        if(json.success){
+          alert('Registration successful! Redirecting to login…');
+          location.href = 'login.php';               // ← redirect
+        }else{
+          throw new Error(json.message||'Registration failed');
+        }
+      }catch(err){
+        alert(`❌ ${err.message}`);
+      }
+    };
+  </script>
+  <!-- Firebase App (Core) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+
+  <!-- Firebase Auth -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <script>
+    // ─── Firebase Config ───
+    const firebaseConfig = {
+          apiKey: "AIzaSyCE5BPXYqHLQ0tgxYUoSHBHCDtBkr2547s",
+          authDomain: "stockout-india.firebaseapp.com",
+          projectId: "stockout-india",
+          storageBucket: "stockout-india.firebasestorage.app",
+          messagingSenderId: "391240277268",
+          appId: "1:391240277268:web:9a11f9b8620cbc8a76b601"
+      };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    let googleIdToken = '';
+
+    // ─── Google Sign In ───
+    document.getElementById('googleSignUpBtn').onclick = async () => {
+      try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const result = await auth.signInWithPopup(provider);
+        const user = result.user;
+        googleIdToken = await user.getIdToken();
+
+        // Auto-fill email
+        const emailField = document.getElementById('email');
+        emailField.value = user.email || '';
+        emailField.disabled = true; // lock email
+
+        // Hide Google button
+        document.getElementById('googleSignUpBtn').classList.add('hidden');
+
+        // Auto check "No GSTIN"
+        document.getElementById('noGstChk').checked = true;
+        document.getElementById('gstFieldGroup').classList.add('hidden');
+        document.getElementById('extraGroup').classList.remove('hidden');
+
+        // Hide password fields
+        document.getElementById('passwordGroup').classList.add('hidden');
+
+        alert('Google authenticated! Fill the remaining details to complete registration.');
+
+      } catch (error) {
+        console.error(error);
+        alert(`❌ Google Sign-in Failed: ${error.message}`);
+      }
+    };
+
+    // ─── Normal or Google Register ───
+    document.getElementById('registerForm').onsubmit = async (e) => {
+      e.preventDefault();
+
+      const noGst = document.getElementById('noGstChk').checked;
+      const isGoogleSignup = googleIdToken !== '';
+
+      // Validate basic fields
+      if (!document.getElementById('phone').value.trim()) {
+        alert('Phone number is required!');
+        return;
+      }
+
+      if (!isGoogleSignup && (!document.getElementById('pass').value || !document.getElementById('cpass').value)) {
+        alert('Password and Confirm Password required!');
+        return;
+      }
+
+      // Build Payload
+      const payload = {
+        role         : "user",
+        phone        : document.getElementById('phone').value.trim(),
+        name         : document.getElementById('fullName').value.trim(),
+        company_name : document.getElementById('companyName').value.trim(),
+        address      : document.getElementById('address').value.trim(),
+        pincode      : document.getElementById('pincode').value.trim(),
+        city         : document.getElementById('citySelect').value,
+        state        : parseInt(document.getElementById('stateSelect').value) || null,
+        gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
+        industry     : parseInt(document.getElementById('industrySelect').value) || null,
+        sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null
+      };
+
+      if (isGoogleSignup) {
+        payload.idToken = googleIdToken;
       } else {
-        throw new Error(json.message || 'Registration failed');
+        payload.password = document.getElementById('pass').value;
+        payload.email    = document.getElementById('email').value.trim();
+        payload.google_id = ""; // normal signup
       }
 
-    } catch (err) {
-      console.error(err);
-      alert(`❌ ${err.message}`);
-    }
-  };
-</script>
+      try {
+        const res = await fetch(`${BASE}/register`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
 
+        if (json.success) {
+          alert('✅ Registration Successful! Redirecting...');
+          location.href = 'login.php';
+        } else {
+          throw new Error(json.message || 'Registration failed');
+        }
 
+      } catch (err) {
+        console.error(err);
+        alert(`❌ ${err.message}`);
+      }
+    };
+  </script>
 
 </body>
 </html>

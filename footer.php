@@ -181,10 +181,10 @@
                 <ul class="mobile-menu">
                     <li><a href="index.php">Home</a></li>
                     <li>
-                        <a href="all-industries.php">Industries</a>
+                        <a href="pages/all-industries.php">Industries</a>
                     </li>
                     <li>
-                        <a href="all-products">Products</a>
+                        <a href="pages/all-products">Products</a>
                     </li>
                 </ul>
             </nav><!-- End .mobile-nav -->

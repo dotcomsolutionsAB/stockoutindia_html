@@ -124,7 +124,7 @@
 
 <?php include("../footer.php") ?>
 
-<style>
+<!-- <style>
     /* ─── 1.  Desktop (unchanged) ─────────────────────────────────── */
   @media (min-width: 768px) {
     .account_page {
@@ -148,6 +148,7 @@
     /* Turn the sidebar into a sticky horizontal bar */
     .acc-sidebar {
       position: sticky;
+      width: 100%;
       top: 0;
       z-index: 20;
       display: flex;
@@ -158,6 +159,7 @@
       border-bottom: 1px solid #ececec;
       overflow-x: auto;                /* scroll if icons overflow */
       scrollbar-width: none;           /* hide scrollbar in Firefox */
+      gap: 7px;
     }
     .acc-sidebar::-webkit-scrollbar { display: none; } /* hide in Chrome */
 
@@ -170,6 +172,10 @@
       border: none;
       background: transparent;
       transition: background 0.2s;
+      background: antiquewhite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .acc-btn i {
       font-size: 22px;                 /* icon size */
@@ -178,7 +184,7 @@
     /* Active tab highlight */
     .acc-tab-active,
     .acc-btn:focus-visible {
-      background: #f6f6f6;
+      background: #be1312;
       border-radius: 6px;
     }
 
@@ -193,4 +199,4 @@
   /* ─── 3.  General tweaks ──────────────────────────────────────── */
   .acc-btn { cursor: pointer; }
 
-</style>
+</style> -->

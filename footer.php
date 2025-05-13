@@ -7,7 +7,7 @@
             <style>
                 .whatsapp-sticky {
                     position: fixed;
-                    bottom: 20px;
+                    bottom: 75px;
                     right: 20px;
                     background-color: #25D366;
                     color: white;
@@ -204,50 +204,32 @@
             </div> -->
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
-
-    <!-- <div class="sticky-navbar">
+    <div class="sticky-navbar">
         <div class="sticky-info">
             <a href="index.php">
                 <i class="icon-home"></i>Home
             </a>
         </div>
+
         <div class="sticky-info">
-            <a href="pages/all-industries.php" class="">
+            <a href="pages/all-industries.php">
                 <i class="icon-bars"></i>Industries
             </a>
         </div>
+
         <div class="sticky-info">
-            <a href="pages/account.php" class="">
+            <a href="pages/account.php">
                 <i class="icon-user-2"></i>Account
             </a>
         </div>
-    </div> -->
-<div class="sticky-navbar">
-    <div class="sticky-info">
-        <a href="index.php">
-            <i class="icon-home"></i>Home
-        </a>
-    </div>
 
-    <div class="sticky-info">
-        <a href="pages/all-industries.php">
-            <i class="icon-bars"></i>Industries
-        </a>
+        <!-- Wishlist  ➜  account.php?tab=wishlist -->
+        <div class="sticky-info">
+            <a href="pages/account.php?tab=wishlist">
+                <i class="icon-heart"></i>Wishlist
+            </a>
+        </div>
     </div>
-
-    <div class="sticky-info">
-        <a href="pages/account.php">
-            <i class="icon-user-2"></i>Account
-        </a>
-    </div>
-
-    <!-- Wishlist  ➜  account.php?tab=wishlist -->
-    <div class="sticky-info">
-        <a href="pages/account.php?tab=wishlist">
-            <i class="icon-heart"></i>Wishlist
-        </a>
-    </div>
-</div>
 
 
 
@@ -268,8 +250,4 @@
     <!-- Main JS File -->
     <script src="assets/js/main.min.js"></script>
 </body>
-<style>
-
-
-</style>
 </html>

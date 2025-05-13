@@ -109,6 +109,12 @@
         display: flex;
         justify-content: flex-end;
     }
+    .make_pay {
+        font-size: 12px;
+    }
+    .index_page_card i {
+        font-size: 20px !important;
+    }
 }
     /* ─── 1.  Desktop (unchanged) ─────────────────────────────────── */
     @media (min-width: 768px) {

@@ -1,4 +1,3 @@
-# Enable rewrite
 RewriteEngine On
 
 # Never rewrite real files or directories
@@ -6,17 +5,17 @@ RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Redirect /index.php (or /foo/index.php) to clean slash
-RewriteCond %{THE_REQUEST} \s(?:.*/)?index\.php [NC]
-RewriteRule (^|/+)index\.php$ $1 [R=301,L,QSA]
+# Redirect index.php to root
+RewriteCond %{THE_REQUEST} \s/index\.php [NC]
+RewriteRule ^index\.php$ / [R=301,L,QSA]
 
-# Redirect /index (or /foo/index) to clean slash
-RewriteRule (^|/+)index/?$ $1 [R=301,L]
+# Redirect /index to /
+RewriteRule ^index$ / [R=301,L]
 
-# Redirect any other public .php URL to its clean counterpart
-RewriteCond %{THE_REQUEST} \s/([^\s]+?)\.php\b [NC]
+# Redirect .php URLs to clean URLs
+RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
 RewriteRule ^(.+?)\.php$ /$1 [R=301,L,QSA]
 
-# Internally serve *.php when the clean URL exists as a .php file
+# Internally map clean URL to .php file if it exists
 RewriteCond %{REQUEST_FILENAME}.php -f
 RewriteRule ^(.+?)/?$ $1.php [L]

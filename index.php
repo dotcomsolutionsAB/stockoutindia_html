@@ -192,7 +192,7 @@
             text: "Added to wishlist ❤️",
             duration: 2000,
             gravity: "bottom",
-            position: "right",
+            position: "center",
             backgroundColor: "#b30000"
             }).showToast();
         } else {

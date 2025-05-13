@@ -85,3 +85,74 @@
 
 
 <?php include("../footer.php") ?>
+
+<!-- <style>
+    /* ─── 1.  Desktop (unchanged) ─────────────────────────────────── */
+  @media (min-width: 768px) {
+    .account_page {
+      display: flex;                   /* sidebar + main side-by-side */
+      gap: 24px;
+    }
+
+    .acc-sidebar {                     /* keep your current sidebar width */
+      width: 240px;
+      flex-shrink: 0;
+    }
+  }
+
+  /* ─── 2.  Mobile (≤ 767 px)  ──────────────────────────────────── */
+  @media (max-width: 767px) {
+    /* Make the page flow vertically */
+    .account_page {
+      display: block;
+    }
+
+    /* Turn the sidebar into a sticky horizontal bar */
+    .acc-sidebar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 6px 0;
+      background: #fff;                /* matches theme */
+      border-bottom: 1px solid #ececec;
+      overflow-x: auto;                /* scroll if icons overflow */
+      scrollbar-width: none;           /* hide scrollbar in Firefox */
+    }
+    .acc-sidebar::-webkit-scrollbar { display: none; } /* hide in Chrome */
+
+    /* Individual buttons – shrink to icon only */
+    .acc-btn {
+      flex: 0 0 48px;                  /* equal-width buttons */
+      height: 48px;
+      padding: 0;
+      font-size: 0;                    /* hides the text label */
+      border: none;
+      background: transparent;
+      transition: background 0.2s;
+    }
+    .acc-btn i {
+      font-size: 22px;                 /* icon size */
+    }
+
+    /* Active tab highlight */
+    .acc-tab-active,
+    .acc-btn:focus-visible {
+      background: #f6f6f6;
+      border-radius: 6px;
+    }
+
+    /* OPTIONAL: Still expose the label to screen readers */
+    .acc-btn::after {
+      content: attr(aria-label);
+      position: absolute;
+      left: -9999px;
+    }
+  }
+
+  /* ─── 3.  General tweaks ──────────────────────────────────────── */
+  .acc-btn { cursor: pointer; }
+
+</style> -->

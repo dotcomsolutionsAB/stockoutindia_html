@@ -213,7 +213,7 @@
         const authToken = localStorage.getItem("authToken");
         const userId = localStorage.getItem("user_id");
 
-        // ❤️ Wishlist Button
+        // Wishlist Button
         if (e.target.matches(".fa-heart")) {
             const card = e.target.closest(".product-card");
             const productId = card?.querySelector("a.updateProductBtn")?.dataset?.id || card?.querySelector("a")?.href?.split("id=")[1];

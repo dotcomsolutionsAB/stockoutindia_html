@@ -20,43 +20,45 @@
 #  .htaccess   –   new.stockoutindia.com (place in /httpdocs/)
 #  Clean URLs  •  Works on Plesk  •  No infinite 301 loop
 # ------------------------------------------------------------------
-<IfModule mod_rewrite.c>
-    RewriteEngine On
 
-    #################################################################
-    # 1)  Redirect only when the ORIGINAL request had “.php”.
-    #     Using THE_REQUEST guarantees we don’t fire again
-    #     after an internal rewrite to *.php.
-    #################################################################
-    RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?]
-    RewriteRule ^ %1 [R=301,L,NE]
 
-    #################################################################
-    # 2)  Skip real files and folders (assets stay untouched)
-    #################################################################
-    RewriteCond %{REQUEST_FILENAME} -f [OR]
-    RewriteCond %{REQUEST_FILENAME} -d
-    RewriteRule ^ - [L]
+# <IfModule mod_rewrite.c>
+#     RewriteEngine On
 
-    #################################################################
-    # 3)  Friendly URLs  →  matching scripts
-    #################################################################
+#     #################################################################
+#     # 1)  Redirect only when the ORIGINAL request had “.php”.
+#     #     Using THE_REQUEST guarantees we don’t fire again
+#     #     after an internal rewrite to *.php.
+#     #################################################################
+#     RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?]
+#     RewriteRule ^ %1 [R=301,L,NE]
 
-    # ─── Root-level pages ──────────────────────────────────────────
-    RewriteRule ^$                           index.php                [L]
-    RewriteRule ^(index|login|register)/?$   $1.php                   [L]
+#     #################################################################
+#     # 2)  Skip real files and folders (assets stay untouched)
+#     #################################################################
+#     RewriteCond %{REQUEST_FILENAME} -f [OR]
+#     RewriteCond %{REQUEST_FILENAME} -d
+#     RewriteRule ^ - [L]
 
-    # ─── /pages/ section ───────────────────────────────────────────
-    RewriteRule ^pages/(account|all-industries|all-products|make-payment|faq)/?$ \
-                pages/$1.php                                           [L]
+#     #################################################################
+#     # 3)  Friendly URLs  →  matching scripts
+#     #################################################################
 
-    # ─── /admin/ section ────────────────────────────────────────────
-    RewriteRule ^admin/?$                       admin/admin_index.php  [L]
-    RewriteRule ^admin/(admin_index|tables)/?$  admin/$1.php          [L]
+#     # ─── Root-level pages ──────────────────────────────────────────
+#     RewriteRule ^$                           index.php                [L]
+#     RewriteRule ^(index|login|register)/?$   $1.php                   [L]
 
-    #################################################################
-    # 4)  Generic fallback: /anything  →  anything.php  (if it exists)
-    #################################################################
-    RewriteCond %{REQUEST_FILENAME}.php -f
-    RewriteRule ^(.+?)/?$                      $1.php                 [L]
-</IfModule>
+#     # ─── /pages/ section ───────────────────────────────────────────
+#     RewriteRule ^pages/(account|all-industries|all-products|make-payment|faq)/?$ \
+#                 pages/$1.php                                           [L]
+
+#     # ─── /admin/ section ────────────────────────────────────────────
+#     RewriteRule ^admin/?$                       admin/admin_index.php  [L]
+#     RewriteRule ^admin/(admin_index|tables)/?$  admin/$1.php          [L]
+
+#     #################################################################
+#     # 4)  Generic fallback: /anything  →  anything.php  (if it exists)
+#     #################################################################
+#     RewriteCond %{REQUEST_FILENAME}.php -f
+#     RewriteRule ^(.+?)/?$                      $1.php                 [L]
+# </IfModule>

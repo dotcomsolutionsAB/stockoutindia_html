@@ -381,14 +381,20 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function filterList(type, event) {
-        const input = event.target.value.toLowerCase();
-        const items = document.querySelectorAll(`#${type}-list label`);
-        items.forEach(item => {
-            const labelText = item.textContent.toLowerCase();
-            item.style.display = labelText.includes(input) ? 'block' : 'none';
-        });
-    }
+function filterList(type, event) {
+    const input = event.target.value.toLowerCase();
+    const items = document.querySelectorAll(`#${type}-list label`);
+    
+    items.forEach(label => {
+        const stateName = label.textContent.trim().toLowerCase();
+        if (stateName.includes(input)) {
+            label.style.display = 'block';
+        } else {
+            label.style.display = 'none';
+        }
+    });
+}
+
 
     function selectAll(type) {
         document.querySelectorAll(`#${type}-list label`).forEach(label => {

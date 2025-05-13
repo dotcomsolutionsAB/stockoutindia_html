@@ -83,16 +83,6 @@
                                 <li>
                                     <a href="pages/all-industries.php">Industries</a>
                                 </li>
-                                <!-- <li class="d-none d-xxl-block">
-                                    <a href="all-industries.php">All Industries</a>
-                                </li> -->
-                                <!-- <li>
-                                    <a href="#">Pages</a>
-                                    <ul>
-                                        <li><a href="wishlist.html">Wishlist</a></li>
-                                        <li><a href="cart.html">Shopping Cart</a></li>
-                                    </ul>
-                                </li> -->
                             </ul>
                         </nav>
                     </div>
@@ -119,13 +109,7 @@
                             <form id="searchForm" action="" method="GET">
                                 <div class="header-search-wrapper">
                                 <input type="search" class="form-control" name="id" id="q" placeholder="I'm searching for..." autocomplete="off" >
-                                
-                                <!-- <div class="select-custom font2">
-                                    <select id="industry" name="industry">
-                                    <option value="">All Industries</option>
-                                    </select>
-                                </div> -->
-                                
+                                    
                                 <button class="btn icon-magnifier" title="search" type="submit"></button>
                                 </div>
 
@@ -583,6 +567,7 @@
         }
     });
 </script> -->
+
 <script>
     const BASE_URL = "https://api.stockoutindia.com/api";
     const authToken = localStorage.getItem("authToken");

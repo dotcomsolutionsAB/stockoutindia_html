@@ -1,64 +1,18 @@
-# # Enable Rewrite Engine
-# RewriteEngine On
+# Enable Rewrite Engine
+RewriteEngine On
 
-# # Redirect requests for index.php to /
-# RewriteCond %{THE_REQUEST} \s/index\.php [NC]
-# RewriteRule ^index\.php$ / [R=301,L]
+# Redirect requests for index.php to /
+RewriteCond %{THE_REQUEST} \s/index\.php [NC]
+RewriteRule ^index\.php$ / [R=301,L]
 
-# # Redirect requests for index to /
-# RewriteRule ^index$ / [R=301,L]
+# Redirect requests for index to /
+RewriteRule ^index$ / [R=301,L]
 
-# # Redirect .php URLs to clean URLs
-# RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
-# RewriteRule ^(.*)\.php$ /$1 [R=301,L]
+# Redirect .php URLs to clean URLs
+RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
+RewriteRule ^(.*)\.php$ /$1 [R=301,L]
 
-# # Remove .php extension from URLs for files that do not exist
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule ^(.*)$ $1.php [L]
-# ------------------------------------------------------------------
-#  .htaccess   –   new.stockoutindia.com (place in /httpdocs/)
-#  Clean URLs  •  Works on Plesk  •  No infinite 301 loop
-# ------------------------------------------------------------------
-
-
-# <IfModule mod_rewrite.c>
-#     RewriteEngine On
-
-#     #################################################################
-#     # 1)  Redirect only when the ORIGINAL request had “.php”.
-#     #     Using THE_REQUEST guarantees we don’t fire again
-#     #     after an internal rewrite to *.php.
-#     #################################################################
-#     RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?]
-#     RewriteRule ^ %1 [R=301,L,NE]
-
-#     #################################################################
-#     # 2)  Skip real files and folders (assets stay untouched)
-#     #################################################################
-#     RewriteCond %{REQUEST_FILENAME} -f [OR]
-#     RewriteCond %{REQUEST_FILENAME} -d
-#     RewriteRule ^ - [L]
-
-#     #################################################################
-#     # 3)  Friendly URLs  →  matching scripts
-#     #################################################################
-
-#     # ─── Root-level pages ──────────────────────────────────────────
-#     RewriteRule ^$                           index.php                [L]
-#     RewriteRule ^(index|login|register)/?$   $1.php                   [L]
-
-#     # ─── /pages/ section ───────────────────────────────────────────
-#     RewriteRule ^pages/(account|all-industries|all-products|make-payment|faq)/?$ \
-#                 pages/$1.php                                           [L]
-
-#     # ─── /admin/ section ────────────────────────────────────────────
-#     RewriteRule ^admin/?$                       admin/admin_index.php  [L]
-#     RewriteRule ^admin/(admin_index|tables)/?$  admin/$1.php          [L]
-
-#     #################################################################
-#     # 4)  Generic fallback: /anything  →  anything.php  (if it exists)
-#     #################################################################
-#     RewriteCond %{REQUEST_FILENAME}.php -f
-#     RewriteRule ^(.+?)/?$                      $1.php                 [L]
-# </IfModule>
+# Remove .php extension from URLs for files that do not exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ $1.php [L]

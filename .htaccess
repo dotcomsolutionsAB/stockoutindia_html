@@ -1,18 +1,44 @@
-# Enable Rewrite Engine
-RewriteEngine On
+# # Enable Rewrite Engine
+# RewriteEngine On
 
-# Redirect requests for index.php to /
-RewriteCond %{THE_REQUEST} \s/index\.php [NC]
-RewriteRule ^index\.php$ / [R=301,L]
+# # Redirect requests for index.php to /
+# RewriteCond %{THE_REQUEST} \s/index\.php [NC]
+# RewriteRule ^index\.php$ / [R=301,L]
 
-# Redirect requests for index to /
-RewriteRule ^index$ / [R=301,L]
+# # Redirect requests for index to /
+# RewriteRule ^index$ / [R=301,L]
 
-# Redirect .php URLs to clean URLs
-RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
-RewriteRule ^(.*)\.php$ /$1 [R=301,L]
+# # Redirect .php URLs to clean URLs
+# RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
+# RewriteRule ^(.*)\.php$ /$1 [R=301,L]
 
-# Remove .php extension from URLs for files that do not exist
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ $1.php [L]
+# # Remove .php extension from URLs for files that do not exist
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)$ $1.php [L]
+
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Never rewrite real files or folders
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Root pages
+    RewriteRule ^$                     index.php          [L]
+    RewriteRule ^(index|login|register)/?$  $1.php        [L]
+
+    # /pages/ section
+    RewriteRule ^pages/(account|all-industries|all-products|make-payment|faq)/?$  pages/$1.php  [L]
+
+    # /admin/ section
+    RewriteRule ^admin/?$                          admin/admin_index.php [L]
+    RewriteRule ^admin/(admin_index|tables)/?$     admin/$1.php         [L]
+
+    # Generic “add .php” fallback
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+?)/?$                          $1.php  [L]
+</IfModule>

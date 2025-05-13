@@ -871,7 +871,7 @@
   }
   .downbox{
       display: flex;
-      justify-content: space-between;
+      justify-content: end;
       align-items: center;
   }
   .product_name_heading {
@@ -891,6 +891,7 @@
       margin-bottom: 20px;
       text-align: left;
       width:60%;
+      display: none;
   }
   .comment_section label {
       display: block;

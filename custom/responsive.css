@@ -98,6 +98,9 @@
         transition: border-color 0.3s;
         width: 100%;
     }
+    .subss{
+        border-radius: 5px !important;
+    }
 }
     /* ─── 1.  Desktop (unchanged) ─────────────────────────────────── */
     @media (min-width: 768px) {

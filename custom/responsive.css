@@ -17,9 +17,16 @@
     .p_card {
         flex: 0 0 50%;
         max-width: 50%;
-      }
-
-      .product-card {
+    }
+    .acc-main {
+        flex: 1;
+        padding:5px;
+        overflow-y: scroll;
+    }
+    .account_page {
+        min-height: max-content;
+    }
+    .product-card {
         width: 190px;
         font-family: sans-serif;
         position: relative;

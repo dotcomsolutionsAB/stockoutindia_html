@@ -157,7 +157,8 @@
         const isDisabled = !authToken;
 
         if (!products.length) {
-            container.innerHTML = `<div class="col-12 text-center py-4">No products found.</div>`;
+            container.innerHTML = `<div class="col-12 text-center py-4" style="min-height: 60vh; display: flex; justify-content: center;
+            align-items: center; font-size: 30px;">No products found.</div>`;
             return;
         }
 

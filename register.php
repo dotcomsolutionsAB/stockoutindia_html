@@ -94,7 +94,7 @@
           </div>
 
           <!-- pwd + eye -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
+          <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
             <div class="relative">
               <input id="pass" type="password" placeholder="Password"
                     class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
@@ -106,6 +106,19 @@
                     class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
               <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                 data-feather="eye"></i>
+            </div>
+          </div> -->
+          <!-- Password Fields -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
+            <div class="relative">
+              <input id="pass" type="password" placeholder="Password"
+                    class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" data-feather="eye"></i>
+            </div>
+            <div class="relative">
+              <input id="cpass" type="password" placeholder="Confirm Password"
+                    class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+              <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" data-feather="eye"></i>
             </div>
           </div>
 
@@ -131,7 +144,9 @@
             </span>
           </label>
 
-          <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">
+            <!-- Warning Message -->
+            <p id="passwordWarning" class="text-sm text-red-500 mt-2 hidden">Password must not contain spaces.</p>
+          <button type="submit" class="w-full bg-red-700 hover:bg-red-800 disabled:opacity-50 text-white font-semibold py-2 rounded-full" disabled id="reg-btn">
             Register
           </button>
         </form>
@@ -151,6 +166,67 @@
       </div>
     </div>
   </div>
+<!-- Password Fields -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
+  <div class="relative">
+    <input id="pass" type="password" placeholder="Password"
+           class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+    <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" data-feather="eye"></i>
+  </div>
+  <div class="relative">
+    <input id="cpass" type="password" placeholder="Confirm Password"
+           class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
+    <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" data-feather="eye"></i>
+  </div>
+</div>
+
+<!-- Warning Message -->
+<p id="passwordWarning" class="text-sm text-red-500 mt-2 hidden">Password must not contain spaces.</p>
+
+<!-- Register Button -->
+<button id="reg-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50" disabled>
+  Register
+</button>
+
+<!-- JS Logic -->
+<script>
+  const pass = document.getElementById('pass');
+  const cpass = document.getElementById('cpass');
+  const regBtn = document.getElementById('reg-btn');
+  const warning = document.getElementById('passwordWarning');
+
+  function validatePasswords() {
+    const password = pass.value;
+    const confirmPassword = cpass.value;
+
+    const hasSpace = password.includes(' ') || confirmPassword.includes(' ');
+
+    if (hasSpace) {
+      warning.classList.remove('hidden');
+      setBorderColor('orange');
+      regBtn.disabled = true;
+      return;
+    } else {
+      warning.classList.add('hidden');
+    }
+
+    if (password && confirmPassword && password === confirmPassword) {
+      setBorderColor('green');
+      regBtn.disabled = false;
+    } else {
+      setBorderColor('orange');
+      regBtn.disabled = true;
+    }
+  }
+
+  function setBorderColor(color) {
+    pass.style.borderColor = color;
+    cpass.style.borderColor = color;
+  }
+
+  pass.addEventListener('input', validatePasswords);
+  cpass.addEventListener('input', validatePasswords);
+</script>
 
   <script>
     /* ─── Constants ───────────────────────────────────────────── */
@@ -381,11 +457,11 @@
         alert('Password and Confirm Password required!');
         return;
       }
-
+      const rawPhone = document.getElementById('phone').value.trim();
       // Build Payload
       const payload = {
         role         : "user",
-        phone        : document.getElementById('phone').value.trim(),
+        phone        : `+91${rawPhone}`,
         name         : document.getElementById('fullName').value.trim(),
         company_name : document.getElementById('companyName').value.trim(),
         address      : document.getElementById('address').value.trim(),

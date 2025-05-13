@@ -1,4 +1,4 @@
-@media (max-width: 520px) {
+@media (max-width: 480px) {
     .acc-title{
         display: none;
     }
@@ -24,7 +24,7 @@
         overflow-y: scroll;
     }
     .account_page {
-        min-height: max-content;
+        height: max-content;
     }
     .product-card {
         width: 190px;

@@ -56,7 +56,7 @@
           </section>
 		</main>
 
-<script>
+<!-- <script>
     function showAccTab(tabId) {
         // Hide all tab contents
         document.querySelectorAll('.acc-tab-content').forEach(tab => tab.classList.remove('acc-active'));
@@ -81,12 +81,50 @@
 
     window.location.href = "login.php";
   }
+</script> -->
+<script>
+    function showAccTab(tabId) {
+        // Hide all contents
+        document.querySelectorAll('.acc-tab-content')
+                .forEach(tab => tab.classList.remove('acc-active'));
+        document.getElementById('acc-' + tabId + 'Tab')
+                .classList.add('acc-active');
+
+        // Button states
+        document.querySelectorAll('.acc-btn')
+                .forEach(btn => btn.classList.remove('acc-tab-active'));
+        document.getElementById('tab-' + tabId)
+                .classList.add('acc-tab-active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // read ?tab=… from the URL
+        const params      = new URLSearchParams(window.location.search);
+        const requested   = params.get('tab');            // e.g. "wishlist"
+        const validTabs   = ['profile','products','addProducts','wishlist','orderHistory'];
+
+        // Fall back to “products” if no / bad value
+        const initialTab = (requested && validTabs.includes(requested))
+                           ? requested
+                           : 'products';
+
+        showAccTab(initialTab);
+    });
+
+    function accLogout() {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user_id");
+        localStorage.removeItem("role");
+        localStorage.removeItem("username");
+        localStorage.removeItem("name");
+        window.location.href = "login.php";
+    }
 </script>
 
 
 <?php include("../footer.php") ?>
 
-<!-- <style>
+<style>
     /* ─── 1.  Desktop (unchanged) ─────────────────────────────────── */
   @media (min-width: 768px) {
     .account_page {
@@ -155,4 +193,4 @@
   /* ─── 3.  General tweaks ──────────────────────────────────────── */
   .acc-btn { cursor: pointer; }
 
-</style> -->
+</style>

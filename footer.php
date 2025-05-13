@@ -205,7 +205,7 @@
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
 
-    <div class="sticky-navbar">
+    <!-- <div class="sticky-navbar">
         <div class="sticky-info">
             <a href="index.php">
                 <i class="icon-home"></i>Home
@@ -221,7 +221,40 @@
                 <i class="icon-user-2"></i>Account
             </a>
         </div>
+    </div> -->
+<div class="sticky-navbar">
+    <div class="sticky-info">
+        <a href="index.php">
+            <i class="icon-home"></i>Home
+        </a>
     </div>
+
+    <div class="sticky-info">
+        <a href="pages/all-industries.php">
+            <i class="icon-bars"></i>Industries
+        </a>
+    </div>
+
+    <div class="sticky-info">
+        <a href="pages/account.php">
+            <i class="icon-user-2"></i>Account
+        </a>
+    </div>
+
+    <!-- Wishlist  ➜  account.php?tab=wishlist -->
+    <div class="sticky-info">
+        <a href="pages/account.php?tab=wishlist">
+            <i class="icon-heart"></i>Wishlist
+        </a>
+    </div>
+
+    <!-- My Products  ➜  account.php?tab=products -->
+    <div class="sticky-info">
+        <a href="pages/account.php?tab=products">
+            <i class="icon-boxes"></i>My&nbsp;Products
+        </a>
+    </div>
+</div>
 
 
 

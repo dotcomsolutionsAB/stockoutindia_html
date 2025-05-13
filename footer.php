@@ -184,7 +184,7 @@
                         <a href="pages/all-industries.php">Industries</a>
                     </li>
                     <li>
-                        <a href="pages/all-products">Products</a>
+                        <a href="pages/all-products.php">Products</a>
                     </li>
                 </ul>
             </nav><!-- End .mobile-nav -->

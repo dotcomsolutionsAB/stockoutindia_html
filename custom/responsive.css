@@ -67,3 +67,15 @@
         justify-content: space-around;
     }
 }
+
+.sticky-navbar .sticky-info:not(:last-child) {
+    border-right: 0px solid #e7e7e7;
+}
+
+.sticky-navbar.fixed {
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+    display: flex;
+}

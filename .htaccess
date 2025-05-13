@@ -17,10 +17,8 @@
 # RewriteCond %{REQUEST_FILENAME} !-d
 # RewriteRule ^(.*)$ $1.php [L]
 
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
 
     # Never rewrite real files or folders
     RewriteCond %{REQUEST_FILENAME} -f [OR]

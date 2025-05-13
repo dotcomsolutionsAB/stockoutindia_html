@@ -100,17 +100,17 @@
 
 <script>
     function loadSimilarProducts(currentProduct, userId, industryId) {
-        const token = localStorage.getItem("authToken");
+        const tokenss = localStorage.getItem("authToken");
 
-        const similarProductsURL = token 
+        const similarProductsURL = tokenss 
             ? `<?php echo BASE_URL; ?>/product/get_products`
             : `<?php echo BASE_URL; ?>/get_products`;
 
         const headersObj = {
             "Content-Type": "application/json"
         };
-        if (token) {
-            headersObj["Authorization"] = `Bearer ${token}`;
+        if (tokenss) {
+            headersObj["Authorization"] = `Bearer ${tokenss}`;
         }
 
         if (!industryId) {
@@ -131,7 +131,7 @@
                     .filter(p => p.product_name !== currentProduct.product_name)
                     .slice(0, 4);
 
-                const isDisabled = !token;
+                const isDisabled = !tokenss;
 
                 if (sameIndustryProducts.length > 0) {
                     const cardsHTML = sameIndustryProducts.map(product => {

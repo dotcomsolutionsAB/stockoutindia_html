@@ -166,29 +166,7 @@
       </div>
     </div>
   </div>
-<!-- Password Fields -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
-  <div class="relative">
-    <input id="pass" type="password" placeholder="Password"
-           class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-    <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" data-feather="eye"></i>
-  </div>
-  <div class="relative">
-    <input id="cpass" type="password" placeholder="Confirm Password"
-           class="w-full border border-gray-400 px-3 py-2 rounded-md pr-10">
-    <i class="eye absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer" data-feather="eye"></i>
-  </div>
-</div>
 
-<!-- Warning Message -->
-<p id="passwordWarning" class="text-sm text-red-500 mt-2 hidden">Password must not contain spaces.</p>
-
-<!-- Register Button -->
-<button id="reg-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50">
-
-<!-- <button id="reg-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50" disabled> -->
-  Register
-</button>
 
 <!-- JS Logic -->
 <script>
@@ -206,7 +184,7 @@
     if (hasSpace) {
       warning.classList.remove('hidden');
       setBorderColor('orange');
-      // regBtn.disabled = true;
+      regBtn.disabled = true;
       return;
     } else {
       warning.classList.add('hidden');
@@ -423,6 +401,8 @@
         emailField.value = user.email || '';
         emailField.disabled = true; // lock email
 
+        regBtn.disabled = false;
+        
         // Hide Google button
         document.getElementById('googleSignUpBtn').classList.add('hidden');
 

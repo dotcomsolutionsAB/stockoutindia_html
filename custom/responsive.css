@@ -145,7 +145,7 @@
   /* ─── 3.  General tweaks ──────────────────────────────────────── */
   .acc-btn { cursor: pointer; }
 
-/* .sticky-navbar .sticky-info:not(:last-child) {
+.sticky-navbar .sticky-info:not(:last-child) {
     border-right: 0px solid #e7e7e7;
 }
 
@@ -155,4 +155,4 @@
     width: 100%;
     align-items: center;
     display: flex;
-} */
+}

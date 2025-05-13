@@ -1,35 +1,18 @@
-# # Enable Rewrite Engine
-# RewriteEngine On
-
-# # Redirect requests for index.php to /
-# RewriteCond %{THE_REQUEST} \s/index\.php [NC]
-# RewriteRule ^index\.php$ / [R=301,L]
-
-# # Redirect requests for index to /
-# RewriteRule ^index$ / [R=301,L]
-
-# # Redirect .php URLs to clean URLs
-# RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
-# RewriteRule ^(.*)\.php$ /$1 [R=301,L]
-
-# # Remove .php extension from URLs for files that do not exist
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule ^(.*)$ $1.php [L]
 # Enable Rewrite Engine
 RewriteEngine On
-RewriteBase 
 
-# Force index.php or index to /
+# Redirect requests for index.php to /
 RewriteCond %{THE_REQUEST} \s/index\.php [NC]
 RewriteRule ^index\.php$ / [R=301,L]
+
+# Redirect requests for index to /
 RewriteRule ^index$ / [R=301,L]
 
-# Redirect .php URLs to extension-less versions (e.g., all-products.php → all-products)
-RewriteCond %{THE_REQUEST} \s/+pages/([a-zA-Z0-9_-]+)\.php [NC]
-RewriteRule ^pages/([a-zA-Z0-9_-]+)\.php$ /$1 [R=301,L]
+# Redirect .php URLs to clean URLs
+RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
+RewriteRule ^(.*)\.php$ /$1 [R=301,L]
 
-# Internally rewrite clean URLs (e.g., /all-products → /pages/all-products.php)
+# Remove .php extension from URLs for files that do not exist
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([a-zA-Z0-9_-]+)$ pages/$1.php [L]
+RewriteRule ^(.*)$ $1.php [L]

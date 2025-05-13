@@ -144,8 +144,12 @@
             </span>
           </label>
 
-            <!-- Warning Message -->
-            <p id="passwordWarning" class="text-sm text-red-500 mt-2 hidden">Password must not contain spaces.</p>
+          <!-- Warning Message -->
+          <p id="passwordWarning" class="text-sm text-red-500 mt-2 hidden">Password must not contain spaces.</p>
+
+          <!-- Warning Message 2-->
+          <p id="unmatchWarning" class="text-sm text-red-500 mt-2 hidden">Password Not Match.</p>
+
           <button type="submit" class="w-full bg-red-700 hover:bg-red-800 disabled:opacity-50 text-white font-semibold py-2 rounded-full" disabled id="reg-btn">
             Register
           </button>
@@ -174,6 +178,7 @@
   const cpass = document.getElementById('cpass');
   const regBtn = document.getElementById('reg-btn');
   const warning = document.getElementById('passwordWarning');
+  const warn2 = document.getElementById('unmatchWarning');
 
   function validatePasswords() {
     const password = pass.value;
@@ -195,6 +200,7 @@
       regBtn.disabled = false;
     } else {
       setBorderColor('orange');
+      warn2.classList.remove('hidden');
       regBtn.disabled = true;
     }
   }
@@ -402,7 +408,7 @@
         emailField.disabled = true; // lock email
 
         regBtn.disabled = false;
-        
+
         // Hide Google button
         document.getElementById('googleSignUpBtn').classList.add('hidden');
 

@@ -119,7 +119,7 @@
                                             <li><a href="pages/account.php">Profile</a></li>
                                             <li><a href="pages/all-products.php">Products</a></li>
                                             <li><a href="pages/all-industries.php">Industries</a></li>
-                                            <li><a href="#">Wishlist</a></li>
+                                            <li><a href="pages/account.php?tab=wishlist">Wishlist</a></li>
                                         </ul>
                                     </div>
                                 </div>

@@ -67,7 +67,9 @@
                             
                             <div class="widget">
                                 <h3 class="widget-title">States</h3>
-                                <input type="text" class="form-control mb-2" placeholder="Search states..." onkeyup="filterList('state')">
+                                <!-- <input type="text" class="form-control mb-2" placeholder="Search states..." onkeyup="filterList('state')"> -->
+                                <input type="text" class="form-control mb-2" placeholder="Search states..." onkeyup="filterList('state', event)">
+
                                 <div class="mb-2">
                                     <button class="btn btn-sm btn-outline-success" onclick="selectAll('state')">Select All</button>
                                     <button class="btn btn-sm btn-outline-danger" onclick="clearAll('state')">Clear</button>
@@ -379,21 +381,35 @@
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-        function selectAll(type) {
-        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = true);
-    }
-
-    function clearAll(type) {
-        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = false);
-    }
-
-    function filterList(type) {
+    function filterList(type, event) {
         const input = event.target.value.toLowerCase();
         const items = document.querySelectorAll(`#${type}-list label`);
         items.forEach(item => {
-            item.style.display = item.textContent.toLowerCase().includes(input) ? 'block' : 'none';
+            const labelText = item.textContent.toLowerCase();
+            item.style.display = labelText.includes(input) ? 'block' : 'none';
         });
     }
+
+    function selectAll(type) {
+        document.querySelectorAll(`#${type}-list label`).forEach(label => {
+            if (label.style.display !== 'none') {
+                const checkbox = label.querySelector('input[type="checkbox"]');
+                if (checkbox) checkbox.checked = true;
+            }
+        });
+        fetchProducts(); // re-fetch based on new selections
+    }
+
+    function clearAll(type) {
+        document.querySelectorAll(`#${type}-list label`).forEach(label => {
+            if (label.style.display !== 'none') {
+                const checkbox = label.querySelector('input[type="checkbox"]');
+                if (checkbox) checkbox.checked = false;
+            }
+        });
+        fetchProducts(); // re-fetch based on cleared selections
+    }
+
 </script>
 
 <!-- <script>

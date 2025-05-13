@@ -101,6 +101,14 @@
     .subss{
         border-radius: 5px !important;
     }
+    .payment_summary_box h2 {
+        color: #b30000;
+        margin-bottom: 20px;
+        width: 100%;
+        font-size: 25px;
+        display: flex;
+        justify-content: flex-end;
+    }
 }
     /* ─── 1.  Desktop (unchanged) ─────────────────────────────────── */
     @media (min-width: 768px) {

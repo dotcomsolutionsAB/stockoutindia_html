@@ -206,7 +206,7 @@
     </div><!-- End .mobile-menu-container -->
 
     <div class="sticky-navbar">
-        <!-- <div class="sticky-info">
+        <div class="sticky-info">
             <a href="index.php">
                 <i class="icon-home"></i>Home
             </a>
@@ -220,7 +220,7 @@
             <a href="pages/account.php" class="">
                 <i class="icon-user-2"></i>Account
             </a>
-        </div> -->
+        </div>
     </div>
 
 

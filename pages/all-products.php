@@ -378,6 +378,22 @@
         fetchProducts();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+        function selectAll(type) {
+        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = true);
+    }
+
+    function clearAll(type) {
+        document.querySelectorAll(`#${type}-list input[type="checkbox"]`).forEach(c => c.checked = false);
+    }
+
+    function filterList(type) {
+        const input = event.target.value.toLowerCase();
+        const items = document.querySelectorAll(`#${type}-list label`);
+        items.forEach(item => {
+            item.style.display = item.textContent.toLowerCase().includes(input) ? 'block' : 'none';
+        });
+    }
 </script>
 
 <!-- <script>

@@ -8,7 +8,7 @@
     "/",
     "/index.php",
     "/pages/all-products.php",
-    "/pages/all-industry.php"
+    "/pages/all-industries.php"
   ];
 
   // Public pages with dynamic params

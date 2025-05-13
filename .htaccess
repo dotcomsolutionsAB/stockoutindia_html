@@ -1,18 +1,60 @@
-# Enable Rewrite Engine
-RewriteEngine On
+# # Enable Rewrite Engine
+# RewriteEngine On
 
-# Redirect requests for index.php to /
-RewriteCond %{THE_REQUEST} \s/index\.php [NC]
-RewriteRule ^index\.php$ / [R=301,L]
+# # Redirect requests for index.php to /
+# RewriteCond %{THE_REQUEST} \s/index\.php [NC]
+# RewriteRule ^index\.php$ / [R=301,L]
 
-# Redirect requests for index to /
-RewriteRule ^index$ / [R=301,L]
+# # Redirect requests for index to /
+# RewriteRule ^index$ / [R=301,L]
 
-# Redirect .php URLs to clean URLs
-RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
-RewriteRule ^(.*)\.php$ /$1 [R=301,L]
+# # Redirect .php URLs to clean URLs
+# RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
+# RewriteRule ^(.*)\.php$ /$1 [R=301,L]
 
-# Remove .php extension from URLs for files that do not exist
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ $1.php [L]
+# # Remove .php extension from URLs for files that do not exist
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)$ $1.php [L]
+
+# ======================================================
+#  .htaccess for new.stockoutindia.com
+#  Pretty URLs  →  matching *.php files
+# ======================================================
+
+# --- SECURITY / PERFORMANCE ----------------------------------------------
+Options +FollowSymLinks -MultiViews
+AddDefaultCharset UTF-8
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase 
+
+    # 1.  Skip rewrites if the request already points at a real file or directory
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # 2.  ROOT-LEVEL pages  -----------------------------------------------
+    RewriteRule ^$                 index.php         [L]   #  new.stockoutindia.com/
+    RewriteRule ^index/?$          index.php         [L]
+    RewriteRule ^login/?$          login.php         [L]
+    RewriteRule ^register/?$       register.php      [L]
+
+    # 3.  /pages/ section  -------------------------------------------------
+    RewriteRule ^pages/(account|all-industries|all-products|make-payment|faq)/?$  pages/$1.php  [L]
+
+    # 4.  /admin/ section  -------------------------------------------------
+    #     /admin  →  /admin/admin_index.php
+    RewriteRule ^admin/?$          admin/admin_index.php   [L]
+    RewriteRule ^admin/(admin_index|tables)/?$  admin/$1.php        [L]
+
+    # 5.  Generic “add .php if it exists” fallback (last resort) ----------
+    #     Lets you drop new scripts in without editing this file again.
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+?)/?$          $1.php            [L]
+
+    # 6.  Everything else → 404  ------------------------------------------
+    #     (Optional) Comment this out if you want Apache’s default 404.
+    RewriteRule ^ - [R=404,L]
+</IfModule>

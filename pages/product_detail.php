@@ -28,23 +28,23 @@
 <script>
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('id');
-    const token = localStorage.getItem("authToken");
+    const authstoken = localStorage.getItem("authToken");
 
     if (!productId) {
         document.getElementById('product_detail_container').innerHTML = '<p style="padding:20px">Invalid product ID.</p>';
         throw new Error("No product ID provided.");
     }
 
-    // Base URL depends on presence of token
-    const url = token 
+    // Base URL depends on presence of authstoken
+    const url = authstoken 
         ? `<?php echo BASE_URL; ?>/product/get_products/${productId}` 
         : `<?php echo BASE_URL; ?>/get_products/${productId}`;
 
     const headersObj  = {
         "Content-Type": "application/json"
     };
-    if (token) {
-        headersObj["Authorization"] = `Bearer ${token}`;
+    if (authstoken) {
+        headersObj["Authorization"] = `Bearer ${authstoken}`;
     }
 
     fetch(url, {

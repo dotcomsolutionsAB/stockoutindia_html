@@ -247,13 +247,6 @@
             <i class="icon-heart"></i>Wishlist
         </a>
     </div>
-
-    <!-- My Products  ➜  account.php?tab=products -->
-    <div class="sticky-info">
-        <a href="pages/account.php?tab=products">
-            <i class="icon-boxes"></i>My&nbsp;Products
-        </a>
-    </div>
 </div>
 
 

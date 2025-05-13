@@ -85,7 +85,7 @@
   }
 
   /* ─── 2.  Mobile (≤ 767 px)  ──────────────────────────────────── */
-  @media (max-width: 767px) {
+  @media (max-width: 520px) {
     /* Make the page flow vertically */
     .account_page {
       display: block;

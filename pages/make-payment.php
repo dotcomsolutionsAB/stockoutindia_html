@@ -76,7 +76,7 @@
     commentInput.value = `Payment for order #${productId}`;
 
     // Step 1: Fetch product and generate initial order
-    fetch(`${BASE_URL}/get_products/${productId}`, {
+    fetch(`${BASE_URL}/products/get_products/${productId}`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",

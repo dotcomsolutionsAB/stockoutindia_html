@@ -265,10 +265,11 @@
     /* ─── REGISTER API call ──────────────────────────────────── */
     document.getElementById('registerForm').onsubmit = async e=>{
       e.preventDefault();
+      const rawPhone = document.getElementById('phone').value.trim();
 
       const payload = {
         gstin        : gstInput.value.trim(),
-        phone        : document.getElementById('phone').value.trim(),
+        phone        : `+91${rawPhone}`,
         email        : document.getElementById('email').value.trim(),
         password     : document.getElementById('pass').value,
         google_id    : "",

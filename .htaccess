@@ -1,18 +1,42 @@
-# Enable Rewrite Engine
+# # Enable Rewrite Engine
+# RewriteEngine On
+
+# # Redirect requests for index.php to /
+# RewriteCond %{THE_REQUEST} \s/index\.php [NC]
+# RewriteRule ^index\.php$ / [R=301,L]
+
+# # Redirect requests for index to /
+# RewriteRule ^index$ / [R=301,L]
+
+# # Redirect .php URLs to clean URLs
+# RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
+# RewriteRule ^(.*)\.php$ /$1 [R=301,L]
+
+# # Remove .php extension from URLs for files that do not exist
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^(.*)$ $1.php [L]
+
 RewriteEngine On
+RewriteBase 
 
-# Redirect requests for index.php to /
-RewriteCond %{THE_REQUEST} \s/index\.php [NC]
-RewriteRule ^index\.php$ / [R=301,L]
+# ---------------------------------------
+# 🔁 Redirect direct .php URLs to clean URLs (except query strings)
+# ---------------------------------------
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/((?:pages|admin)?/?[a-zA-Z0-9_-]+)\.php(?:\s|\?) [NC]
+RewriteRule ^((?:pages|admin)?/?[a-zA-Z0-9_-]+)\.php$ /$1 [R=301,L]
 
-# Redirect requests for index to /
-RewriteRule ^index$ / [R=301,L]
-
-# Redirect .php URLs to clean URLs
-RewriteCond %{THE_REQUEST} \s/([a-zA-Z0-9_-]+)\.php [NC]
-RewriteRule ^(.*)\.php$ /$1 [R=301,L]
-
-# Remove .php extension from URLs for files that do not exist
+# ---------------------------------------
+# 🧩 Internally rewrite clean URLs to actual .php files
+# Root level (index, login, register, etc.)
+# ---------------------------------------
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ $1.php [L]
+RewriteRule ^([a-zA-Z0-9_-]+)$ $1.php [L]
+
+# ---------------------------------------
+# 🧩 Internally rewrite /pages/slug and /admin/slug to .php
+# ---------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(pages|admin)/([a-zA-Z0-9_-]+)$ $1/$2.php [L]

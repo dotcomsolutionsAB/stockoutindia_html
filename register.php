@@ -184,7 +184,9 @@
 <p id="passwordWarning" class="text-sm text-red-500 mt-2 hidden">Password must not contain spaces.</p>
 
 <!-- Register Button -->
-<button id="reg-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50" disabled>
+<button id="reg-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50">
+
+<!-- <button id="reg-btn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50" disabled> -->
   Register
 </button>
 
@@ -204,7 +206,7 @@
     if (hasSpace) {
       warning.classList.remove('hidden');
       setBorderColor('orange');
-      regBtn.disabled = true;
+      // regBtn.disabled = true;
       return;
     } else {
       warning.classList.add('hidden');

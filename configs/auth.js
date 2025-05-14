@@ -8,7 +8,11 @@
     "/",
     "/index",
     "/pages/all-products",
-    "/pages/all-industries"
+    "/pages/all-industries",
+    "/pages/faq",
+    "/pages/privacy-policy",
+    "/pages/refund-policy",
+    "/pages/terms-condition"
   ];
 
   // Public pages with dynamic params

@@ -47,7 +47,7 @@
     width:180px;
   }
   .closediv a{
-    display:block;
+    display:none;
   }
 }
 

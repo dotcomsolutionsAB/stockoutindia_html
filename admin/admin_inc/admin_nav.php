@@ -15,7 +15,7 @@
         <!-- Search Bar -->
         <div class="flex items-center space-x-4">
             <input type="text" placeholder="I'm searching for..."
-                class="px-4 py-2 rounded-lg border border-gray-300 w-600" />
+                class="px-4 py-2 rounded-lg border border-gray-300 w-600" style="display:none;"/>
         </div>
 
         <!-- Profile Dropdown Button -->
@@ -30,9 +30,9 @@
 
             <!-- Dropdown Content -->
             <div id="dropdownContent" class="dropdown-content absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg">
-                <a href="#settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
-                <a href="#privacy" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Privacy</a>
-                <a href="#logout" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" onclick="accLogout()">Logout</a>
+                <!-- <a href="#settings" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Settings</a>
+                <a href="#privacy" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Privacy</a> -->
+                <a href="" class="block px-4 py-2 text-gray-700 hover:bg-gray-100" onclick="accLogout()">Logout</a>
             </div>
         </div>
     </div>

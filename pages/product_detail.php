@@ -6,7 +6,7 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                <li class="breadcrumb-item"><a href="index">Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Products</a></li>
             </ol>
         </div>
@@ -135,7 +135,7 @@
 
                 if (sameIndustryProducts.length > 0) {
                     const cardsHTML = sameIndustryProducts.map(product => {
-                        const productLink = `pages/product_detail.php?id=${encodeURIComponent(product.id)}`;
+                        const productLink = `pages/product_detail?id=${encodeURIComponent(product.id)}`;
                         const image = product.image?.[0] || 'uploads/placeholder.png';
                         const phone = product.user?.mobile || '';
                         const whatsapp = product.user?.whatsapp || phone;
@@ -261,7 +261,7 @@
 
             if (!productId) return;
 
-            const shareUrl = `https://new.stockoutindia.com/pages/product_detail.php?id=${productId}`;
+            const shareUrl = `https://new.stockoutindia.com/pages/product_detail?id=${productId}`;
 
             try {
             await navigator.clipboard.writeText(shareUrl);
@@ -305,7 +305,7 @@
             cancelButtonColor: "#d33"
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "login.php"; // replace with your actual login page
+                window.location.href = "login"; // replace with your actual login page
             }
         });
     }

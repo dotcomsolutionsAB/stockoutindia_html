@@ -44,7 +44,7 @@
       wishlist.forEach((item) => {
         const product = item.product;
         const image = product.image?.[0] || "uploads/placeholder.png";
-        const productLink = `pages/product_detail.php?id=${product.id}`;
+        const productLink = `pages/product_detail?id=${product.id}`;
         const whatsapp = product.user?.phone || "";
         const phone = product.user?.phone || "";
 

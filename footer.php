@@ -5,7 +5,7 @@
             </a>
             
             <style>
-                .whatsapp-sticky {
+                /* .whatsapp-sticky {
                     position: fixed;
                     bottom: 75px;
                     right: 20px;
@@ -23,7 +23,7 @@
 
                 .whatsapp-sticky:hover {
                     background-color: #1ebe5d;
-                }
+                } */
             </style>
 
                 <div class="instagram-box bg-dark">

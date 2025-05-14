@@ -9,7 +9,7 @@
 
     <title>Stockout India</title>
     <script src="configs/auth.js"></script>
-    <!-- <script src="loader.php?f=auth-js" type="text/javascript"></script> -->
+    <!-- <script src="loader?f=auth-js" type="text/javascript"></script> -->
     <meta name="description" content="StockOut">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
@@ -25,7 +25,7 @@
         } )( document );
     </script>
     
-    <!-- <script src="loader.php?f=locked-js" type="text/javascript"></script> -->
+    <!-- <script src="loader?f=locked-js" type="text/javascript"></script> -->
     <!-- Plugins CSS File -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
 
@@ -491,7 +491,7 @@
             }).then(result => {
                 if (result.isConfirmed && result.value?.success) {
                     Swal.fire('Success!', result.value.message, 'success').then(() => {
-                        window.location.href = 'pages/account.php';
+                        window.location.href = 'pages/account';
                     });
                 }
             });
@@ -599,7 +599,7 @@
                         if (result.success && result.data.length > 0) {
                             const html = result.data.map(product => `
                                 <div class="bar_result border-bottom">
-                                    <a href="pages/product_detail.php?id=${encodeURIComponent(product.id)}" class="text-dark d-block">
+                                    <a href="pages/product_detail?id=${encodeURIComponent(product.id)}" class="text-dark d-block">
                                         ${product.product_name}
                                     </a>
                                 </div>

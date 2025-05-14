@@ -6,7 +6,7 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                <li class="breadcrumb-item"><a href="index">Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Make Payment</a></li>
             </ol>
         </div>
@@ -198,7 +198,7 @@
             .then(res => res.json())
             .then(result => {
             if (result.success) {
-                window.location.href = "pages/account.php";
+                window.location.href = "pages/account";
             } else {
                 alert("Error storing payment: " + result.message);
             }

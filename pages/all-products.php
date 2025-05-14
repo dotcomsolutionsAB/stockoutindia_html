@@ -7,7 +7,7 @@
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                        <li class="breadcrumb-item"><a href="index">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Products</li>
                     </ol>
                 </div>
@@ -164,7 +164,7 @@
 
         products.forEach(product => {
             const image = product.image?.[0] || 'uploads/placeholder.png';
-            const productLink = `pages/product_detail.php?id=${product.id}`;
+            const productLink = `pages/product_detail?id=${product.id}`;
             const phone = product.user?.mobile || '';
             const whatsapp = product.user?.whatsapp || phone;
 
@@ -276,7 +276,7 @@
 
             if (!productId) return;
 
-            const shareUrl = `https://new.stockoutindia.com/pages/product_detail.php?id=${productId}`;
+            const shareUrl = `https://new.stockoutindia.com/pages/product_detail?id=${productId}`;
 
             try {
             await navigator.clipboard.writeText(shareUrl);
@@ -322,7 +322,7 @@
             cancelButtonColor: "#d33"
         }).then((result) => {
             if (result.isConfirmed) {
-                window.location.href = "login.php"; // replace with your actual login page
+                window.location.href = "login"; // replace with your actual login page
             }
         });
     }

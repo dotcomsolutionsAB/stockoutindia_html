@@ -262,7 +262,3 @@
   fetchProducts(); // Call on page load
 </script>
 <?php include("footer.php") ?>
-
-<style>
-
-</style>

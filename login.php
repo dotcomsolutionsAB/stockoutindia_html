@@ -76,8 +76,7 @@
             <a href="forget-password" class="text-red-600 font-semibold hover:underline">Forgot Your Password?</a>
           </div>
 
-          <button type="submit"
-            class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">
+          <button type="submit" class="w-full bg-red-700 hover:bg-red-800 text-white font-semibold py-2 rounded-full">
             Login
           </button>
         </form>

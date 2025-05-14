@@ -24,9 +24,10 @@
         overflow-y: scroll;
         max-height: 90vh;
     }
-    /* .account_page {
+    .account_page {
         height: max-content;
-    } */
+        overflow-y: scroll;
+    }
     .product-card {
         width: 190px;
         font-family: sans-serif;

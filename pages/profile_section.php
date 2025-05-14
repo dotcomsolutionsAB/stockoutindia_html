@@ -52,6 +52,7 @@
     background:none; border:none; cursor:pointer; font-size:1rem; line-height:1;
     color:#6b7280;
   }
+
 </style>
 
 

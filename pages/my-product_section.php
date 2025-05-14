@@ -258,58 +258,6 @@
   fetchProducts(); // Auto-run on load
 </script>
 
-<!-- <script>
-  document.addEventListener("click", async (e) => {
-    const soldBtn = e.target.closest(".mark-sold");
-    if (!soldBtn) return;
-
-    const productId = soldBtn.id;
-    const token = localStorage.getItem("authToken");
-
-    if (!token) {
-      Swal.fire("Unauthorized", "Please log in to mark as sold.", "warning");
-      return;
-    }
-
-    // Optional confirmation
-    const confirm = await Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to mark this product as sold?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Yes, mark as sold"
-    });
-
-    if (!confirm.isConfirmed) return;
-
-    try {
-      const response = await fetch(`<?php echo BASE_URL; ?>/product/update_status`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          product: parseInt(productId),
-          status: "sold"
-        })
-      });
-
-      const res = await response.json();
-
-      if (res.success) {
-        Swal.fire("✅ Marked!", "Product has been marked as sold.", "success").then(() => location.reload());
-      } else {
-        Swal.fire("❌ Failed", res.message || "Something went wrong.", "error");
-      }
-
-    } catch (err) {
-      Swal.fire("Error", "API request failed.", "error");
-    }
-  });
-
-</script> -->
-
 <script>
   const Token = localStorage.getItem("authToken");
 

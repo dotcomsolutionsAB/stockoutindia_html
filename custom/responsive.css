@@ -22,6 +22,7 @@
         flex: 1;
         padding:5px;
         overflow-y: scroll;
+        max-height: 90vh;
     }
     /* .account_page {
         height: max-content;

@@ -23,9 +23,9 @@
         padding:5px;
         overflow-y: scroll;
     }
-    .account_page {
+    /* .account_page {
         height: max-content;
-    }
+    } */
     .product-card {
         width: 190px;
         font-family: sans-serif;
@@ -119,13 +119,13 @@
     /* ─── 1.  Desktop (unchanged) ─────────────────────────────────── */
     @media (min-width: 768px) {
         .account_page {
-        display: flex;                   /* sidebar + main side-by-side */
-        gap: 24px;
+            display: flex;                   /* sidebar + main side-by-side */
+            gap: 24px;
         }
 
         .acc-sidebar {                     /* keep your current sidebar width */
-        width: 240px;
-        flex-shrink: 0;
+            width: 240px;
+            flex-shrink: 0;
         }
     }
 
@@ -133,7 +133,7 @@
     @media (max-width: 480px) {
         /* Make the page flow vertically */
         .account_page {
-        display: block;
+            display: block;
         }
 
         /* Turn the sidebar into a sticky horizontal bar */

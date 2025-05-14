@@ -6,29 +6,29 @@
   // Public pages (no login required)
   const publicPages = [
     "/",
-    "/index.php",
-    "/pages/all-products.php",
-    "/pages/all-industries.php"
+    "/index",
+    "/pages/all-products",
+    "/pages/all-industries"
   ];
 
   // Public pages with dynamic params
   const publicPatterns = [
-    "/pages/product_detail.php",
-    "/pages/filter-products.php"
+    "/pages/product_detail",
+    "/pages/filter-products"
   ];
 
   // Customer (user role) pages
   const customerPages = [
-    "/pages/account.php",
-    "/pages/profile.php",
-    "/pages/setting.php"
+    "/pages/account",
+    "/pages/profile",
+    "/pages/setting"
   ];
 
   // Admin-only pages
   const adminPages = [
-    "/admin/configurations.php",
-    "/admin/admin_index.php",
-    "../admin/tables.php"
+    "/admin/configurations",
+    "/admin/admin_index",
+    "../admin/tables"
   ];
 
   // Check if path starts with any pattern (for dynamic pages)
@@ -38,7 +38,7 @@
 
   function redirectToLogin(msg = "Unauthorized access.") {
     alert(msg);
-    window.location.href = "/login.php";
+    window.location.href = "/login";
   }
 
   // ROUTING LOGIC

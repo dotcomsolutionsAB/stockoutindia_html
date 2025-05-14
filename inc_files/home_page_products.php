@@ -5,7 +5,7 @@
 
         </div>
         <div class="view_more">
-          <a href="pages/all-products.php">View More</a>
+          <a href="pages/all-products">View More</a>
         </div>
       </div>
     </div>

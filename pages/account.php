@@ -79,7 +79,7 @@
     localStorage.removeItem("username");
     localStorage.removeItem("name");
 
-    window.location.href = "login.php";
+    window.location.href = "login";
   }
 </script> -->
 <script>
@@ -117,7 +117,7 @@
         localStorage.removeItem("role");
         localStorage.removeItem("username");
         localStorage.removeItem("name");
-        window.location.href = "login.php";
+        window.location.href = "login";
     }
 </script>
 

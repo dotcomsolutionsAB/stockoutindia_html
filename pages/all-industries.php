@@ -7,7 +7,7 @@
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
                 <div class="container">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+                        <li class="breadcrumb-item"><a href="index">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Industries</li>
                     </ol>
                 </div>
@@ -210,13 +210,13 @@
                 col.innerHTML = `
                     <div class="product-default left-details product-widget ${isDisabled}">
                         <figure>
-                            <a href="${isDisabled ? 'javascript:void(0);' : `pages/filter-products.php?sub_industry=${sub.id}`}">
+                            <a href="${isDisabled ? 'javascript:void(0);' : `pages/filter-products?sub_industry=${sub.id}`}">
                                 <img src="${sub.image || 'uploads/placeholder.png'}" width="75" height="75" alt="${sub.name}">
                             </a>
                         </figure>
                         <div class="product-details">
                             <h3 class="product-title">
-                                <a href="${isDisabled ? 'javascript:void(0);' : `pages/filter-products.php?sub_industry=${sub.id}`}">${sub.name}</a>
+                                <a href="${isDisabled ? 'javascript:void(0);' : `pages/filter-products?sub_industry=${sub.id}`}">${sub.name}</a>
                             </h3>                                                
                             <div class="price-box">
                                 <span class="product-price"> ${sub.product_count} Product(s)</span>

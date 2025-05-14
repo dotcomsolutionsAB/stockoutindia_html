@@ -138,9 +138,9 @@
             <input type="checkbox" required class="accent-red-600 rounded mt-1">
             <span>
               By registering you confirm that you accept the
-              <a href="pages/terms-condition.php" class="text-red-600 font-medium">Terms &amp; Conditions</a>
+              <a href="pages/terms-condition" class="text-red-600 font-medium">Terms &amp; Conditions</a>
               and the
-              <a href="pages/privacy-policy.php" class="text-red-600 font-medium">Privacy Policy</a>.
+              <a href="pages/privacy-policy" class="text-red-600 font-medium">Privacy Policy</a>.
             </span>
           </label>
 
@@ -161,7 +161,7 @@
 
         <p class="text-sm text-gray-600 mt-4">
           Already have an account?
-          <a href="login.php" class="text-red-600 font-semibold">Sign in</a>
+          <a href="login" class="text-red-600 font-semibold">Sign in</a>
         </p>
       </div>
     </div>
@@ -359,7 +359,7 @@
 
         if(json.success){
           alert('Registration successful! Redirecting to login…');
-          location.href = 'login.php';               // ← redirect
+          location.href = 'login';               // ← redirect
         }else{
           throw new Error(json.message||'Registration failed');
         }
@@ -474,7 +474,7 @@
 
         if (json.success) {
           alert('✅ Registration Successful! Redirecting...');
-          location.href = 'login.php';
+          location.href = 'login';
         } else {
           throw new Error(json.message || 'Registration failed');
         }

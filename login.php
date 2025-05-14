@@ -73,7 +73,7 @@
           </div>
 
           <div class="flex justify-between items-center mb-4 text-sm">
-            <a href="forget-password.php" class="text-red-600 font-semibold hover:underline">Forgot Your Password?</a>
+            <a href="forget-password" class="text-red-600 font-semibold hover:underline">Forgot Your Password?</a>
           </div>
 
           <button type="submit"
@@ -95,7 +95,7 @@
         </button>
 
         <p class="text-sm text-gray-600">Don't have an account?
-          <a href="register.php" class="text-red-600 font-semibold">Sign up</a>
+          <a href="register" class="text-red-600 font-semibold">Sign up</a>
         </p>
       </div>
     </div>
@@ -202,9 +202,9 @@
             localStorage.setItem('username', username);
 
             if (role === 'admin') {
-              window.location.href = 'admin/admin_index.php';
+              window.location.href = 'admin/admin_index';
             } else {
-              window.location.href = 'index.php';
+              window.location.href = 'index';
             }
           } else {
             alert(result.message || 'Login failed!');
@@ -279,7 +279,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // If "Go to Register" is clicked, redirect to registration page
-                            window.location.href = 'register.php';
+                            window.location.href = 'register';
                         } else {
                             // If "Cancel" is clicked, stay on the login page
                             console.log('User cancelled registration');
@@ -298,9 +298,9 @@
 
                     // Redirect based on user role
                     if (role === 'admin') {
-                        window.location.href = 'admin/admin_index.php';
+                        window.location.href = 'admin/admin_index';
                     } else {
-                        window.location.href = 'index.php';
+                        window.location.href = 'index';
                     }
                 }
             } else {

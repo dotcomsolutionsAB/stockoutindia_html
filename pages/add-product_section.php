@@ -239,7 +239,7 @@
 
             if (imageRes.success) {
               // alert("✅ Product & Image uploaded successfully!");
-              window.location.href = `pages/make-payment.php?product_id=${productId}`;
+              window.location.href = `pages/make-payment?product_id=${productId}`;
               // window.location.reload();
             } else {
               alert("⚠️ Product added but image upload failed: " + imageRes.message);

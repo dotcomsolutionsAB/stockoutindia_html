@@ -37,7 +37,7 @@
         <br>
         <p class="text-sm text-gray-600 text-center">
           Remembered your password?
-          <a href="login.php" class="text-red-600 font-semibold">Sign in</a>
+          <a href="login" class="text-red-600 font-semibold">Sign in</a>
         </p>
       </div>
     </div>
@@ -66,7 +66,7 @@
             confirmButtonText: 'OK',
             confirmButtonColor: '#b91c1c'
           }).then(() => {
-            window.location.href = "login.php";
+            window.location.href = "login";
           });
         } else {
           Swal.fire({

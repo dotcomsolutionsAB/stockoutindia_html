@@ -1,19 +1,22 @@
 # Enable mod_rewrite
 RewriteEngine On
 
+# Set base if not in root (uncomment and set correct path if needed)
+# RewriteBase /
+
 # Don't rewrite real files or directories
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# Redirect index.php or /index to /
-RewriteCond %{THE_REQUEST} \s/(index(\.php)?) [NC]
-RewriteRule ^index(\.php)?$ / [R=301,L]
+# Redirect direct access to index.php or /index to /
+RewriteCond %{THE_REQUEST} \s/index(?:\.php)?[\s?] [NC]
+RewriteRule ^index(?:\.php)?$ / [R=301,L]
 
-# Redirect *.php URLs to clean version (e.g., all-products.php → all-products)
-RewriteCond %{THE_REQUEST} \s/([^\s]+?)\.php[?\s] [NC]
-RewriteRule ^(.*)\.php$ /$1 [R=301,L,QSA]
+# Redirect any .php URLs to extensionless clean versions
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.php[\s?] [NC]
+RewriteRule ^(.+?)\.php$ /$1 [R=301,L]
 
-# Internally map clean URLs to actual .php files
+# Internally rewrite extensionless URLs to their .php counterparts
 RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.*)/?$ $1.php [L]
+RewriteRule ^(.+?)/?$ $1.php [L]

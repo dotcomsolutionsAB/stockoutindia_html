@@ -70,19 +70,19 @@
                         <button class="mobile-menu-toggler" type="button">
                             <i class="fas fa-bars"></i>
                         </button>
-                        <a href="index.php" class="logo">
+                        <a href="index" class="logo">
                             <img src="uploads/logo.jpg" alt="Stock Out" width="111" height="44">
                         </a>
                         <nav class="main-nav">
                             <ul class="menu">
                                 <li class="active">
-                                    <a href="index.php">Home</a>
+                                    <a href="index">Home</a>
                                 </li>
                                 <li>
-                                    <a href="pages/all-products.php">Products</a>
+                                    <a href="pages/all-products">Products</a>
                                 </li>                                
                                 <li>
-                                    <a href="pages/all-industries.php">Industries</a>
+                                    <a href="pages/all-industries">Industries</a>
                                 </li>
                             </ul>
                         </nav>
@@ -178,13 +178,13 @@
 
     if (authToken) {
       iconsWrapper.innerHTML = `      
-        <a href="pages/account.php" class="header_icon">
+        <a href="pages/account" class="header_icon">
           <i class="fas fa-user-edit"></i>
         </a>
       `;
     } else {
       iconsWrapper.innerHTML = `
-        <a href="login.php" class="header_icon">
+        <a href="login" class="header_icon">
           <i class="fas fa-user"></i>
         </a>
       `;
@@ -543,7 +543,7 @@
                         if (result.success && result.data.length > 0) {
                             const html = result.data.slice(0, 5).map(product => `
                                 <div class="bar_result border-bottom">
-                                <a href="pages/product_detail.php?id=${encodeURIComponent(product.id)}" class="text-dark d-block">
+                                <a href="pages/product_detail?id=${encodeURIComponent(product.id)}" class="text-dark d-block">
                                     ${product.product_name}
                                 </a>
                                 </div>
@@ -636,7 +636,7 @@
             .then(result => {
                 if (result.success && result.data.length > 0) {
                     const productId = result.data[0].id;
-                    window.location.href = `pages/product_detail.php?id=${productId}`;
+                    window.location.href = `pages/product_detail?id=${productId}`;
                 } else {
                     alert("No matching product found.");
                 }

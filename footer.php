@@ -99,7 +99,7 @@
                 <div class="footer-middle">
                     <div class="row">
                         <div class="col-lg-3 foot_ques">
-                            <a href="index.php"><img src="uploads/stockout_logo.png" alt="Logo" class="logo"></a>
+                            <a href="index"><img src="uploads/stockout_logo.png" alt="Logo" class="logo"></a>
 
                             <!-- <p class="footer-desc">Lorem ipsum dolor sit amet, consectetur adipis.</p> -->
 
@@ -116,10 +116,10 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <ul class="links">
-                                            <li><a href="pages/account.php">Profile</a></li>
-                                            <li><a href="pages/all-products.php">Products</a></li>
-                                            <li><a href="pages/all-industries.php">Industries</a></li>
-                                            <li><a href="pages/account.php?tab=wishlist">Wishlist</a></li>
+                                            <li><a href="pages/account">Profile</a></li>
+                                            <li><a href="pages/all-products">Products</a></li>
+                                            <li><a href="pages/all-industries">Industries</a></li>
+                                            <li><a href="pages/account?tab=wishlist">Wishlist</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -133,10 +133,10 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <ul class="links">
-                                            <li><a href="pages/faq.php">FAQs</a></li>
-                                            <li><a href="pages/privacy-policy.php">Privacy Policy</a></li>
-                                            <li><a href="pages/refund-policy.php">Refund Policy</a></li>
-                                            <li><a href="pages/terms-condition.php">Terms & Conditions</a></li>
+                                            <li><a href="pages/faq">FAQs</a></li>
+                                            <li><a href="pages/privacy-policy">Privacy Policy</a></li>
+                                            <li><a href="pages/refund-policy">Refund Policy</a></li>
+                                            <li><a href="pages/terms-condition">Terms & Conditions</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -179,12 +179,12 @@
             <span class="mobile-menu-close"><i class="fa fa-times"></i></span>
             <nav class="mobile-nav">
                 <ul class="mobile-menu">
-                    <li><a href="index.php">Home</a></li>
+                    <li><a href="index">Home</a></li>
                     <li>
-                        <a href="pages/all-industries.php">Industries</a>
+                        <a href="pages/all-industries">Industries</a>
                     </li>
                     <li>
-                        <a href="pages/all-products.php">Products</a>
+                        <a href="pages/all-products">Products</a>
                     </li>
                 </ul>
             </nav><!-- End .mobile-nav -->
@@ -206,26 +206,26 @@
     </div><!-- End .mobile-menu-container -->
     <div class="sticky-navbar">
         <div class="sticky-info">
-            <a href="index.php">
+            <a href="index">
                 <i class="icon-home"></i>Home
             </a>
         </div>
 
         <div class="sticky-info">
-            <a href="pages/all-industries.php">
+            <a href="pages/all-industries">
                 <i class="icon-bars"></i>Industries
             </a>
         </div>
 
         <div class="sticky-info">
-            <a href="pages/account.php">
+            <a href="pages/account">
                 <i class="icon-user-2"></i>Account
             </a>
         </div>
 
-        <!-- Wishlist  ➜  account.php?tab=wishlist -->
+        <!-- Wishlist  ➜  account?tab=wishlist -->
         <div class="sticky-info">
-            <a href="pages/account.php?tab=wishlist">
+            <a href="pages/account?tab=wishlist">
                 <i class="icon-heart"></i>Wishlist
             </a>
         </div>

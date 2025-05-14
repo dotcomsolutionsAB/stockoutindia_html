@@ -48,7 +48,7 @@
                 <?php include("admin_inc/coupons.php"); ?> 
                 
                 <!-- Test Section -->
-                <?php include("admin_inc/admin_test_section.php"); ?>   
+                 <!-- include("admin_inc/admin_test_section.php");    -->
                 
             </div>
         </div>

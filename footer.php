@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <!-- <div class="container">
+                <div class="container">
                     <div class="widget-newsletter d-lg-flex align-items-center flex-wrap">
                         <div class="footer-left d-md-flex flex-wrap align-items-center mr-5">
                             <div class="info-box w-auto mr-5 my-3">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
             </div>
             <div class="container">
@@ -143,7 +143,7 @@
                             </div><!-- End .widget -->
                         </div><!-- End .col-lg-3 -->
 
-                        <!-- <div class="col-lg-3">
+                        <div class="col-lg-3">
                             <div class="widget text-lg-right">
                                 <h4 class="widget-title">Features</h4>
 
@@ -153,7 +153,7 @@
                                 </ul>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
                 <div class="footer-bottom">
                     <p class="footer-copyright text-lg-center mb-0">&copy; Stockout India. 2025. All Rights

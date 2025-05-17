@@ -181,11 +181,17 @@
         <a href="pages/account" class="header_icon">
           <i class="fas fa-user-edit"></i>
         </a>
+        <a href="pages/account?tab=addProductsTab" class="header_icon">
+          <i class="fas fa-plus-circle"></i>
+        </a>
       `;
     } else {
       iconsWrapper.innerHTML = `
         <a href="login" class="header_icon">
           <i class="fas fa-user"></i>
+        </a>
+        <a href="login" class="header_icon">
+          <i class="fas fa-plus-circle"></i>
         </a>
       `;
     }

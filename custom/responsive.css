@@ -1,4 +1,7 @@
 @media (max-width: 480px) {
+    .add_pros span{
+        display: none;
+    }
     .acc-title{
         display: none;
     }

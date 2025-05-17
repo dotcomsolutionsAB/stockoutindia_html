@@ -181,8 +181,9 @@
         <a href="pages/account" class="header_icon">
           <i class="fas fa-user-edit"></i>
         </a>
-        <a href="pages/account?tab=addProductsTab" class="header_icon">
-          <i class="fas fa-plus-circle"></i>
+        <a href="pages/account?tab=addProducts" class="header_icon add_pros">
+            <span>List Product</span>
+            <i class="fas fa-plus-circle"></i>
         </a>
       `;
     } else {
@@ -190,7 +191,8 @@
         <a href="login" class="header_icon">
           <i class="fas fa-user"></i>
         </a>
-        <a href="login" class="header_icon">
+        <a href="login" class="header_icon add_pros">
+            <span>List Product</span>
           <i class="fas fa-plus-circle"></i>
         </a>
       `;

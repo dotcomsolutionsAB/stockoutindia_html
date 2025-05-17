@@ -62,7 +62,7 @@
                     </div>
                 </div>
 
-                <div class="container">
+                <!-- <div class="container">
                     <div class="widget-newsletter d-lg-flex align-items-center flex-wrap">
                         <div class="footer-left d-md-flex flex-wrap align-items-center mr-5">
                             <div class="info-box w-auto mr-5 my-3">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
             </div>
             <div class="container">
@@ -143,7 +143,28 @@
                             </div><!-- End .widget -->
                         </div><!-- End .col-lg-3 -->
 
+                        <!-- === App-download widget (replaces the old Features widget) === -->
                         <div class="col-lg-3">
+                            <div class="widget text-lg-right">
+                                <h4 class="widget-title mb-3">Get the App</h4>
+
+                                <!-- Google Play -->
+                                <a href="https://play.google.com/store/apps/details?id=com.stockoutindia.official"
+                                    target="_blank" rel="noopener" class="d-inline-block mb-2">
+                                    <img src="uploads/playStore.png" alt="Get it on Google Play"
+                                        class="img-fluid" style="max-width: 165px;">
+                                </a>
+
+                                <!-- App Store -->
+                                <a href="https://apps.apple.com/app/id1234567890" target="_blank" rel="noopener" class="d-inline-block">
+                                    <img
+                                        src="/assets/img/app-store-badge.svg"
+                                        alt="Download on the App Store" class="img-fluid" style="max-width: 165px;">
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-lg-3">
                             <div class="widget text-lg-right">
                                 <h4 class="widget-title">Features</h4>
 
@@ -152,7 +173,7 @@
                                     <li><a href="#">Sell Your Product</a></li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="footer-bottom">

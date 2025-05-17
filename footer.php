@@ -150,7 +150,7 @@
 
                                 <!-- Google Play -->
                                 <a href="https://play.google.com/store/apps/details?id=com.stockoutindia.official"
-                                    target="_blank" rel="noopener" class="d-inline-block mb-2">
+                                    target="_blank" rel="noopener" class="d-inline-block">
                                     <img src="uploads/appImage2.png" alt="Get it on Google Play"
                                         class="img-fluid" style="max-width: 165px;">
                                 </a>

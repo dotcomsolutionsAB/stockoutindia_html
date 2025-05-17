@@ -151,14 +151,13 @@
                                 <!-- Google Play -->
                                 <a href="https://play.google.com/store/apps/details?id=com.stockoutindia.official"
                                     target="_blank" rel="noopener" class="d-inline-block mb-2">
-                                    <img src="uploads/playStore.png" alt="Get it on Google Play"
+                                    <img src="uploads/appImage2.png" alt="Get it on Google Play"
                                         class="img-fluid" style="max-width: 165px;">
                                 </a>
 
                                 <!-- App Store -->
-                                <a href="https://apps.apple.com/app/id1234567890" target="_blank" rel="noopener" class="d-inline-block">
-                                    <img
-                                        src="/assets/img/app-store-badge.svg"
+                                <a href="#" target="_blank" rel="noopener" class="d-inline-block">
+                                    <img src="uploads/appImage1.png"
                                         alt="Download on the App Store" class="img-fluid" style="max-width: 165px;">
                                 </a>
                             </div>

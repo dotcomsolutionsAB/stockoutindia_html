@@ -73,35 +73,31 @@
                     <p class="product_dealer_name">Dealer name: ${matchedProduct.user?.name || 'N/A'}</p>
 
                     <div class="product_icons">
-  ${
-    matchedProduct.user?.phone
-      ? authstoken
-        // Logged in: real WhatsApp link
-        ? `<a href="https://wa.me/${matchedProduct.user.phone.replace('+', '')}" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>`
-        // Not logged in: icon with alert on click
-        : `<a href="#" onclick="showLoginAlert(); return false;"><i class="fab fa-whatsapp"></i></a>`
-      // No phone in user data but still show icon if NOT logged in as blank icon (disabled)
-      : !authstoken
-        ? `<a href="#" onclick="showLoginAlert(); return false;"><i class="fab fa-whatsapp" style="opacity:0.3; cursor:default;"></i></a>`
-        : ''
-  }
-  ${
-    matchedProduct.user?.phone
-      ? authstoken
-        // Logged in: real phone link
-        ? `<a href="tel:${matchedProduct.user.phone}"><i class="fas fa-phone"></i></a>`
-        // Not logged in: icon with alert on click
-        : `<a href="#" onclick="showLoginAlert(); return false;"><i class="fas fa-phone"></i></a>`
-      // No phone in user data but still show icon if NOT logged in as blank icon (disabled)
-      : !authstoken
-        ? `<a href="#" onclick="showLoginAlert(); return false;"><i class="fas fa-phone" style="opacity:0.3; cursor:default;"></i></a>`
-        : ''
-  }
-</div>
-
-
-
-
+                        ${
+                            matchedProduct.user?.phone
+                            ? authstoken
+                                // Logged in: real WhatsApp link
+                                ? `<a href="https://wa.me/${matchedProduct.user.phone.replace('+', '')}" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>`
+                                // Not logged in: icon with alert on click
+                                : `<a href="#" onclick="showLoginAlert(); return false;"><i class="fab fa-whatsapp"></i></a>`
+                            // No phone in user data but still show icon if NOT logged in as blank icon (disabled)
+                            : !authstoken
+                                ? `<a href="#" onclick="showLoginAlert(); return false;"><i class="fab fa-whatsapp" style="opacity:0.3; cursor:default;"></i></a>`
+                                : ''
+                        }
+                        ${
+                            matchedProduct.user?.phone
+                            ? authstoken
+                                // Logged in: real phone link
+                                ? `<a href="tel:${matchedProduct.user.phone}"><i class="fas fa-phone"></i></a>`
+                                // Not logged in: icon with alert on click
+                                : `<a href="#" onclick="showLoginAlert(); return false;"><i class="fas fa-phone"></i></a>`
+                            // No phone in user data but still show icon if NOT logged in as blank icon (disabled)
+                            : !authstoken
+                                ? `<a href="#" onclick="showLoginAlert(); return false;"><i class="fas fa-phone" style="opacity:0.3; cursor:default;"></i></a>`
+                                : ''
+                        }
+                    </div>
                     <div class="product_description">
                         <h3>About</h3>
                         <p>${matchedProduct.description || 'No description available.'}</p>

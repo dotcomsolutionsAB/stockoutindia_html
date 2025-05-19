@@ -73,21 +73,22 @@
                     <p class="product_dealer_name">Dealer name: ${matchedProduct.user?.name || 'N/A'}</p>
 
                     <div class="product_icons">
-                        ${
-                        matchedProduct.user?.phone
-                            ? authstoken
-                            ? `<a href="https://wa.me/${matchedProduct.user.phone.replace('+', '')}" target="_blank"><i class="fab fa-whatsapp"></i></a>`
-                            : `<a href="#" onclick="showLoginAlert(); return false;"><i class="fab fa-whatsapp"></i></a>`
-                            : ''
-                        }
-                        ${
-                        matchedProduct.user?.phone
-                            ? authstoken
-                            ? `<a href="tel:${matchedProduct.user.phone}"><i class="fas fa-phone"></i></a>`
-                            : `<a href="#" onclick="showLoginAlert(); return false;"><i class="fas fa-phone"></i></a>`
-                            : ''
-                        }
-                    </div>
+    ${
+      matchedProduct.user?.phone
+        ? authstoken
+          ? `<a href="https://wa.me/${matchedProduct.user.phone.replace('+', '')}" target="_blank" rel="noopener noreferrer"><i class="fab fa-whatsapp"></i></a>`
+          : `<a href="#" onclick="showLoginAlert(); return false;"><i class="fab fa-whatsapp"></i></a>`
+        : ''
+    }
+    ${
+      matchedProduct.user?.phone
+        ? authstoken
+          ? `<a href="tel:${matchedProduct.user.phone}"><i class="fas fa-phone"></i></a>`
+          : `<a href="#" onclick="showLoginAlert(); return false;"><i class="fas fa-phone"></i></a>`
+        : ''
+    }
+</div>
+
 
 
                     <div class="product_description">

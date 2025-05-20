@@ -48,7 +48,43 @@
     <button type="submit" class="btn btn-danger subss">Submit</button>
   </form>
 </section>
+<style>
+  #fileNamePreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+  }
 
+  .image-preview-wrapper {
+    width: 120px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .image-preview-img {
+    max-width: 100%;
+    max-height: 100px;
+    object-fit: contain;
+    margin-bottom: 6px;
+    border-radius: 4px;
+  }
+
+  .image-preview-name {
+    font-size: 12px;
+    text-align: center;
+    word-break: break-word;
+    color: #555;
+  }
+
+</style>
 <script>
   document.addEventListener("DOMContentLoaded", async function () {
     const stockout_base_url = "<?php echo BASE_URL; ?>";
@@ -69,15 +105,6 @@
     });
 
     // Show selected file name(s)
-    // document.getElementById("stockout_image_upload").addEventListener("change", function () {
-    //   const fileNameDisplay = document.getElementById("fileNamePreview");
-    //   const files = Array.from(this.files);
-    //   if (files.length > 0) {
-    //     fileNameDisplay.innerText = files.map(f => f.name).join(", ");
-    //   } else {
-    //     fileNameDisplay.innerText = "";
-    //   }
-    // });
     document.getElementById("stockout_image_upload").addEventListener("change", function () {
       const fileNameDisplay = document.getElementById("fileNamePreview");
       const files = Array.from(this.files);
@@ -89,22 +116,15 @@
 
           reader.onload = function (e) {
             const wrapper = document.createElement("div");
-            wrapper.style.display = "inline-block";
-            wrapper.style.margin = "10px";
-            wrapper.style.textAlign = "center";
+            wrapper.className = "image-preview-wrapper";
 
             const img = document.createElement("img");
             img.src = e.target.result;
-            img.style.maxWidth = "100px";
-            img.style.maxHeight = "100px";
-            img.style.display = "block";
-            img.style.marginBottom = "5px";
-            img.style.border = "1px solid #ccc";
-            img.style.borderRadius = "6px";
+            img.alt = file.name;
+            img.className = "image-preview-img";
 
             const label = document.createElement("div");
-            label.style.fontSize = "12px";
-            label.style.wordBreak = "break-word";
+            label.className = "image-preview-name";
             label.textContent = file.name;
 
             wrapper.appendChild(img);
@@ -116,6 +136,7 @@
         });
       }
     });
+
 
 
     // Load Units

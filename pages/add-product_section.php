@@ -40,7 +40,8 @@
         Click to upload Product Image
       </label>
       <input type="file" name="files[]" id="stockout_image_upload" accept="image/*" style="display:none" multiple>
-      <span id="fileNamePreview" style="display:block; font-size: 13px; color: #555;"></span>
+      <!-- <span id="fileNamePreview" style="display:block; font-size: 13px; color: #555;"></span> -->
+       <span id="fileNamePreview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></span>
     </div>
 
     <br>
@@ -68,15 +69,54 @@
     });
 
     // Show selected file name(s)
+    // document.getElementById("stockout_image_upload").addEventListener("change", function () {
+    //   const fileNameDisplay = document.getElementById("fileNamePreview");
+    //   const files = Array.from(this.files);
+    //   if (files.length > 0) {
+    //     fileNameDisplay.innerText = files.map(f => f.name).join(", ");
+    //   } else {
+    //     fileNameDisplay.innerText = "";
+    //   }
+    // });
     document.getElementById("stockout_image_upload").addEventListener("change", function () {
       const fileNameDisplay = document.getElementById("fileNamePreview");
       const files = Array.from(this.files);
+      fileNameDisplay.innerHTML = ""; // Clear previous previews
+
       if (files.length > 0) {
-        fileNameDisplay.innerText = files.map(f => f.name).join(", ");
-      } else {
-        fileNameDisplay.innerText = "";
+        files.forEach(file => {
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            const wrapper = document.createElement("div");
+            wrapper.style.display = "inline-block";
+            wrapper.style.margin = "10px";
+            wrapper.style.textAlign = "center";
+
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.style.maxWidth = "100px";
+            img.style.maxHeight = "100px";
+            img.style.display = "block";
+            img.style.marginBottom = "5px";
+            img.style.border = "1px solid #ccc";
+            img.style.borderRadius = "6px";
+
+            const label = document.createElement("div");
+            label.style.fontSize = "12px";
+            label.style.wordBreak = "break-word";
+            label.textContent = file.name;
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(label);
+            fileNameDisplay.appendChild(wrapper);
+          };
+
+          reader.readAsDataURL(file);
+        });
       }
     });
+
 
     // Load Units
     try {
@@ -176,13 +216,13 @@
       const minimum_quantity = parseInt(getVal("minimum_quantity"));
 
       // ✅ Custom Validations
-      if (selling_price >= original_price) {
-        alert("❌ Selling Price must be less than Original Price.");
+      if (selling_price < original_price) {
+        alert("❌ Selling Price must be greater than Original Price.");
         return;
       }
 
-      if (offer_quantity >= minimum_quantity) {
-        alert("❌ Offer Quantity must be less than Minimum Quantity.");
+      if (offer_quantity < minimum_quantity) {
+        alert("❌ Offer Quantity must be greater than Minimum Quantity.");
         return;
       }
 

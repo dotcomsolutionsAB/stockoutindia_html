@@ -48,6 +48,7 @@
     <button type="submit" class="btn btn-danger subss">Submit</button>
   </form>
 </section>
+
 <style>
   .image-modal-overlay {
     position: fixed;
@@ -126,6 +127,7 @@
   }
 
 </style>
+
 <script>
   document.addEventListener("DOMContentLoaded", async function () {
     const stockout_base_url = "<?php echo BASE_URL; ?>";
@@ -203,6 +205,14 @@
       modalContent.appendChild(modalImg);
       modalOverlay.appendChild(modalContent);
       document.body.appendChild(modalOverlay);
+
+      // ✅ Close modal when clicking outside the image (on overlay)
+      modalOverlay.addEventListener("click", function (e) {
+        if (e.target === modalOverlay) {
+          document.body.removeChild(modalOverlay);
+        }
+      });
+
     }
 
 

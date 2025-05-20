@@ -164,6 +164,11 @@
             img.alt = file.name;
             img.className = "image-preview-img";
 
+            // 👇 Add click event to open full preview modal
+            img.addEventListener("click", () => {
+              showImagePreviewModal(e.target.result, file.name);
+            });
+
             const label = document.createElement("div");
             label.className = "image-preview-name";
             label.textContent = file.name;
@@ -172,12 +177,6 @@
             wrapper.appendChild(label);
             fileNameDisplay.appendChild(wrapper);
           };
-
-          // 👇 Add click event to open full preview modal
-          img.addEventListener("click", () => {
-            showImagePreviewModal(e.target.result, file.name);
-          });
-
 
           reader.readAsDataURL(file);
         });

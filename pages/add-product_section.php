@@ -49,6 +49,47 @@
   </form>
 </section>
 <style>
+  .image-modal-overlay {
+    position: fixed;
+    z-index: 1000;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .image-modal-content {
+    position: relative;
+    background: #fff;
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow: auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  }
+
+  .image-modal-content img {
+    max-width: 100%;
+    max-height: 80vh;
+    display: block;
+    margin: auto;
+    border-radius: 6px;
+  }
+
+  .image-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
   #fileNamePreview {
     display: flex;
     flex-wrap: wrap;
@@ -132,11 +173,38 @@
             fileNameDisplay.appendChild(wrapper);
           };
 
+          // 👇 Add click event to open full preview modal
+          img.addEventListener("click", () => {
+            showImagePreviewModal(e.target.result, file.name);
+          });
+
+
           reader.readAsDataURL(file);
         });
       }
     });
 
+    function showImagePreviewModal(src, filename) {
+      const modalOverlay = document.createElement("div");
+      modalOverlay.className = "image-modal-overlay";
+
+      const modalContent = document.createElement("div");
+      modalContent.className = "image-modal-content";
+
+      const modalImg = document.createElement("img");
+      modalImg.src = src;
+      modalImg.alt = filename;
+
+      const closeButton = document.createElement("span");
+      closeButton.className = "image-modal-close";
+      closeButton.innerHTML = "&times;";
+      closeButton.onclick = () => document.body.removeChild(modalOverlay);
+
+      modalContent.appendChild(closeButton);
+      modalContent.appendChild(modalImg);
+      modalOverlay.appendChild(modalContent);
+      document.body.appendChild(modalOverlay);
+    }
 
 
     // Load Units

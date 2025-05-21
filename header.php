@@ -131,7 +131,7 @@
                 </div>
             </div>
 
-            <div class="header-bottom">
+            <!-- <div class="header-bottom">
                 <div class="owl-carousel info-boxes-slider" data-owl-options="{
                         'items': 1,
                         'dots': false,
@@ -150,26 +150,27 @@
 
                         <div class="info-box-content">
                             <h4 class="text-white">Free Shipping &amp; Return</h4>
-                        </div><!-- End .info-box-content -->
-                    </div><!-- End .info-box -->
+                        </div>
+                    </div>
 
                     <div class="info-box info-box-icon-left">
                         <i class="icon-money text-white"></i>
 
                         <div class="info-box-content">
                             <h4 class="text-white">Money Back Guarantee</h4>
-                        </div><!-- End .info-box-content -->
-                    </div><!-- End .info-box -->
+                        </div>
+                    </div>
 
                     <div class="info-box info-box-icon-left">
                         <i class="icon-support text-white"></i>
 
                         <div class="info-box-content">
                             <h4 class="text-white">Online Support 24/7</h4>
-                        </div><!-- End .info-box-content -->
-                    </div><!-- End .info-box -->
-                </div><!-- End .owl-carousel -->
-            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            
         </header>
 <script>
   document.addEventListener("DOMContentLoaded", function () {

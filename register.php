@@ -92,7 +92,7 @@
             <input id="email" type="email" placeholder="Email"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
           </div>
-          <input type="text" name="idToken" id="idToken">
+          <input type="hidden" name="idToken" id="idToken">
           <!-- pwd + eye -->
           <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
             <div class="relative">

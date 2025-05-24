@@ -510,68 +510,81 @@
     //     alert(`❌ ${err.message}`);
     //   }
     // };
-    document.getElementById('registerForm').onsubmit = async (e) => {
-      e.preventDefault();
+  document.getElementById('registerForm').onsubmit = async (e) => {
+    e.preventDefault();
 
-      const noGst = document.getElementById('noGstChk').checked;
-      
-      // 🔥 Updated logic for isGoogleSignup
-      const isGoogleSignup = googleIdToken && googleIdToken.trim() !== '';
+    const noGst = document.getElementById('noGstChk').checked;
 
-      // Validate phone always
-      if (!document.getElementById('phone').value.trim()) {
-        alert('Phone number is required!');
+    // 🔥 Check for Google ID token (from localStorage or variable)
+    const idToken = googleIdToken || localStorage.getItem('G_id');
+    const isGoogleSignup = idToken && idToken.trim() !== '';
+
+    // Always check phone
+    if (!document.getElementById('phone').value.trim()) {
+      alert('Phone number is required!');
+      return;
+    }
+
+    // 🔥 Only check passwords if Google ID token is NOT present
+    if (!isGoogleSignup) {
+      const password = document.getElementById('pass').value;
+      const confirmPassword = document.getElementById('cpass').value;
+
+      if (!password || !confirmPassword) {
+        alert('Password and Confirm Password are required!');
         return;
       }
 
-      // 🔥 Updated password check – skip if Google Sign-Up
-      if (!isGoogleSignup && (!document.getElementById('pass').value || !document.getElementById('cpass').value)) {
-        alert('Password and Confirm Password required!');
+      if (password !== confirmPassword) {
+        alert('Passwords do not match!');
         return;
       }
+    }
 
-      const rawPhone = document.getElementById('phone').value.trim();
-      const payload = {
-        role         : "user",
-        phone        : `+91${rawPhone}`,
-        name         : document.getElementById('fullName').value.trim(),
-        company_name : document.getElementById('companyName').value.trim(),
-        address      : document.getElementById('address').value.trim(),
-        pincode      : document.getElementById('pincode').value.trim(),
-        city         : document.getElementById('citySelect').value,
-        state        : parseInt(document.getElementById('stateSelect').value) || null,
-        gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
-        industry     : parseInt(document.getElementById('industrySelect').value) || null,
-        sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null
-      };
-
-      if (isGoogleSignup) {
-        payload.idToken = googleIdToken;
-      } else {
-        payload.password = document.getElementById('pass').value;
-        payload.email    = document.getElementById('email').value.trim();
-        payload.google_id = ""; // normal signup
-      }
-
-      try {
-        const res = await fetch(`${BASE}/register`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
-        });
-        const json = await res.json();
-
-        if (json.success) {
-          location.href = 'login';
-        } else {
-          throw new Error(json.message || 'Registration failed');
-        }
-
-      } catch (err) {
-        console.error(err);
-        alert(`❌ ${err.message}`);
-      }
+    const rawPhone = document.getElementById('phone').value.trim();
+    const payload = {
+      role         : "user",
+      phone        : `+91${rawPhone}`,
+      name         : document.getElementById('fullName').value.trim(),
+      company_name : document.getElementById('companyName').value.trim(),
+      address      : document.getElementById('address').value.trim(),
+      pincode      : document.getElementById('pincode').value.trim(),
+      city         : document.getElementById('citySelect').value,
+      state        : parseInt(document.getElementById('stateSelect').value) || null,
+      gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
+      industry     : parseInt(document.getElementById('industrySelect').value) || null,
+      sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null,
+      email        : document.getElementById('email').value.trim()
     };
+
+    if (isGoogleSignup) {
+      payload.idToken = idToken;
+      // Password fields are skipped
+    } else {
+      payload.password = document.getElementById('pass').value;
+      payload.google_id = ""; // Normal signup
+    }
+
+    try {
+      const res = await fetch(`${BASE}/register`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+
+      if (json.success) {
+        location.href = 'login';
+      } else {
+        throw new Error(json.message || 'Registration failed');
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert(`❌ ${err.message}`);
+    }
+  };
+
 
   </script>
 

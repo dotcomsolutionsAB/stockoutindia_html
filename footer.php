@@ -34,7 +34,9 @@
                                 <i class="fab fa-instagram text-white mr-4"></i>
                                 <div class="info-box-content">
                                     <h4 class="text-white line-height-1">Follow Us on Instagram</h4>
-                                    <p class="line-height-1">@Stockoutindia</p>
+                                    <a href="https://www.instagram.com/stockoutindia_?igsh=MTUwcTR2eDUxdHVobg==" target="blank_">
+										<p class="line-height-1">stockoutindia_</p>
+									</a>
                                 </div>
                             </div>
                         </div>

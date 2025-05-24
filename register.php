@@ -214,6 +214,30 @@
     const BASE  = `<?php echo BASE_URL; ?>`;
     const token = localStorage.getItem('authToken') ?? '';
 
+    // ─── Check for pre-saved Google Token and Email ───
+    const savedGoogleToken = localStorage.getItem('G_id');
+    const savedEmail = localStorage.getItem('E_id');
+
+    if (savedGoogleToken && savedEmail) {
+        console.log('Auto-fill from Google Sign-In:', savedEmail);
+        document.getElementById('email').value = savedEmail;
+        document.getElementById('email').disabled = true; // Lock email input
+        googleIdToken = savedGoogleToken;
+
+        // Optional: Show/hide UI elements as needed
+        regBtn.disabled = false;
+        document.getElementById('googleSignUpBtn').classList.add('hidden');
+        document.getElementById('noGstChk').checked = true;
+        document.getElementById('gstFieldGroup').classList.add('hidden');
+        document.getElementById('extraGroup').classList.remove('hidden');
+        document.getElementById('passwordGroup').classList.add('hidden');
+
+        // Clear saved Google data from localStorage
+        localStorage.removeItem('G_id');
+        localStorage.removeItem('E_id');
+    }
+
+
     /* ─── Feather / eye toggles ───────────────────────────────── */
     feather.replace();
     document.querySelectorAll('.eye').forEach(icon=>{
@@ -415,7 +439,7 @@
         // Hide password fields
         document.getElementById('passwordGroup').classList.add('hidden');
 
-        alert('Google authenticated! Fill the remaining details to complete registration.');
+        // alert('Google authenticated! Fill the remaining details to complete registration.');
 
       } catch (error) {
         console.error(error);
@@ -473,7 +497,7 @@
         const json = await res.json();
 
         if (json.success) {
-          alert('✅ Registration Successful! Redirecting...');
+          // alert('✅ Registration Successful! Redirecting...');
           location.href = 'login';
         } else {
           throw new Error(json.message || 'Registration failed');

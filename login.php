@@ -241,9 +241,10 @@
         firebase.auth().signInWithPopup(provider)
             .then((result) => {
                 const idToken = result.credential.idToken; // Get the ID token
+                const email = result.user.email; // Get user's email
 
-                // Send the ID token to the backend for verification
-                sendToBackend(idToken);
+                // Send the ID token to the backend
+                sendToBackend(idToken, email);
             })
             .catch((error) => {
                 console.error("Error signing in with Google:", error);
@@ -251,7 +252,7 @@
     });
 
     // Function to send the ID token to the backend
-    function sendToBackend(idToken) {
+    function sendToBackend(idToken, email) {
         fetch('<?php echo BASE_URL; ?>/login', {
             method: 'POST',
             headers: {
@@ -267,23 +268,31 @@
 
             if (data.success) {
                 if (data.account_created === false) {
+
+                    // Save ID token and email in localStorage
+                    localStorage.setItem('G_id', idToken);
+                    localStorage.setItem('E_id', email);
+
+                    // Redirect to registration page directly
+                    window.location.href = 'register';
+
                     // Show SweetAlert popup when user is not registered
-                    Swal.fire({
-                        title: 'You Have no Account!',
-                        text: 'You have to register first.',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Go to Register',
-                        cancelButtonText: 'Cancel'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // If "Go to Register" is clicked, redirect to registration page
-                            window.location.href = 'register';
-                        } else {
-                            // If "Cancel" is clicked, stay on the login page
-                            console.log('User cancelled registration');
-                        }
-                    });
+                    // Swal.fire({
+                    //     title: 'You Have no Account!',
+                    //     text: 'You have to register first.',
+                    //     icon: 'warning',
+                    //     showCancelButton: true,
+                    //     confirmButtonText: 'Go to Register',
+                    //     cancelButtonText: 'Cancel'
+                    // }).then((result) => {
+                    //     if (result.isConfirmed) {
+                    //         // If "Go to Register" is clicked, redirect to registration page
+                    //         window.location.href = 'register';
+                    //     } else {
+                    //         // If "Cancel" is clicked, stay on the login page
+                    //         console.log('User cancelled registration');
+                    //     }
+                    // });
                 } else {
                     // User found and logged in
                     const { token, user_id, name, role, username } = data.data;

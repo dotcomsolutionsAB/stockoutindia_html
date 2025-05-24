@@ -92,7 +92,7 @@
             <input id="email" type="email" placeholder="Email"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
           </div>
-          <input type="text" name="idToken" id="g_id">
+          <input type="text" name="idToken" id="idToken">
           <!-- pwd + eye -->
           <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
             <div class="relative">
@@ -559,11 +559,11 @@
     };
 
     if (isGoogleSignup) {
-      payload.idToken = idToken;
+      payload.idToken = document.getElementById('idToken').value.trim();
       // Password fields are skipped
     } else {
       payload.password = document.getElementById('pass').value;
-      payload.google_id = ""; // Normal signup
+      payload.idToken = document.getElementById('idToken').value.trim(); // Normal signup
     }
 
     try {

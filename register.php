@@ -221,7 +221,7 @@
     if (savedGoogleToken && savedEmail) {
         console.log('Auto-fill from Google Sign-In:', savedEmail);
         document.getElementById('email').value = savedEmail;
-        document.getElementById('g_id').value = savedGoogleToken;
+        document.getElementById('idToken').value = savedGoogleToken;
         document.getElementById('email').disabled = true; // Lock email input
         googleIdToken = savedGoogleToken;  // 🔥 This updates the global variable
 

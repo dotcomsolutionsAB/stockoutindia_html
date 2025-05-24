@@ -448,24 +448,89 @@
     };
 
     // ─── Normal or Google Register ───
+    // document.getElementById('registerForm').onsubmit = async (e) => {
+    //   e.preventDefault();
+
+    //   const noGst = document.getElementById('noGstChk').checked;
+    //   // const isGoogleSignup = googleIdToken !== '';
+    //   const isGoogleSignup = googleIdToken && googleIdToken.trim() !== '';
+
+
+    //   // Validate basic fields
+    //   if (!document.getElementById('phone').value.trim()) {
+    //     alert('Phone number is required!');
+    //     return;
+    //   }
+
+    //   if (!isGoogleSignup && (!document.getElementById('pass').value || !document.getElementById('cpass').value)) {
+    //     alert('Password and Confirm Password required!');
+    //     return;
+    //   }
+    //   const rawPhone = document.getElementById('phone').value.trim();
+    //   // Build Payload
+    //   const payload = {
+    //     role         : "user",
+    //     phone        : `+91${rawPhone}`,
+    //     name         : document.getElementById('fullName').value.trim(),
+    //     company_name : document.getElementById('companyName').value.trim(),
+    //     address      : document.getElementById('address').value.trim(),
+    //     pincode      : document.getElementById('pincode').value.trim(),
+    //     city         : document.getElementById('citySelect').value,
+    //     state        : parseInt(document.getElementById('stateSelect').value) || null,
+    //     gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
+    //     industry     : parseInt(document.getElementById('industrySelect').value) || null,
+    //     sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null
+    //   };
+
+    //   if (isGoogleSignup) {
+    //     payload.idToken = googleIdToken;
+    //   } else {
+    //     payload.password = document.getElementById('pass').value;
+    //     payload.email    = document.getElementById('email').value.trim();
+    //     payload.google_id = ""; // normal signup
+    //   }
+
+    //   try {
+    //     const res = await fetch(`${BASE}/register`, {
+    //       method: 'POST',
+    //       headers: {'Content-Type': 'application/json'},
+    //       body: JSON.stringify(payload)
+    //     });
+    //     const json = await res.json();
+
+    //     if (json.success) {
+    //       // alert('✅ Registration Successful! Redirecting...');
+    //       location.href = 'login';
+    //     } else {
+    //       throw new Error(json.message || 'Registration failed');
+    //     }
+
+    //   } catch (err) {
+    //     console.error(err);
+    //     alert(`❌ ${err.message}`);
+    //   }
+    // };
     document.getElementById('registerForm').onsubmit = async (e) => {
       e.preventDefault();
 
       const noGst = document.getElementById('noGstChk').checked;
-      const isGoogleSignup = googleIdToken !== '';
+      
+      // 🔥 Updated logic for isGoogleSignup
+      const isGoogleSignup = googleIdToken && googleIdToken.trim() !== '';
 
-      // Validate basic fields
+      // Validate phone always
       if (!document.getElementById('phone').value.trim()) {
         alert('Phone number is required!');
         return;
       }
 
+      // 🔥 Updated password check – skip if Google Sign-Up
       if (!isGoogleSignup && (!document.getElementById('pass').value || !document.getElementById('cpass').value)) {
         alert('Password and Confirm Password required!');
         return;
       }
+
       const rawPhone = document.getElementById('phone').value.trim();
-      // Build Payload
       const payload = {
         role         : "user",
         phone        : `+91${rawPhone}`,
@@ -497,7 +562,6 @@
         const json = await res.json();
 
         if (json.success) {
-          // alert('✅ Registration Successful! Redirecting...');
           location.href = 'login';
         } else {
           throw new Error(json.message || 'Registration failed');
@@ -508,6 +572,7 @@
         alert(`❌ ${err.message}`);
       }
     };
+
   </script>
 
 </body>

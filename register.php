@@ -213,7 +213,7 @@
     /* ─── Constants ───────────────────────────────────────────── */
     const BASE  = `<?php echo BASE_URL; ?>`;
     const token = localStorage.getItem('authToken') ?? '';
-
+    let googleIdToken = '';  // Global declaration
     // ─── Check for pre-saved Google Token and Email ───
     const savedGoogleToken = localStorage.getItem('G_id');
     const savedEmail = localStorage.getItem('E_id');
@@ -222,7 +222,7 @@
         console.log('Auto-fill from Google Sign-In:', savedEmail);
         document.getElementById('email').value = savedEmail;
         document.getElementById('email').disabled = true; // Lock email input
-        googleIdToken = savedGoogleToken;
+        googleIdToken = savedGoogleToken;  // 🔥 This updates the global variable
 
         // Optional: Show/hide UI elements as needed
         regBtn.disabled = false;
@@ -526,20 +526,20 @@
     }
 
     // 🔥 Only check passwords if Google ID token is NOT present
-    if (!isGoogleSignup) {
-      const password = document.getElementById('pass').value;
-      const confirmPassword = document.getElementById('cpass').value;
+    // if (!isGoogleSignup) {
+    //   const password = document.getElementById('pass').value;
+    //   const confirmPassword = document.getElementById('cpass').value;
 
-      if (!password || !confirmPassword) {
-        alert('Password and Confirm Password are required!');
-        return;
-      }
+    //   if (!password || !confirmPassword) {
+    //     alert('Password and Confirm Password are required!');
+    //     return;
+    //   }
 
-      if (password !== confirmPassword) {
-        alert('Passwords do not match!');
-        return;
-      }
-    }
+    //   if (password !== confirmPassword) {
+    //     alert('Passwords do not match!');
+    //     return;
+    //   }
+    // }
 
     const rawPhone = document.getElementById('phone').value.trim();
     const payload = {

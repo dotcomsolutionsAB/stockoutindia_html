@@ -92,7 +92,7 @@
             <input id="email" type="email" placeholder="Email"
                    class="w-full border border-gray-400 px-3 py-2 rounded-md">
           </div>
-
+          <input type="text" name="idToken" id="g_id">
           <!-- pwd + eye -->
           <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" id="passwordGroup">
             <div class="relative">
@@ -221,6 +221,7 @@
     if (savedGoogleToken && savedEmail) {
         console.log('Auto-fill from Google Sign-In:', savedEmail);
         document.getElementById('email').value = savedEmail;
+        document.getElementById('g_id').value = savedGoogleToken;
         document.getElementById('email').disabled = true; // Lock email input
         googleIdToken = savedGoogleToken;  // 🔥 This updates the global variable
 

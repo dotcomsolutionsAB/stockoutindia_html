@@ -574,7 +574,13 @@
       const json = await res.json();
 
       if (json.success) {
-        location.href = 'login';
+          // Store user data in localStorage
+          localStorage.setItem('authToken', token);
+          localStorage.setItem('user_id', user_id);
+          localStorage.setItem('name', name);
+          localStorage.setItem('role', role);
+          localStorage.setItem('username', username);
+          location.href = 'index';
       } else {
         throw new Error(json.message || 'Registration failed');
       }

@@ -354,7 +354,7 @@
         phone        : `+91${rawPhone}`,
         email        : document.getElementById('email').value.trim(),
         password     : document.getElementById('pass').value,
-        google_id    : "",
+        google_id    : document.getElementById('g_id').value.trim(),
         role         : "user",                       // ← default role
         industry     : indSel.value,
         sub_industry : subSel.value

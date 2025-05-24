@@ -575,16 +575,25 @@
       const json = await res.json();
 
       if (json.success) {
-          // Store user data in localStorage
-          localStorage.setItem('authToken', token);
-          localStorage.setItem('user_id', user_id);
-          localStorage.setItem('name', name);
-          localStorage.setItem('role', role);
-          localStorage.setItem('username', username);
-          location.href = 'index';
+        const data = json.data || {};
+
+        if (data.token) {
+            localStorage.setItem('authToken', data.token);
+            localStorage.setItem('user_id', data.user_id);
+            localStorage.setItem('name', data.name);
+            localStorage.setItem('role', data.role);
+            localStorage.setItem('username', data.username);
+
+            // Redirect to index if token exists
+            location.href = 'index';
+        } else {
+            // No token means no auth, redirect to login
+            location.href = 'login';
+        }
       } else {
-        throw new Error(json.message || 'Registration failed');
+          throw new Error(json.message || 'Registration failed');
       }
+
 
     } catch (err) {
       console.error(err);

@@ -213,7 +213,7 @@
     /* ─── Constants ───────────────────────────────────────────── */
     const BASE  = `<?php echo BASE_URL; ?>`;
     const token = localStorage.getItem('authToken') ?? '';
-    let googleIdToken = '';  // Global declaration
+    // let googleIdToken = '';  // Global declaration
     // ─── Check for pre-saved Google Token and Email ───
     const savedGoogleToken = localStorage.getItem('G_id');
     const savedEmail = localStorage.getItem('E_id');

@@ -381,10 +381,12 @@
               // window.location.reload();
             } else {
               alert("⚠️ Product added but image upload failed: " + imageRes.message);
+              window.location.href = `pages/make-payment?product_id=${productId}`;
             }
           } else {
             alert("✅ Product added (No image uploaded)");
-            window.location.reload();
+            // window.location.reload();
+            window.location.href = `pages/make-payment?product_id=${productId}`;
           }
         } else {
           alert("❌ Error: " + res.message);

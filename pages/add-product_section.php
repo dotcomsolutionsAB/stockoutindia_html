@@ -314,7 +314,7 @@
       const minimum_quantity = parseInt(getVal("minimum_quantity"));
 
       // ✅ Custom Validations
-      if (selling_price < original_price) {
+      if (selling_price > original_price) {
         alert("❌ Selling Price must be lesser than Original Price.");
         return;
       }

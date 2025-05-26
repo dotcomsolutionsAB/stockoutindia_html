@@ -315,7 +315,7 @@
 
       // ✅ Custom Validations
       if (selling_price < original_price) {
-        alert("❌ Selling Price must be greater than Original Price.");
+        alert("❌ Selling Price must be lesser than Original Price.");
         return;
       }
 

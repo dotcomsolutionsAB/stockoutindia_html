@@ -123,6 +123,29 @@
 
             document.getElementById('product_detail_container').innerHTML = html;
 
+            // document.getElementById('product_detail_container').innerHTML = html;
+
+            // Slider logic
+            const images = document.querySelectorAll('.slider_images_container img.product_image');
+            let currentIndex = 0;
+
+            const showImage = (index) => {
+            images.forEach((img, i) => {
+                img.classList.toggle('active', i === index);
+            });
+            };
+
+            document.getElementById('prevBtn').addEventListener('click', () => {
+            currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+            showImage(currentIndex);
+            });
+
+            document.getElementById('nextBtn').addEventListener('click', () => {
+            currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+            showImage(currentIndex);
+            });
+
+
             // ✅ Now passing industryId properly
             loadSimilarProducts(matchedProduct, matchedProduct.user?.id, industryId);
         } else {
@@ -347,28 +370,7 @@
         });
     }
 </script>
-<script>
-    // Slider logic
-const images = document.querySelectorAll('.slider_images_container img.product_image');
-let currentIndex = 0;
 
-const showImage = (index) => {
-  images.forEach((img, i) => {
-    img.classList.toggle('active', i === index);
-  });
-};
-
-document.getElementById('prevBtn').addEventListener('click', () => {
-  currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
-  showImage(currentIndex);
-});
-
-document.getElementById('nextBtn').addEventListener('click', () => {
-  currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
-  showImage(currentIndex);
-});
-
-</script>
 <style>
     .product_image_box {
     position: relative;

@@ -335,5 +335,22 @@
         });
     }
 </script>
+<style>
+    .product_image_box {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
 
+.product_image_box img.product_image {
+  max-height: 200px;
+  object-fit: contain;
+  cursor: pointer;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+</style>
 <?php include("../footer.php") ?>

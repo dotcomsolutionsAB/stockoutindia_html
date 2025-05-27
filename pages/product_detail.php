@@ -125,7 +125,6 @@
 
             // document.getElementById('product_detail_container').innerHTML = html;
 
-            // Slider logic
             const images = document.querySelectorAll('.slider_images_container img.product_image');
             let currentIndex = 0;
 
@@ -135,15 +134,22 @@
             });
             };
 
+            // Hide arrows if only one image
+            if (images.length <= 1) {
+            document.getElementById('prevBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            } else {
             document.getElementById('prevBtn').addEventListener('click', () => {
-            currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
-            showImage(currentIndex);
+                currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+                showImage(currentIndex);
             });
 
             document.getElementById('nextBtn').addEventListener('click', () => {
-            currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
-            showImage(currentIndex);
+                currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+                showImage(currentIndex);
             });
+            }
+
 
 
             // ✅ Now passing industryId properly

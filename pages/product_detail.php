@@ -58,8 +58,12 @@
             const industryId = matchedProduct.industry_details?.id;
 
             const html = `
-                <div class="product_image_box">
-                    <img src="${matchedProduct.image?.[0] || 'uploads/placeholder.png'}" alt="${matchedProduct.product_name}" class="product_image">
+                 <div class="product_image_box">
+                    ${
+                    matchedProduct.image && matchedProduct.image.length > 0
+                        ? matchedProduct.image.map(imgUrl => `<img src="${imgUrl}" alt="${matchedProduct.product_name}" class="product_image" />`).join('')
+                        : `<img src="uploads/placeholder.png" alt="No Image" class="product_image" />`
+                    }
                 </div>
 
                 <div class="product_info">

@@ -59,12 +59,24 @@
 
             const html = `
                  <div class="product_image_box">
-                    ${
-                    matchedProduct.image && matchedProduct.image.length > 0
-                        ? matchedProduct.image.map(imgUrl => `<img src="${imgUrl}" alt="${matchedProduct.product_name}" class="product_image" />`).join('')
-                        : `<img src="uploads/placeholder.png" alt="No Image" class="product_image" />`
-                    }
+                    <button id="prevBtn" class="slider-btn">&#10094;</button>
+                    <div class="slider_images_container">
+                        ${
+                        matchedProduct.image && matchedProduct.image.length > 0
+                            ? matchedProduct.image.map((imgUrl, index) => `
+                            <img 
+                                src="${imgUrl}" 
+                                alt="${matchedProduct.product_name}" 
+                                class="product_image slider_image${index === 0 ? ' active' : ''}" 
+                                data-index="${index}"
+                            />
+                            `).join('')
+                            : `<img src="uploads/placeholder.png" alt="No Image" class="product_image active" />`
+                        }
+                    </div>
+                    <button id="nextBtn" class="slider-btn">&#10095;</button>
                 </div>
+
 
                 <div class="product_info">
                     <h2 class="product_title">${matchedProduct.product_name}</h2>
@@ -335,22 +347,84 @@
         });
     }
 </script>
+<script>
+    // Slider logic
+const images = document.querySelectorAll('.slider_images_container img.product_image');
+let currentIndex = 0;
+
+const showImage = (index) => {
+  images.forEach((img, i) => {
+    img.classList.toggle('active', i === index);
+  });
+};
+
+document.getElementById('prevBtn').addEventListener('click', () => {
+  currentIndex = (currentIndex === 0) ? images.length - 1 : currentIndex - 1;
+  showImage(currentIndex);
+});
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  currentIndex = (currentIndex === images.length - 1) ? 0 : currentIndex + 1;
+  showImage(currentIndex);
+});
+
+</script>
 <style>
     .product_image_box {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 10px 0;
-  border-bottom: 1px solid #ccc;
-}
+    position: relative;
+    width: 100%;
+    max-width: 500px; /* adjust as needed */
+    margin-bottom: 20px;
+    user-select: none;
+    }
 
-.product_image_box img.product_image {
-  max-height: 200px;
-  object-fit: contain;
-  cursor: pointer;
-  border-radius: 5px;
-  flex-shrink: 0;
-}
+    .slider_images_container {
+    overflow: hidden;
+    position: relative;
+    height: 300px; /* fixed height for images */
+    }
 
+    .slider_images_container img.product_image {
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    }
+
+    .slider_images_container img.product_image.active {
+    display: block;
+    position: relative;
+    }
+
+    .slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.4);
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 3px;
+    user-select: none;
+    z-index: 10;
+    }
+
+    #prevBtn {
+    left: 5px;
+    }
+
+    #nextBtn {
+    right: 5px;
+    }
+
+    .slider-btn:hover {
+    background-color: rgba(0,0,0,0.7);
+    }
 </style>
 <?php include("../footer.php") ?>

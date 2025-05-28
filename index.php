@@ -92,7 +92,7 @@
             html += '<div class="w-100"></div>';
         }
 
-        html += cardTemplate;   
+        // html += cardTemplate;   
         const image = product.image?.[0] || "uploads/placeholder.png";
         const productLink = `pages/product_detail?id=${product.id}`;
         /* phone can be phone or mobile; strip the leading “+” */

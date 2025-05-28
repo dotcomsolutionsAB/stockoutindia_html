@@ -167,8 +167,7 @@
             const productLink = `pages/product_detail?id=${product.id}`;
             const phone = product.user?.mobile || '';
             const whatsapp = product.user?.whatsapp || phone;
-            const hasPhone = phone !== null && phone.trim() !== '';
-            
+
             container.innerHTML += `
                 <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
                     <div class="product-card bg-white">
@@ -210,12 +209,12 @@
                             </div>                          
                         </div>
                         <div class="d-flex bottom-btns global_page_card">
-                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start ${isDisabled || !hasPhone ? 'disabled-btn' : ''}" 
-                                ${isDisabled || !hasPhone ? '' : `onclick="handleWhatsApp('${encodeURIComponent(whatsapp)}')"`}>
+                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start ${!authToken ? 'disabled-btn' : ''}" 
+                                onclick="handleWhatsApp('${whatsapp}', ${!authToken})">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </button>
-                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${isDisabled || !hasPhone ? 'disabled-btn' : ''}" 
-                                ${isDisabled || !hasPhone ? '' : `onclick="handleCall('${encodeURIComponent(phone)}')"`}>
+                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${!authToken ? 'disabled-btn' : ''}" 
+                                onclick="handleCall('${phone}', ${!authToken})">
                                 <i class="fa-solid fa-phone"></i>
                             </button>
                         </div>
@@ -223,16 +222,21 @@
                 </div>`;
         });
     }
+    
+    function handleWhatsApp(number, isDisabled) {
+        if (isDisabled) return showLoginAlert();
 
-function handleWhatsApp(number) {
-    window.open(`https://wa.me/${number}?text=${encodeURIComponent("Hi")}`, '_blank');
-}
+        const message = "Hi";
+        const waNumber = number.replace(/^\+/, ''); // Remove '+' if present
+        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    }
 
-function handleCall(number) {
-    window.location.href = `tel:${number}`;
-}
+    function handleCall(number, isDisabled) {
+        if (isDisabled) return showLoginAlert();
 
-
+        const telNumber = number.replace(/^\+/, ''); // Clean number if needed
+        window.location.href = `tel:${telNumber}`;
+    }
 
     // for wishlist and share
     document.addEventListener("click", async (e) => {

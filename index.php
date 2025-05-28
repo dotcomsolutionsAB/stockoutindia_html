@@ -101,8 +101,9 @@
         const waPhone   = phone.replace(/^\+/, '');              // remove “+” only for WA
         const hasPhone  = waPhone !== '';  
 
-        const callBtnClass = (!hasPhone || isGuest) ? 'disabled-btn' : '';
-        const waBtnClass   = (!hasPhone || isGuest) ? 'disabled-btn' : '';
+        const callBtnClass = isGuest ? 'disabled-btn' : '';
+        const waBtnClass   = isGuest ? 'disabled-btn' : '';
+
 
         const card = `
             <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
@@ -272,10 +273,6 @@ function showLoginAlert() {
         }
     }
   });
-
-
-
-
 
   fetchProducts(); // Call on page load
 </script>

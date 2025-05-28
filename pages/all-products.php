@@ -309,18 +309,19 @@
     //     const staticNumber = "+917019616007";
     //     window.location.href = `tel:${staticNumber}`;
     // }
-    function handleWhatsApp(number, isDisabled) {
-        if (isDisabled) return showLoginAlert();
+function handleWhatsApp(number, isDisabled) {
+    if (isDisabled) return showLoginAlert();
 
-        if (!number) {
-            alert("WhatsApp number is not available.");
-            return;
-        }
-
-        const waNumber = number.replace(/\D/g, ''); // Remove non-numeric chars
-        const message = "Hi";
-        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    if (!number || number.trim() === '') {
+        alert("WhatsApp number is not available.");
+        return;
     }
+
+    const waNumber = number.replace(/\D/g, ''); // Remove non-numeric characters
+    const message = "Hi";
+    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
+}
+
 
     function handleCall(number, isDisabled) {
         if (isDisabled) return showLoginAlert();

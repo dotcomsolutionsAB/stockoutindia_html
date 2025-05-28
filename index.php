@@ -82,7 +82,7 @@
 
   function renderProducts(products) {
     const container = document.getElementById("product-container");
-    // const authToken = localStorage.getItem("authToken");
+    const authToken = localStorage.getItem("authToken");
     const isGuest = !authToken;          // true → user not logged in
 
      let html = ''; 

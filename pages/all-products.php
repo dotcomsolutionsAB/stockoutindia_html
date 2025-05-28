@@ -154,7 +154,8 @@
         const container = document.getElementById('product-list');
         container.innerHTML = '';
 
-        const isDisabled = !authToken;
+        /* global authToken already exists elsewhere in your code */
+        const isGuest = !authToken;          // true → user not logged in
 
         if (!products.length) {
             container.innerHTML = `<div class="col-12 text-center py-4" style="min-height: 60vh; display: flex; justify-content: center;

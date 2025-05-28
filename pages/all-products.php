@@ -168,8 +168,9 @@
             const productLink = `pages/product_detail?id=${product.id}`;
             /* phone can be phone or mobile; strip the leading “+” */
             const rawPhone  = product.user?.phone || product.user?.mobile || '';
-            const phone     = rawPhone.replace(/^\+/, '').replace(/\D/g, '');
-            const hasPhone  = phone !== '';
+            const phone     = rawPhone.trim();                       // KEEP the “+”
+            const waPhone   = phone.replace(/^\+/, '');              // remove “+” only for WA
+            const hasPhone  = waPhone !== '';  
 
             container.innerHTML += `
                 <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
@@ -215,7 +216,7 @@
                             <button
                                 class="btn btn-success w-50 rounded-0 rounded-bottom-start 
                                     ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
-                                ${(hasPhone) ? `onclick="handleWhatsApp('${phone}', ${isGuest})"` : ''}
+                                ${(hasPhone) ? `onclick="handleWhatsApp('${waPhone}', ${isGuest})"` : ''}
                             >
                                 <i class="fa-brands fa-whatsapp"></i>
                             </button>
@@ -227,30 +228,27 @@
                             >
                                 <i class="fa-solid fa-phone"></i>
                             </button>
+
                         </div>
                     </div>
                 </div>`;
         });
     }
     
-/* ==================================================================== */
-/*  handleWhatsApp (unchanged name & params)                            */
-/* ==================================================================== */
-function handleWhatsApp(number, isDisabled) {
-    /* isDisabled === true means guest user */
-    if (isDisabled) return showLoginAlert();
-    if (!number)     return;                         // safety-guard
-    window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
-}
+    /* ==================================================================== */
+    function handleWhatsApp(number, isDisabled) {
+        /* isDisabled === true means guest user */
+        if (isDisabled) return showLoginAlert();
+        if (!number)     return;                         // safety-guard
+        window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
+    }
 
-/* ==================================================================== */
-/*  handleCall (unchanged name & params)                                */
-/* ==================================================================== */
-function handleCall(number, isDisabled) {
-    if (isDisabled) return showLoginAlert();
-    if (!number)     return;
-    window.location.href = `tel:${number}`;
-}
+    /* ==================================================================== */
+    function handleCall(number, isDisabled) {
+        if (isDisabled) return showLoginAlert();
+        if (!number)     return;
+        window.location.href = `tel:${number}`;
+    }
 
     // for wishlist and share
     document.addEventListener("click", async (e) => {

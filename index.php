@@ -142,18 +142,23 @@
                       </div>                          
                   </div>
                   <div class="d-flex bottom-btns index_page_card">
-                    <button
-                      class="btn btn-success w-50 rounded-0 rounded-bottom-start
-                            ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
-                      ${hasPhone ? `onclick="handleWhatsApp('${waPhone}', ${isGuest})"` : ''}
-                    ><i class="fa-brands fa-whatsapp"></i></button>
+  <button
+    class="btn btn-success w-50 rounded-0 rounded-bottom-start
+           ${!hasPhone ? 'disabled-btn' : ''}"
+    ${hasPhone ? `onclick="handleWhatsApp('${waPhone}')"` : ''}
+  >
+    <i class="fa-brands fa-whatsapp"></i>
+  </button>
 
-                    <button
-                      class="btn btn-danger  w-50 rounded-0 rounded-bottom-end
-                            ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
-                      ${hasPhone ? `onclick="handleCall('${phone}', ${isGuest})"` : ''}
-                    ><i class="fa-solid fa-phone"></i></button>
-                  </div>
+  <button
+    class="btn btn-danger  w-50 rounded-0 rounded-bottom-end
+           ${!hasPhone ? 'disabled-btn' : ''}"
+    ${hasPhone ? `onclick="handleCall('${phone}')"` : ''}
+  >
+    <i class="fa-solid fa-phone"></i>
+  </button>
+</div>
+
               </div>
             </div>
         `;
@@ -162,27 +167,42 @@
     });
     container.innerHTML = html; 
   }
-  /* ==================================================================== */
-  function handleWhatsApp(number, isDisabled) {
-        /* isDisabled === true means guest user */
-        if (!localStorage.getItem('authToken')) {
-          showLoginAlert();
-          return;
-        }
-        if (!number)     return;                         // safety-guard
-        window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
-  }
 
-  /* ==================================================================== */
-  function handleCall(number, isDisabled) {
-      if (!localStorage.getItem('authToken')) {
-        showLoginAlert();
-        return;
-      }
-      if (!number)     return;
-      window.location.href = `tel:${number}`;
+function handleWhatsApp(number) {
+  if (!localStorage.getItem('authToken')) {
+    showLoginAlert();
+    return;
   }
+  if (!number) return;                       // safety guard
+  window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
+}
 
+function handleCall(number) {
+  if (!localStorage.getItem('authToken')) {
+    showLoginAlert();
+    return;
+  }
+  if (!number) return;
+  window.location.href = `tel:${number}`;
+}
+
+
+    function showLoginAlert() {
+      Swal.fire({
+          title: "Login Required",
+          text: "You need to be logged user.",
+          icon: "warning",
+          confirmButtonText: "Login",
+          showCancelButton: true,
+          cancelButtonText: "Cancel",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33"
+      }).then((result) => {
+          if (result.isConfirmed) {
+              window.location.href = "login"; // replace with your actual login page
+          }
+      });
+  }
   // for wishlist and share
   document.addEventListener("click", async (e) => {
     const authToken = localStorage.getItem("authToken");
@@ -255,22 +275,7 @@
 
 
 
-  function showLoginAlert() {
-      Swal.fire({
-          title: "Login Required",
-          text: "You need to be logged user.",
-          icon: "warning",
-          confirmButtonText: "Login",
-          showCancelButton: true,
-          cancelButtonText: "Cancel",
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33"
-      }).then((result) => {
-          if (result.isConfirmed) {
-              window.location.href = "login"; // replace with your actual login page
-          }
-      });
-  }
+
 
   fetchProducts(); // Call on page load
 </script>

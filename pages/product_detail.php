@@ -166,7 +166,8 @@
 <script>
     function loadSimilarProducts(currentProduct, userId, industryId) {
         const tokenss = localStorage.getItem("authToken");
-
+        const isGuest = !tokenss;          // ← add this
+        
         const similarProductsURL = tokenss 
             ? `<?php echo BASE_URL; ?>/product/get_products`
             : `<?php echo BASE_URL; ?>/get_products`;

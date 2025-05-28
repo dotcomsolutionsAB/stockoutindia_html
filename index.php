@@ -101,6 +101,9 @@
         const waPhone   = phone.replace(/^\+/, '');              // remove “+” only for WA
         const hasPhone  = waPhone !== '';  
 
+        const callBtnClass = (!hasPhone || isGuest) ? 'disabled-btn' : '';
+        const waBtnClass   = (!hasPhone || isGuest) ? 'disabled-btn' : '';
+
         const card = `
             <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
               <div class="product-card bg-white">
@@ -141,24 +144,20 @@
                           <p class="p_price fw-bold text-danger mb0" style="font-size: 1.1rem;">₹${product.selling_price}/${product.unit}</p>
                       </div>                          
                   </div>
-                  <div class="d-flex bottom-btns index_page_card">
-  <button
-    class="btn btn-success w-50 rounded-0 rounded-bottom-start
-           ${!hasPhone ? 'disabled-btn' : ''}"
-    ${hasPhone ? `onclick="handleWhatsApp('${waPhone}')"` : ''}
-  >
-    <i class="fa-brands fa-whatsapp"></i>
-  </button>
-
-  <button
-    class="btn btn-danger  w-50 rounded-0 rounded-bottom-end
-           ${!hasPhone ? 'disabled-btn' : ''}"
-    ${hasPhone ? `onclick="handleCall('${phone}')"` : ''}
-  >
-    <i class="fa-solid fa-phone"></i>
-  </button>
-</div>
-
+                    <div class="d-flex bottom-btns index_page_card">
+            <button
+              class="btn btn-success w-50 rounded-0 rounded-bottom-start ${waBtnClass}"
+              ${hasPhone ? `onclick="handleWhatsApp('${waPhone}')"` : ''}
+            >
+              <i class="fa-brands fa-whatsapp"></i>
+            </button>
+            <button
+              class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${callBtnClass}"
+              ${hasPhone ? `onclick="handleCall('${phone}')"` : ''}
+            >
+              <i class="fa-solid fa-phone"></i>
+            </button>
+          </div>
               </div>
             </div>
         `;
@@ -169,16 +168,18 @@
   }
 
 function handleWhatsApp(number) {
-  if (!localStorage.getItem('authToken')) {
+  const authToken = localStorage.getItem("authToken");
+  if (!authToken) {
     showLoginAlert();
     return;
   }
-  if (!number) return;                       // safety guard
+  if (!number) return;
   window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
 }
 
 function handleCall(number) {
-  if (!localStorage.getItem('authToken')) {
+  const authToken = localStorage.getItem("authToken");
+  if (!authToken) {
     showLoginAlert();
     return;
   }
@@ -186,23 +187,22 @@ function handleCall(number) {
   window.location.href = `tel:${number}`;
 }
 
-
-    function showLoginAlert() {
-      Swal.fire({
-          title: "Login Required",
-          text: "You need to be logged user.",
-          icon: "warning",
-          confirmButtonText: "Login",
-          showCancelButton: true,
-          cancelButtonText: "Cancel",
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33"
-      }).then((result) => {
-          if (result.isConfirmed) {
-              window.location.href = "login"; // replace with your actual login page
-          }
-      });
-  }
+function showLoginAlert() {
+  Swal.fire({
+    title: "Login Required",
+    text: "Please log in to contact the seller.",
+    icon: "warning",
+    confirmButtonText: "Login",
+    showCancelButton: true,
+    cancelButtonText: "Cancel",
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      window.location.href = "login"; // Replace with your login page
+    }
+  });
+}
   // for wishlist and share
   document.addEventListener("click", async (e) => {
     const authToken = localStorage.getItem("authToken");

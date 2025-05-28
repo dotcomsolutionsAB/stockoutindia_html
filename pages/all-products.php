@@ -209,31 +209,28 @@
                             </div>                          
                         </div>
                         <div class="d-flex bottom-btns global_page_card">
-                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start ${isDisabled ? 'disabled-btn' : ''}" 
-                                onclick="handleWhatsApp('${encodeURIComponent(whatsapp)}', ${isDisabled})">
+                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start ${isDisabled || !hasPhone ? 'disabled-btn' : ''}" 
+                                ${isDisabled || !hasPhone ? '' : `onclick="handleWhatsApp('${encodeURIComponent(whatsapp)}')"`}>
                                 <i class="fa-brands fa-whatsapp"></i>
                             </button>
-                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${isDisabled ? 'disabled-btn' : ''}" 
-                                onclick="handleCall('${encodeURIComponent(phone)}', ${isDisabled})">
+                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${isDisabled || !hasPhone ? 'disabled-btn' : ''}" 
+                                ${isDisabled || !hasPhone ? '' : `onclick="handleCall('${encodeURIComponent(phone)}')"`}>
                                 <i class="fa-solid fa-phone"></i>
                             </button>
-                    </div>
+                        </div>
                     </div>
                 </div>`;
         });
     }
 
-function handleWhatsApp(number, isDisabled) {
-    if (isDisabled) return showLoginAlert();
-    if (!number) return alert("WhatsApp number not available.");
+function handleWhatsApp(number) {
     window.open(`https://wa.me/${number}?text=${encodeURIComponent("Hi")}`, '_blank');
 }
 
-function handleCall(number, isDisabled) {
-    if (isDisabled) return showLoginAlert();
-    if (!number) return alert("Phone number not available.");
+function handleCall(number) {
     window.location.href = `tel:${number}`;
 }
+
 
 
     // for wishlist and share

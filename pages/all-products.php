@@ -228,7 +228,6 @@
                             >
                                 <i class="fa-solid fa-phone"></i>
                             </button>
-
                         </div>
                     </div>
                 </div>`;

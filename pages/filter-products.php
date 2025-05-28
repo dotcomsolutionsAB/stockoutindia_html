@@ -30,7 +30,7 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const subIndustryId = urlParams.get("sub_industry");
-        const isDisabled = !authToken;
+        // const isDisabled = !authToken;
 
         if (!subIndustryId) return;
 
@@ -58,8 +58,11 @@
                     result.data.forEach(product => {
                         const productLink = `pages/product_detail?id=${product.id}`;
                         const image = product.image?.[0] || "uploads/placeholder.png";
-                        const whatsapp = product.user?.mobile || "";
-                        const phone = product.user?.mobile || "";
+                        /* phone can be phone or mobile; strip the leading “+” */
+                        const rawPhone  = product.user?.phone || product.user?.mobile || '';
+                        const phone     = rawPhone.trim();                       // KEEP the “+”
+                        const waPhone   = phone.replace(/^\+/, '');              // remove “+” only for WA
+                        const hasPhone  = waPhone !== '';  
 
                         const cardHtml = `
                             <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
@@ -102,12 +105,19 @@
                                         </div>                          
                                     </div>
                                     <div class="d-flex bottom-btns global_page_card">
-                                        <button class="btn btn-success w-50 rounded-0 rounded-bottom-start ${!authToken ? 'disabled-btn' : ''}" 
-                                            onclick="handleWhatsApp('${whatsapp}', ${!authToken})">
+                                        <button
+                                            class="btn btn-success w-50 rounded-0 rounded-bottom-start 
+                                                ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
+                                            ${(hasPhone) ? `onclick="handleWhatsApp('${waPhone}', ${isGuest})"` : ''}
+                                        >
                                             <i class="fa-brands fa-whatsapp"></i>
                                         </button>
-                                        <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${!authToken ? 'disabled-btn' : ''}" 
-                                            onclick="handleCall('${phone}', ${!authToken})">
+
+                                        <button
+                                            class="btn btn-danger  w-50 rounded-0 rounded-bottom-end 
+                                                ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
+                                            ${(hasPhone) ? `onclick="handleCall('${phone}', ${isGuest})"` : ''}
+                                        >
                                             <i class="fa-solid fa-phone"></i>
                                         </button>
                                     </div>
@@ -203,20 +213,35 @@
         }
     });
     
-    function handleWhatsApp(_, isDisabled) {
+    /* ==================================================================== */
+    function handleWhatsApp(number, isDisabled) {
+        /* isDisabled === true means guest user */
         if (isDisabled) return showLoginAlert();
-
-        const staticNumber = "917019616007"; // no '+' in wa.me links
-        const message = "Hi";
-        window.open(`https://wa.me/${staticNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        if (!number)     return;                         // safety-guard
+        window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
     }
 
-    function handleCall(_, isDisabled) {
+    /* ==================================================================== */
+    function handleCall(number, isDisabled) {
         if (isDisabled) return showLoginAlert();
-
-        const staticNumber = "+917019616007";
-        window.location.href = `tel:${staticNumber}`;
+        if (!number)     return;
+        window.location.href = `tel:${number}`;
     }
+    
+    // function handleWhatsApp(_, isDisabled) {
+    //     if (isDisabled) return showLoginAlert();
+
+    //     const staticNumber = "917019616007"; // no '+' in wa.me links
+    //     const message = "Hi";
+    //     window.open(`https://wa.me/${staticNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    // }
+
+    // function handleCall(_, isDisabled) {
+    //     if (isDisabled) return showLoginAlert();
+
+    //     const staticNumber = "+917019616007";
+    //     window.location.href = `tel:${staticNumber}`;
+    // }
 
     function showLoginAlert() {
         Swal.fire({

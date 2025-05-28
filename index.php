@@ -43,7 +43,7 @@
   // const token = '100|MLh8ulMfLjjkcHPsUZ9WVI9xRb9B41oOdtm6cFOyed6e6744';
 
   async function fetchProducts() {
-    const token = localStorage.getItem("authtoken");
+    const token = localStorage.getItem("authToken");
 
     const headers = {
       "Content-Type": "application/json"
@@ -82,16 +82,17 @@
 
   function renderProducts(products) {
     const container = document.getElementById("product-container");
-    container.innerHTML = "";
-
-    const authToken = localStorage.getItem("authToken");
+    // const authToken = localStorage.getItem("authToken");
     const isGuest = !authToken;          // true → user not logged in
 
+     let html = ''; 
+
     products.forEach((product, index) => {
-        if (index % 4 === 0) {
-            container.innerHTML += `<div class="w-100"></div>`;
+        if (index !== 0 && index % 4 === 0) {
+            html += '<div class="w-100"></div>';
         }
 
+        html += cardTemplate;   
         const image = product.image?.[0] || "uploads/placeholder.png";
         const productLink = `pages/product_detail?id=${product.id}`;
         /* phone can be phone or mobile; strip the leading “+” */
@@ -141,28 +142,39 @@
                       </div>                          
                   </div>
                   <div class="d-flex bottom-btns index_page_card">
-                      <button
-                          class="btn btn-success w-50 rounded-0 rounded-bottom-start 
-                              ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
-                          ${(hasPhone) ? `onclick="handleWhatsApp('${waPhone}', ${isGuest})"` : ''}
-                      >
-                          <i class="fa-brands fa-whatsapp"></i>
-                      </button>
+                    <button
+                      class="btn btn-success w-50 rounded-0 rounded-bottom-start
+                            ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
+                      ${hasPhone ? `onclick="handleWhatsApp('${waPhone}', ${isGuest})"` : ''}
+                    ><i class="fa-brands fa-whatsapp"></i></button>
 
-                      <button
-                          class="btn btn-danger  w-50 rounded-0 rounded-bottom-end 
-                              ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
-                          ${(hasPhone) ? `onclick="handleCall('${phone}', ${isGuest})"` : ''}
-                      >
-                          <i class="fa-solid fa-phone"></i>
-                      </button>
+                    <button
+                      class="btn btn-danger  w-50 rounded-0 rounded-bottom-end
+                            ${(isGuest || !hasPhone) ? 'disabled-btn' : ''}"
+                      ${hasPhone ? `onclick="handleCall('${phone}', ${isGuest})"` : ''}
+                    ><i class="fa-solid fa-phone"></i></button>
                   </div>
               </div>
             </div>
         `;
 
-        container.innerHTML += card;
+        html += card;
     });
+    container.innerHTML = html; 
+  }
+  /* ==================================================================== */
+  function handleWhatsApp(number, isDisabled) {
+        /* isDisabled === true means guest user */
+        if (isDisabled) return showLoginAlert();
+        if (!number)     return;                         // safety-guard
+        window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
+  }
+
+  /* ==================================================================== */
+  function handleCall(number, isDisabled) {
+      if (isDisabled) return showLoginAlert();
+      if (!number)     return;
+      window.location.href = `tel:${number}`;
   }
 
   // for wishlist and share
@@ -235,20 +247,7 @@
     }
   });
 
-  /* ==================================================================== */
-  function handleWhatsApp(number, isDisabled) {
-        /* isDisabled === true means guest user */
-        if (isDisabled) return showLoginAlert();
-        if (!number)     return;                         // safety-guard
-        window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
-  }
 
-  /* ==================================================================== */
-  function handleCall(number, isDisabled) {
-      if (isDisabled) return showLoginAlert();
-      if (!number)     return;
-      window.location.href = `tel:${number}`;
-  }
 
   function showLoginAlert() {
       Swal.fire({

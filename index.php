@@ -165,14 +165,20 @@
   /* ==================================================================== */
   function handleWhatsApp(number, isDisabled) {
         /* isDisabled === true means guest user */
-        if (isDisabled) return showLoginAlert();
+        if (!localStorage.getItem('authToken')) {
+          showLoginAlert();
+          return;
+        }
         if (!number)     return;                         // safety-guard
         window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
   }
 
   /* ==================================================================== */
   function handleCall(number, isDisabled) {
-      if (isDisabled) return showLoginAlert();
+      if (!localStorage.getItem('authToken')) {
+        showLoginAlert();
+        return;
+      }
       if (!number)     return;
       window.location.href = `tel:${number}`;
   }

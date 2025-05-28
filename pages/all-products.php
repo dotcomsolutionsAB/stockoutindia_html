@@ -165,8 +165,10 @@
         products.forEach(product => {
             const image = product.image?.[0] || 'uploads/placeholder.png';
             const productLink = `pages/product_detail?id=${product.id}`;
-            const phone = product.user?.mobile || '';
-            const whatsapp = product.user?.whatsapp || phone;
+            /* phone can be phone or mobile; strip the leading “+” */
+            const rawPhone  = product.user?.phone || product.user?.mobile || '';
+            const phone     = rawPhone.replace(/^\+/, '').replace(/\D/g, '');
+            const hasPhone  = phone !== '';
 
             container.innerHTML += `
                 <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">

@@ -209,34 +209,32 @@
                             </div>                          
                         </div>
                         <div class="d-flex bottom-btns global_page_card">
-                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start ${!authToken ? 'disabled-btn' : ''}" 
-                                onclick="handleWhatsApp('${whatsapp}', ${!authToken})">
+                            <button class="btn btn-success w-50 rounded-0 rounded-bottom-start ${isDisabled ? 'disabled-btn' : ''}" 
+                                onclick="handleWhatsApp('${encodeURIComponent(whatsapp)}', ${isDisabled})">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </button>
-                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${!authToken ? 'disabled-btn' : ''}" 
-                                onclick="handleCall('${phone}', ${!authToken})">
+                            <button class="btn btn-danger w-50 rounded-0 rounded-bottom-end ${isDisabled ? 'disabled-btn' : ''}" 
+                                onclick="handleCall('${encodeURIComponent(phone)}', ${isDisabled})">
                                 <i class="fa-solid fa-phone"></i>
                             </button>
-                        </div>
+                    </div>
                     </div>
                 </div>`;
         });
     }
-    
-    function handleWhatsApp(number, isDisabled) {
-        if (isDisabled) return showLoginAlert();
 
-        const message = "Hi";
-        const waNumber = number.replace(/^\+/, ''); // Remove '+' if present
-        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
-    }
+function handleWhatsApp(number, isDisabled) {
+    if (isDisabled) return showLoginAlert();
+    if (!number) return alert("WhatsApp number not available.");
+    window.open(`https://wa.me/${number}?text=${encodeURIComponent("Hi")}`, '_blank');
+}
 
-    function handleCall(number, isDisabled) {
-        if (isDisabled) return showLoginAlert();
+function handleCall(number, isDisabled) {
+    if (isDisabled) return showLoginAlert();
+    if (!number) return alert("Phone number not available.");
+    window.location.href = `tel:${number}`;
+}
 
-        const telNumber = number.replace(/^\+/, ''); // Clean number if needed
-        window.location.href = `tel:${telNumber}`;
-    }
 
     // for wishlist and share
     document.addEventListener("click", async (e) => {

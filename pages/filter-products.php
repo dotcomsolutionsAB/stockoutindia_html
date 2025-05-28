@@ -214,7 +214,7 @@
     function handleCall(_, isDisabled) {
         if (isDisabled) return showLoginAlert();
 
-        const staticNumber = "+918597148785";
+        const staticNumber = "+917019616007";
         window.location.href = `tel:${staticNumber}`;
     }
 

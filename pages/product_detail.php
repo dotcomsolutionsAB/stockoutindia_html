@@ -58,7 +58,7 @@
             const industryId = matchedProduct.industry_details?.id;
 
             const html = `
-                 <div class="product_image_box">
+                <div class="product_image_box">
                     <button id="prevBtn" class="slider-btn">&#10094;</button>
                     <div class="slider_images_container">
                         ${
@@ -76,7 +76,6 @@
                     </div>
                     <button id="nextBtn" class="slider-btn">&#10095;</button>
                 </div>
-
 
                 <div class="product_info">
                     <h2 class="product_title">${matchedProduct.product_name}</h2>
@@ -355,7 +354,7 @@
     function handleCall(_, isDisabled) {
         if (isDisabled) return showLoginAlert();
 
-        const staticNumber = "+918597148785";
+        const staticNumber = "+917019616007";
         window.location.href = `tel:${staticNumber}`;
     }
 

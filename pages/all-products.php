@@ -222,6 +222,21 @@
                 </div>`;
         });
     }
+    
+    function handleWhatsApp(number, isDisabled) {
+        if (isDisabled) return showLoginAlert();
+
+        const message = "Hi";
+        const waNumber = number.replace(/^\+/, ''); // Remove '+' if present
+        window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    function handleCall(number, isDisabled) {
+        if (isDisabled) return showLoginAlert();
+
+        const telNumber = number.replace(/^\+/, ''); // Clean number if needed
+        window.location.href = `tel:${telNumber}`;
+    }
 
     // for wishlist and share
     document.addEventListener("click", async (e) => {
@@ -292,49 +307,7 @@
             }
         }
     });
-
-
     // end wishlist and share
-    // function handleWhatsApp(_, isDisabled) {
-    //     if (isDisabled) return showLoginAlert();
-
-    //     const staticNumber = "917019616007"; // no '+' in wa.me links
-    //     const message = "Hi";
-    //     window.open(`https://wa.me/${staticNumber}?text=${encodeURIComponent(message)}`, '_blank');
-    // }
-
-    // function handleCall(_, isDisabled) {
-    //     if (isDisabled) return showLoginAlert();
-
-    //     const staticNumber = "+917019616007";
-    //     window.location.href = `tel:${staticNumber}`;
-    // }
-function handleWhatsApp(number, isDisabled) {
-    if (isDisabled) return showLoginAlert();
-
-    if (!number || number.trim() === '') {
-        alert("WhatsApp number is not available.");
-        return;
-    }
-
-    const waNumber = number.replace(/\D/g, ''); // Remove non-numeric characters
-    const message = "Hi";
-    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
-}
-
-
-    function handleCall(number, isDisabled) {
-        if (isDisabled) return showLoginAlert();
-
-        if (!number) {
-            alert("Phone number is not available.");
-            return;
-        }
-
-        const telNumber = number.replace(/\D/g, ''); // Clean phone number
-        window.location.href = `tel:${telNumber}`;
-    }
-
 
     function showLoginAlert() {
         Swal.fire({

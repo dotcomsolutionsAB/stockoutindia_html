@@ -168,25 +168,25 @@
     container.innerHTML = html; 
   }
 
-function handleWhatsApp(number) {
-  const authToken = localStorage.getItem("authToken");
-  if (!authToken) {
-    showLoginAlert();
-    return;
+  function handleWhatsApp(number) {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {
+      showLoginAlert();
+      return;
+    }
+    if (!number) return;
+    window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
   }
-  if (!number) return;
-  window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
-}
 
-function handleCall(number) {
-  const authToken = localStorage.getItem("authToken");
-  if (!authToken) {
-    showLoginAlert();
-    return;
+  function handleCall(number) {
+    const authToken = localStorage.getItem("authToken");
+    if (!authToken) {z
+      showLoginAlert();
+      return;
+    }
+    if (!number) return;
+    window.location.href = `tel:${number}`;
   }
-  if (!number) return;
-  window.location.href = `tel:${number}`;
-}
 
 function showLoginAlert() {
   Swal.fire({

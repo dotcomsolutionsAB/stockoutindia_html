@@ -158,7 +158,7 @@
                                 </a>
 
                                 <!-- App Store -->
-                                <a href="#" target="_blank" rel="noopener" class="d-inline-block">
+                                <a href="https://apps.apple.com/us/app/stockout-india/id6744593799" target="_blank" rel="noopener" class="d-inline-block">
                                     <img src="uploads/appImage1.png"
                                         alt="Download on the App Store" class="img-fluid" style="max-width: 165px;">
                                 </a>

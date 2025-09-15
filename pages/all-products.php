@@ -15,7 +15,7 @@
 
             <div class="container">
                 <div class="row main-content">
-                    <div class="col-lg-9">
+                    <div class="col-lg-12">
                         <nav class="toolbox sticky-header" data-sticky-options="{'mobile': true}">
                             <div class="toolbox-left">
                                 <a href="#" class="sidebar-toggle"><svg data-name="Layer 3" id="Layer_3"

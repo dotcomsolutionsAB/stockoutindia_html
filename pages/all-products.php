@@ -61,13 +61,11 @@
                     </div><!-- End .col-lg-9 -->
 
                     <div class="sidebar-overlay"></div>
-                    <aside class="sidebar-shop col-lg-3 order-lg-first mobile-sidebar">
+                    <!-- <aside class="sidebar-shop col-lg-3 order-lg-first mobile-sidebar">
                         <div class="sidebar-wrapper">
-                           <!-- FILTER SIDEBAR -->
                             
                             <div class="widget">
                                 <h3 class="widget-title">States</h3>
-                                <!-- <input type="text" class="form-control mb-2" placeholder="Search states..." onkeyup="filterList('state')"> -->
                                 <input type="text" class="form-control mb-2" placeholder="Search states..." onkeyup="filterList('state', event)">
 
                                 <div class="mb-2">
@@ -77,8 +75,8 @@
                                 <div class="widget-body" id="state-list" style="max-height: 300px; overflow-y: auto;"></div>
                             </div>
 
-                        </div><!-- End .sidebar-wrapper -->
-                    </aside>
+                        </div>
+                    </aside> -->
                 </div>
             </div>
         </main><!-- End .main -->
@@ -96,19 +94,19 @@
         setupEvents();
     });
 
-    function fetchFilters() {
-        fetch(`${BASE}/states`)
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    const container = document.getElementById('state-list');
-                    container.innerHTML = '';
-                    res.data.forEach(state => {
-                        container.innerHTML += `<label class="d-block"><input type="checkbox" name="state[]" value="${state.id}" onchange="fetchProducts()"> ${state.name}</label>`;
-                    });
-                }
-            });
-    }
+    // function fetchFilters() {
+    //     fetch(`${BASE}/states`)
+    //         .then(res => res.json())
+    //         .then(res => {
+    //             if (res.success) {
+    //                 const container = document.getElementById('state-list');
+    //                 container.innerHTML = '';
+    //                 res.data.forEach(state => {
+    //                     container.innerHTML += `<label class="d-block"><input type="checkbox" name="state[]" value="${state.id}" onchange="fetchProducts()"> ${state.name}</label>`;
+    //                 });
+    //             }
+    //         });
+    // }
 
     function getSelected(name) {
         return Array.from(document.querySelectorAll(`input[name="${name}[]"]:checked`)).map(el => el.value);

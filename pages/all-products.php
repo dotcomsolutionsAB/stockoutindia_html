@@ -89,7 +89,7 @@
     let total = 0;
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetchFilters();
+        // fetchFilters();
         fetchProducts();
         setupEvents();
     });

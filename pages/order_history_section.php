@@ -29,7 +29,7 @@
         container.innerHTML = "";
 
         response.data.forEach(payment => {
-            const { razorpay_order_id, payment_amount, status, date } = payment;
+            const { razorpay_order_id, payment_amount, status, date, product_details } = payment;
             // map to your existing variables
             const p_name = product_details?.product_name || "-";
             const p_status = product_details?.status || "-";

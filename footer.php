@@ -110,7 +110,10 @@
                                 <h3 class="mb-0 text-primary">
                                     <a href="tel:+918790489293">+91 8790489293</a>
                                 </h3>
-                                <p class="footer-desc"><strong>Address:</strong> 2nd floor S.A Trade Centre, Ranigunj X Roads, Secuderabad, Telangana 500003</p>
+                                <p class="footer-desc text-white">
+                                    <strong>Address:</strong> 
+                                    2nd floor S.A Trade Centre, Ranigunj X Roads, Secuderabad, Telangana 500003
+                                </p>
                             </div>
                         </div><!-- End .col-lg-3 -->
 

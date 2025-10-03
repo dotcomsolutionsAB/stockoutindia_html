@@ -1,6 +1,6 @@
         <footer class="footer font2">
             <div class="footer-top">
-            <a href="https://wa.me/917019616007" target="_blank" class="whatsapp-sticky" title="Chat on WhatsApp">
+            <a href="https://wa.me/918790489293" target="_blank" class="whatsapp-sticky" title="Chat on WhatsApp">
                 <i class="fab fa-whatsapp"></i>
             </a>
             

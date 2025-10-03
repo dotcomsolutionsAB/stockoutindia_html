@@ -331,7 +331,7 @@
         offer_quantity,
         minimum_quantity,
         unit: getVal("unit"),
-        industry: parseInt(getVal("industry")),
+        industry: getVal("industry"),
         sub_industry: parseInt(getVal("sub_industry")),
         state_id: parseInt(getVal("state_id")),
         city: getVal("city"),

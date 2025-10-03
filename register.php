@@ -122,7 +122,7 @@
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
             <div class="mt-4" id="industryGroup">
               <label class="block text-sm font-medium mb-1">Select Industries</label>
               <div id="industryList" class="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -305,12 +305,12 @@
       citySel.disabled=false;
     };
     
-    function getSelectedIndustryCsv() {
-      const ids = Array.from(document.querySelectorAll('.industryChk:checked'))
+    function getSelectedIndustryArray() {
+      return Array.from(document.querySelectorAll('.industryChk:checked'))
         .map(cb => parseInt(cb.value, 10))
-        .filter(Number.isInteger); // ensures integers only
-      return ids.join(','); // "25,5,6"
+        .filter(Number.isInteger); // [25,5,6]
     }
+
 
     /* ─── GST validation & auto-fill ─────────────────────────── */
     const gstInput=document.getElementById('gstin');
@@ -484,7 +484,7 @@
       city         : document.getElementById('citySelect').value,
       state        : parseInt(document.getElementById('stateSelect').value) || null,
       gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
-      industry     : getSelectedIndustryCsv(), // <-- "25,5,6"
+      industry     : getSelectedIndustryArray(), // <-- "25,5,6"
       // sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null,
       email        : document.getElementById('email').value.trim()
     };

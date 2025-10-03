@@ -18,10 +18,10 @@
                     <i class="fas fa-plus-circle"></i>
                     Add Products
                   </button>
-                  <button id="tab-wishlist" class="acc-btn" onclick="showAccTab('wishlist')">
+                  <!-- <button id="tab-wishlist" class="acc-btn" onclick="showAccTab('wishlist')">
                     <i class="fa-regular fa-heart"></i>
                     Wisthlist
-                  </button>
+                  </button> -->
                   <button id="tab-orderHistory" class="acc-btn" onclick="showAccTab('orderHistory')">
                     <i class="fas fa-user-circle"></i>
                     Order History

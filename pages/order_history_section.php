@@ -45,12 +45,12 @@
             </div>
             <div class="payment_details">
                 <h4 class="payment_order">Order ID: ${razorpay_order_id}</h4>
-                <p class="product_name">Amount: ₹${p_name}</p>
+                <p class="product_name">Product Name: ${p_name}</p>
                 <p class="payment_amount">Amount: ₹${payment_amount}</p>
                 <p class="payment_status">Status: 
                     <span class="payment_status_tag success">${status}</span>
                 </p>
-                <p class="product_status">Status: 
+                <p class="product_status">Product Status: 
                     <span class="product_status_tag success">${p_status}</span>
                 </p>
                 <p class="payment_date">Date: ${date}</p>

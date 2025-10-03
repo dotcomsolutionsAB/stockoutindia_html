@@ -425,7 +425,7 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    let googleIdToken = '';
+    // let googleIdToken = '';
 
     // ─── Google Sign In ───
     document.getElementById('googleSignUpBtn').onclick = async () => {

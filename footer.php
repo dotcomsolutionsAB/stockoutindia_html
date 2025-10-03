@@ -4,28 +4,6 @@
                 <i class="fab fa-whatsapp"></i>
             </a>
             
-            <style>
-                /* .whatsapp-sticky {
-                    position: fixed;
-                    bottom: 75px;
-                    right: 20px;
-                    background-color: #25D366;
-                    color: white;
-                    font-size: 16px;
-                    font-weight: bold;
-                    padding: 12px 20px;
-                    border-radius: 50px;
-                    text-decoration: none;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-                    z-index: 999;
-                    transition: background-color 0.3s ease;
-                }
-
-                .whatsapp-sticky:hover {
-                    background-color: #1ebe5d;
-                } */
-            </style>
-
                 <div class="instagram-box bg-dark">
                     <div class="row m-0 align-items-center" style="background: #00000099;">
                         

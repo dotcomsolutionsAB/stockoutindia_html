@@ -13,42 +13,45 @@
       <select name="unit" id="stockout_unit" required>
         <option value="">Loading Units...</option>
       </select>
-<style>
-  .stockout-ms { position: relative; }
-.stockout-ms-btn {
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-  border: 1px solid #ddd;
-  background: #fff;
-  border-radius: 6px;
-  cursor: pointer;
-}
-.stockout-ms-panel {
-  position: absolute;
-  z-index: 50;
-  left: 0; right: 0;
-  max-height: 220px;
-  overflow: auto;
-  margin-top: 6px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.08);
-  padding: 8px;
-}
-.stockout-ms-list label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 4px;
-  border-radius: 6px;
-}
-.stockout-ms-list label:hover {
-  background: #f6f6f6;
-}
+  <style>
+    .stockout-ms { position: relative; }
+    .stockout-ms-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px;
+      border: 1px solid #ddd;
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .stockout-ms-panel {
+      position: absolute;
+      z-index: 50;
+      left: 0; right: 0;
+      max-height: 220px;
+      overflow: auto;
+      margin-top: 6px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
+      padding: 8px;
+    }
+    .stockout-ms-list label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 4px;
+      border-radius: 6px;
+    }
+    .stockout-ms-list label:hover {
+      background: #f6f6f6;
+    }
+    .industryChk{
+      width:auto !important;
+    }
 
-</style>
+  </style>
       <!-- Industry (multi-select with checkboxes) -->
       <div class="stockout-ms" id="industry_ms_wrap">
         <button type="button" class="stockout-ms-btn" id="industry_ms_btn">
@@ -179,9 +182,9 @@
     // const industrySelect = document.getElementById("stockout_industry");
     // const subIndustrySelect = document.getElementById("stockout_sub_industry");
     const industryBtn   = document.getElementById("industry_ms_btn");
-const industryPanel = document.getElementById("industry_ms_panel");
-const industryList  = document.getElementById("industry_ms_list");
-const industryCsvEl = document.getElementById("industry_csv");
+    const industryPanel = document.getElementById("industry_ms_panel");
+    const industryList  = document.getElementById("industry_ms_list");
+    const industryCsvEl = document.getElementById("industry_csv");
 
     const stateSelect = document.getElementById("stockout_state");
     const citySelect = document.getElementById("stockout_city");
@@ -321,36 +324,35 @@ const industryCsvEl = document.getElementById("industry_csv");
     }
     
     // Toggle dropdown
-industryBtn.addEventListener("click", () => {
-  const open = industryPanel.style.display !== "none";
-  industryPanel.style.display = open ? "none" : "block";
-});
+    industryBtn.addEventListener("click", () => {
+      const open = industryPanel.style.display !== "none";
+      industryPanel.style.display = open ? "none" : "block";
+    });
 
-// Close when clicking outside
-document.addEventListener("click", (e) => {
-  if (!document.getElementById("industry_ms_wrap").contains(e.target)) {
-    industryPanel.style.display = "none";
-  }
-});
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (!document.getElementById("industry_ms_wrap").contains(e.target)) {
+        industryPanel.style.display = "none";
+      }
+    });
 
-// Gather checked IDs and update button + hidden CSV
-function updateIndustrySelection() {
-  const checked = Array.from(document.querySelectorAll(".industryChk:checked"));
-  const ids = checked.map(cb => parseInt(cb.value, 10)).filter(Number.isInteger);
-  const names = checked.map(cb => cb.nextElementSibling?.textContent?.trim() || "");
+    // Gather checked IDs and update button + hidden CSV
+    function updateIndustrySelection() {
+      const checked = Array.from(document.querySelectorAll(".industryChk:checked"));
+      const ids = checked.map(cb => parseInt(cb.value, 10)).filter(Number.isInteger);
+      const names = checked.map(cb => cb.nextElementSibling?.textContent?.trim() || "");
 
-  // Hidden input gets CSV like "1,2,3"
-  industryCsvEl.value = ids.join(",");
+      // Hidden input gets CSV like "1,2,3"
+      industryCsvEl.value = ids.join(",");
 
-  // Button shows summary
-  industryBtn.textContent = names.length
-    ? names.join(", ").slice(0, 40) + (names.join(", ").length > 40 ? "…" : "")
-    : "Select Industries";
-}
+      // Button shows summary
+      industryBtn.textContent = names.length
+        ? names.join(", ").slice(0, 40) + (names.join(", ").length > 40 ? "…" : "")
+        : "Select Industries";
+    }
 
-// Listen for changes
-industryList.addEventListener("change", updateIndustrySelection);
-
+    // Listen for changes
+    industryList.addEventListener("change", updateIndustrySelection);
 
     // Industry → Sub-Industry
     // industrySelect.addEventListener("change", function () {

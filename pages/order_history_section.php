@@ -20,7 +20,7 @@
             "Content-Type": "application/json",
             "Authorization": `Bearer ${authTokens}`
         },
-        body: JSON.stringify({ user: user_id })
+        body: JSON.stringify({ user: user_id }) 
         });
 
         const response = await res.json();

@@ -30,19 +30,28 @@
 
         response.data.forEach(payment => {
             const { razorpay_order_id, payment_amount, status, date } = payment;
+            // map to your existing variables
+            const p_name = product_details?.product_name || "-";
+            const p_status = product_details?.status || "-";
+            // NEW: image url (fallback to placeholder)
+            const p_image  = product_details?.image || "uploads/placeholder.png";
 
             const card = document.createElement("div");
             card.className = "payment_card";
 
             card.innerHTML = `
             <div class="div_img">
-                <img src="uploads/placeholder.png" alt="Product" class="payment_image">
+                <img src="${p_image}" alt="Product" class="payment_image" onerror="this.onerror=null;this.src='uploads/placeholder.png';">
             </div>
             <div class="payment_details">
                 <h4 class="payment_order">Order ID: ${razorpay_order_id}</h4>
+                <p class="product_name">Amount: ₹${p_name}</p>
                 <p class="payment_amount">Amount: ₹${payment_amount}</p>
                 <p class="payment_status">Status: 
-                <span class="payment_status_tag success">${status}</span>
+                    <span class="payment_status_tag success">${status}</span>
+                </p>
+                <p class="product_status">Status: 
+                    <span class="product_status_tag success">${p_status}</span>
                 </p>
                 <p class="payment_date">Date: ${date}</p>
             </div>

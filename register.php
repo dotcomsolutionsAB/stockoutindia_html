@@ -305,12 +305,12 @@
       citySel.disabled=false;
     };
     
-    function getSelectedIndustryArray() {
-      return Array.from(document.querySelectorAll('.industryChk:checked'))
+    function getSelectedIndustryCsv() {
+      const ids = Array.from(document.querySelectorAll('.industryChk:checked'))
         .map(cb => parseInt(cb.value, 10))
-        .filter(Number.isInteger); // [25,5,6]
+        .filter(Number.isInteger); // ensures integers only
+      return ids.join(','); // "25,5,6"
     }
-
 
     /* ─── GST validation & auto-fill ─────────────────────────── */
     const gstInput=document.getElementById('gstin');
@@ -484,7 +484,7 @@
       city         : document.getElementById('citySelect').value,
       state        : parseInt(document.getElementById('stateSelect').value) || null,
       gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
-      industry     : getSelectedIndustryArray(), // <-- "25,5,6"
+      industry     : getSelectedIndustryCsv(), // <-- "25,5,6"
       // sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null,
       email        : document.getElementById('email').value.trim()
     };

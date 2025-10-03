@@ -107,7 +107,10 @@
 
                             <div class="ls-0 footer-question mb-3">
                                 <h6 class="mb-0 text-white">QUESTIONS?</h6>
-                                <h3 class="mb-0 text-primary">(+91) 7019616007</h3>
+                                <h3 class="mb-0 text-primary">
+                                    <a href="tel:+918790489293">+91 8790489293</a>
+                                </h3>
+                                <p class="footer-desc"><strong>Address:</strong> 2nd floor S.A Trade Centre, Ranigunj X Roads, Secuderabad, Telangana 500003</p>
                             </div>
                         </div><!-- End .col-lg-3 -->
 

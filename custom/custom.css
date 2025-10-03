@@ -951,8 +951,8 @@
 /* Whatsapp */
   .whatsapp-sticky {
       position: fixed;
-      bottom: 75px;
-      right: 20px;
+      bottom: 275px;
+      left: 20px;
       background-color: #25D366;
       color: white;
       font-size: 16px;

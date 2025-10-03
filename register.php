@@ -123,10 +123,12 @@
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <select id="industrySelect" multiple class="w-full border border-gray-400 px-3 py-2 rounded-md" size="6">
-              <!-- options will be injected -->
-            </select>
-            <p class="text-xs text-gray-500 mt-1">Tip: Hold Ctrl/Cmd to select multiple.</p>
+            <div class="mt-4" id="industryGroup">
+              <label class="block text-sm font-medium mb-1">Select Industries</label>
+              <div id="industryList" class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <!-- checkboxes will be injected -->
+              </div>
+            </div>
           </div>
 
           <!-- Terms -->
@@ -269,7 +271,7 @@
 
     const stateSel=document.getElementById('stateSelect');
     const citySel =document.getElementById('citySelect');
-    const indSel  =document.getElementById('industrySelect');
+    const industryList = document.getElementById('industryList'); // <-- add this
 
     let states=[],cities=[],industries=[];
 
@@ -283,8 +285,14 @@
       ]);
       states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
         `<option value="${s.id}" data-name="${s.name}">${s.name}</option>`));
-      industries.forEach(i=>indSel.insertAdjacentHTML('beforeend',
-        `<option value="${i.id}">${i.name}</option>`));
+      industries.forEach(i => {
+        industryList.insertAdjacentHTML('beforeend', `
+          <label class="flex items-center gap-2 border rounded-md p-2">
+            <input type="checkbox" class="industryChk accent-red-600" value="${i.id}">
+            <span>${i.name}</span>
+          </label>
+        `);
+      });
     })();
 
     stateSel.onchange = ()=>{
@@ -296,25 +304,13 @@
               `<option value="${c.name}">${c.name}</option>`));
       citySel.disabled=false;
     };
-
-    // indSel.onchange = async()=>{
-    //   subSel.innerHTML='<option value="">Select Sub-industry</option>';
-    //   if(!indSel.value){subSel.disabled=true;return;}
-    //   if(!subsCache.length) subsCache = await fetchData('/sub_industry');
-    //   subsCache.filter(s=>String(s.industry_id??s.id).startsWith(indSel.value))
-    //           .forEach(s=>subSel.insertAdjacentHTML('beforeend',
-    //             `<option value="${s.id}">${s.name}</option>`));
-    //   subSel.disabled=false;
-    // };
     
     function getSelectedIndustryCsv() {
-      return Array.from(indSel.selectedOptions)
-        .map(o => o.value)
-        .filter(Boolean)
-        .join(',');
+      const ids = Array.from(document.querySelectorAll('.industryChk:checked'))
+        .map(cb => parseInt(cb.value, 10))
+        .filter(Number.isInteger); // ensures integers only
+      return ids.join(','); // "25,5,6"
     }
-
-
 
     /* ─── GST validation & auto-fill ─────────────────────────── */
     const gstInput=document.getElementById('gstin');

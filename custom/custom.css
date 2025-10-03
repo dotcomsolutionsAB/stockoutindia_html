@@ -805,6 +805,8 @@
       flex: 1;
     }
     .payment_order,
+    .product_name,
+    .product_status,
     .payment_amount,
     .payment_status,
     .payment_date {

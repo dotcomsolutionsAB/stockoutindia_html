@@ -63,7 +63,7 @@
           </div>
         </div>
         <!-- Hidden field that will carry CSV like "1,2,3" -->
-        <input type="hidden" name="industry" id="industry_csv" required>
+        <input type="hidden" name="industry" id="industry_csv">
       </div>
 
 
@@ -85,7 +85,6 @@
         Click to upload Product Image
       </label>
       <input type="file" name="files[]" id="stockout_image_upload" accept="image/*" style="display:none" multiple>
-      <!-- <span id="fileNamePreview" style="display:block; font-size: 13px; color: #555;"></span> -->
        <span id="fileNamePreview" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;"></span>
     </div>
 
@@ -179,8 +178,6 @@
     const stockout_token = localStorage.getItem("authToken");
 
     const unitSelect = document.getElementById("stockout_unit");
-    // const industrySelect = document.getElementById("stockout_industry");
-    // const subIndustrySelect = document.getElementById("stockout_sub_industry");
     const industryBtn   = document.getElementById("industry_ms_btn");
     const industryPanel = document.getElementById("industry_ms_panel");
     const industryList  = document.getElementById("industry_ms_list");
@@ -279,27 +276,6 @@
       unitSelect.innerHTML = '<option value="">Failed to load</option>';
     }
 
-    // Load Industries with Sub-Industries
-    // try {
-    //   const res = await fetch(`${stockout_base_url}/industry`, {
-    //     headers: {
-    //       Authorization: `Bearer ${stockout_token}`,
-    //       Accept: "application/json",
-    //     },
-    //   });
-    //   const resJson = await res.json();
-    //   stockout_industry_data = resJson.data || [];
-
-    //   industrySelect.innerHTML =
-    //     '<option value="">Select Industry</option>' +
-    //     stockout_industry_data
-    //       .map((i) => `<option value="${i.id}">${i.name}</option>`)
-    //       .join("");
-    // } catch (err) {
-    //   console.error("❌ Industry fetch failed:", err);
-    //   industrySelect.innerHTML = '<option value="">Failed to load</option>';
-    // }
-    // Load Industries (checkbox list)
     try {
       const res = await fetch(`${stockout_base_url}/industry`, {
         headers: {
@@ -313,10 +289,11 @@
       // Inject checkboxes
       industryList.innerHTML = stockout_industry_data.map(i => `
         <label>
-          <input type="checkbox" class="industryChk" value="${i.id}">
+          <input type="radio" name="industry_radio" class="industryRadio" value="${i.id}">
           <span>${i.name}</span>
         </label>
       `).join("");
+
 
     } catch (err) {
       console.error("❌ Industry fetch failed:", err);
@@ -337,39 +314,37 @@
     });
 
     // Gather checked IDs and update button + hidden CSV
+    // function updateIndustrySelection() {
+    //   const checked = Array.from(document.querySelectorAll(".industryChk:checked"));
+    //   const ids = checked.map(cb => parseInt(cb.value, 10)).filter(Number.isInteger);
+    //   const names = checked.map(cb => cb.nextElementSibling?.textContent?.trim() || "");
+
+    //   // Hidden input gets CSV like "1,2,3"
+    //   industryCsvEl.value = ids.join(",");
+
+    //   // Button shows summary
+    //   industryBtn.textContent = names.length
+    //     ? names.join(", ").slice(0, 40) + (names.join(", ").length > 40 ? "…" : "")
+    //     : "Select Industries";
+    // }
     function updateIndustrySelection() {
-      const checked = Array.from(document.querySelectorAll(".industryChk:checked"));
-      const ids = checked.map(cb => parseInt(cb.value, 10)).filter(Number.isInteger);
-      const names = checked.map(cb => cb.nextElementSibling?.textContent?.trim() || "");
+      const selected = document.querySelector('.industryRadio:checked');
+      const id = selected ? parseInt(selected.value, 10) : null;
+      const name = selected ? selected.nextElementSibling?.textContent?.trim() || "" : "";
 
-      // Hidden input gets CSV like "1,2,3"
-      industryCsvEl.value = ids.join(",");
+      // Hidden input now stores a single ID or empty
+      industryCsvEl.value = id ? String(id) : "";
 
-      // Button shows summary
-      industryBtn.textContent = names.length
-        ? names.join(", ").slice(0, 40) + (names.join(", ").length > 40 ? "…" : "")
-        : "Select Industries";
+      // Button shows the chosen name or default text
+      industryBtn.textContent = name || "Select Industry";
+
+      // Close panel after picking one (optional but nice)
+      if (selected) industryPanel.style.display = "none";
     }
+
 
     // Listen for changes
     industryList.addEventListener("change", updateIndustrySelection);
-
-    // Industry → Sub-Industry
-    // industrySelect.addEventListener("change", function () {
-    //   const selectedIndustryId = parseInt(this.value);
-    //   const industry = stockout_industry_data.find((i) => i.id === selectedIndustryId);
-
-    //   if (industry && Array.isArray(industry.sub_industries)) {
-    //     const subs = industry.sub_industries;
-    //     subIndustrySelect.disabled = subs.length === 0;
-    //     subIndustrySelect.innerHTML =
-    //       '<option value="">Select Sub-Industry</option>' +
-    //       subs.map((s) => `<option value="${s.id}">${s.name}</option>`).join("");
-    //   } else {
-    //     subIndustrySelect.disabled = true;
-    //     subIndustrySelect.innerHTML = '<option value="">No Sub-Industries</option>';
-    //   }
-    // });
 
     // Load States
     try {
@@ -435,7 +410,8 @@
         offer_quantity,
         minimum_quantity,
         unit: getVal("unit"),
-        industry: document.getElementById("industry_csv").value, // "1,2,3"
+        industry: industryCsvEl.value ? parseInt(industryCsvEl.value, 10) : null,
+        // industry: document.getElementById("industry_csv").value, // "1,2,3"
         // sub_industry: parseInt(getVal("sub_industry")),
         state_id: parseInt(getVal("state_id")),
         city: getVal("city"),
@@ -444,10 +420,10 @@
       };
 
       // require at least one industry (hidden inputs ignore `required`)
-      if (!industryCsvEl.value.trim()) {
-        alert("Please select at least one Industry.");
-        return;
-      }
+      // if (!industryCsvEl.value.trim()) {
+      //   alert("Please select at least one Industry.");
+      //   return;
+      // }
 
       try {
         const response = await fetch(`${stockout_base_url}/product`, {

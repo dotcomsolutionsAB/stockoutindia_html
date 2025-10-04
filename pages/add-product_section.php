@@ -47,7 +47,7 @@
     .stockout-ms-list label:hover {
       background: #f6f6f6;
     }
-    .industryChk{
+    .industryRadio{
       width:auto !important;
     }
 

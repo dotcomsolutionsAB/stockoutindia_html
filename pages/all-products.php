@@ -1,7 +1,7 @@
 <base href="../">
 <?php include("../header.php") ?>
 <?php include("../configs/config_static_data.php"); ?>
-<!-- All products Pages -->
+    <!-- All products Pages -->
         <main class="main products_page global_page">
 
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
@@ -80,7 +80,7 @@
                 </div>
             </div>
         </main><!-- End .main -->
-<!-- End All products Pages -->
+    <!-- End All products Pages -->
 
 <script>
     const BASE = "<?php echo BASE_URL; ?>";

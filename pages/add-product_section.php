@@ -13,45 +13,45 @@
       <select name="unit" id="stockout_unit" required>
         <option value="">Loading Units...</option>
       </select>
-  <style>
-    .stockout-ms { position: relative; }
-    .stockout-ms-btn {
-      width: 100%;
-      text-align: left;
-      padding: 10px;
-      border: 1px solid #ddd;
-      background: #fff;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .stockout-ms-panel {
-      position: absolute;
-      z-index: 50;
-      left: 0; right: 0;
-      max-height: 220px;
-      overflow: auto;
-      margin-top: 6px;
-      background: #fff;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      box-shadow: 0 8px 24px rgba(0,0,0,.08);
-      padding: 8px;
-    }
-    .stockout-ms-list label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 4px;
-      border-radius: 6px;
-    }
-    .stockout-ms-list label:hover {
-      background: #f6f6f6;
-    }
-    .industryRadio{
-      width:auto !important;
-    }
+      <style>
+        .stockout-ms { position: relative; }
+        .stockout-ms-btn {
+          width: 100%;
+          text-align: left;
+          padding: 10px;
+          border: 1px solid #ddd;
+          background: #fff;
+          border-radius: 6px;
+          cursor: pointer;
+        }
+        .stockout-ms-panel {
+          position: absolute;
+          z-index: 50;
+          left: 0; right: 0;
+          max-height: 220px;
+          overflow: auto;
+          margin-top: 6px;
+          background: #fff;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          box-shadow: 0 8px 24px rgba(0,0,0,.08);
+          padding: 8px;
+        }
+        .stockout-ms-list label {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 4px;
+          border-radius: 6px;
+        }
+        .stockout-ms-list label:hover {
+          background: #f6f6f6;
+        }
+        .industryRadio{
+          width:auto !important;
+        }
 
-  </style>
+      </style>
       <!-- Industry (multi-select with checkboxes) -->
       <div class="stockout-ms" id="industry_ms_wrap">
         <button type="button" class="stockout-ms-btn" id="industry_ms_btn">
@@ -65,7 +65,6 @@
         <!-- Hidden field that will carry CSV like "1,2,3" -->
         <input type="hidden" name="industry" id="industry_csv">
       </div>
-
 
       <select name="state_id" id="stockout_state" required>
         <option value="">Loading States...</option>

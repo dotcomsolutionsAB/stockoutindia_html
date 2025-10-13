@@ -21,12 +21,16 @@
         </section>
     </div><!-- End .container -->
 </main>
+
 <script>
+
     document.addEventListener("DOMContentLoaded", function () {
         const BASE_URL = "https://api.stockoutindia.com/api";
         const authToken = localStorage.getItem("authToken");
         const headers = { "Content-Type": "application/json" };
         if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
+        // ✅ Add this line
+        const isGuest = !authToken;  // true when user is not logged in
 
         const urlParams = new URLSearchParams(window.location.search);
         const subIndustryId = urlParams.get("sub_industry");
@@ -228,21 +232,6 @@
         window.location.href = `tel:${number}`;
     }
     
-    // function handleWhatsApp(_, isDisabled) {
-    //     if (isDisabled) return showLoginAlert();
-
-    //     const staticNumber = "917019616007"; // no '+' in wa.me links
-    //     const message = "Hi";
-    //     window.open(`https://wa.me/${staticNumber}?text=${encodeURIComponent(message)}`, '_blank');
-    // }
-
-    // function handleCall(_, isDisabled) {
-    //     if (isDisabled) return showLoginAlert();
-
-    //     const staticNumber = "+917019616007";
-    //     window.location.href = `tel:${staticNumber}`;
-    // }
-
     function showLoginAlert() {
         Swal.fire({
             title: "Login Required",

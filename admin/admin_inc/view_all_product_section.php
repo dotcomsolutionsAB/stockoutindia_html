@@ -333,11 +333,6 @@
       const userName = r.user?.name || r.user?.username || '-';
       tr.querySelector('[data-field="user_name"]').textContent = userName;
 
-      // tr.querySelector('.viewBtn')  .onclick = () => alert(`View #${r.id}`);
-      // tr.querySelector('.updateBtn').onclick = () => alert(`Update #${r.id}`);
-      // tr.querySelector('.deleteBtn').onclick = () =>
-      //   confirm(`Delete #${r.id}?`) && alert('Perform delete…');
-
       // View product details in SweetAlert
       tr.querySelector('.viewBtn').onclick = () => {
         Swal.fire({
@@ -354,61 +349,6 @@
       };
 
       // Update product via SweetAlert form
-      // tr.querySelector('.updateBtn').onclick = () => {
-      //   Swal.fire({
-      //     title: `Update Product #${r.id}`,
-      //     html: `
-      //        <div style="text-align:left">
-      //         <label for="swal_name">Product Name</label>
-      //         <input id="swal_name" class="swal2-input" value="${r.product_name}">
-
-      //         <label for="swal_price">Selling Price</label>
-      //         <input id="swal_price" class="swal2-input" type="number" value="${r.selling_price}">
-
-      //         <label for="swal_offer">Offer Quantity</label>
-      //         <input id="swal_offer" class="swal2-input" type="number" value="${r.offer_quantity}">
-
-      //         <label for="swal_dim">Dimensions</label>
-      //         <input id="swal_dim" class="swal2-input" value="${r.dimensions || ''}">
-
-      //         <label for="swal_status">Status</label>
-      //         <select id="swal_status" class="swal2-input">
-      //           <option value="active" ${r.status==='active' ? 'selected' : ''}>Active</option>
-      //           <option value="in-active" ${r.status==='in-active' ? 'selected' : ''}>In-active</option>
-      //           <option value="sold" ${r.status==='sold' ? 'selected' : ''}>Sold</option>
-      //         </select>
-      //       </div>
-      //     `,
-      //     confirmButtonText: 'Update',
-      //     focusConfirm: false,
-      //     preConfirm: () => {
-      //       const data = {
-      //         product_name: document.getElementById('swal_name').value,
-      //         selling_price: parseFloat(document.getElementById('swal_price').value),
-      //         offer_quantity: parseInt(document.getElementById('swal_offer').value),
-      //         dimensions: document.getElementById('swal_dim').value,
-      //         status: document.getElementById('swal_status').value
-      //       };
-
-      //       return fetch(`<?php echo BASE_URL; ?>/product/update/${r.id}`, {
-      //         method: 'POST',
-      //         headers: {
-      //           'Content-Type': 'application/json',
-      //           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-      //         },
-      //         body: JSON.stringify(data)
-      //       }).then(res => {
-      //         if (!res.ok) throw new Error('Failed to update');
-      //         return res.json();
-      //       }).then(() => {
-      //         Swal.fire('Updated!', 'Product updated successfully.', 'success').then(() => location.reload());
-      //       }).catch(err => {
-      //         Swal.showValidationMessage(`Request failed: ${err}`);
-      //       });
-      //     }
-      //   });
-      // };
-
       tr.querySelector('.updateBtn').onclick = () => {
         Swal.fire({
           title: `Update Product #${r.id}`,
@@ -440,10 +380,12 @@
                 <div id="swal_images">${buildImagesHTML(r)}</div>
 
                 <div class="mt-3 flex items-center gap-2">
-                  <input type="file" id="swal_file" accept="image/*" />
+                  <input type="file" id="swal_files" accept="image/*" multiple />
                   <button id="swal_upload_btn" class="swal2-styled">Upload</button>
                 </div>
-                <div class="text-xs text-gray-500 mt-1">Max 5MB. JPG/PNG/WEBP/AVIF/GIF.</div>
+                <div class="text-xs text-gray-500 mt-1">
+                  You can select multiple files. Field name: <code>files[]</code>. Max 5MB each. JPG/PNG/WEBP/AVIF/GIF.
+                </div>
               </div>
             </div>
           `,
@@ -472,27 +414,49 @@
             });
 
             // Hook upload button
-            const upBtn = document.getElementById('swal_upload_btn');
-            const file  = document.getElementById('swal_file');
+            const upBtn  = document.getElementById('swal_upload_btn');
+            const fileEl = document.getElementById('swal_files');
+            const imgWrap = document.getElementById('swal_images');
+
+            // small util: normalize whatever the API returns into [{id,url}]
+            const normalizeImages = (arr) => (Array.isArray(arr) ? arr : []).map(it => ({
+              id:  it?.id ?? null,
+              url: it?.url ?? it
+            }));
+
             upBtn.addEventListener('click', async () => {
-              const f = file.files?.[0];
-              if (!f) {
-                Swal.showValidationMessage('Please choose a file first.');
+              const files = Array.from(fileEl.files || []);
+              if (!files.length) {
+                Swal.showValidationMessage('Please choose one or more files.');
                 return;
               }
               try {
                 upBtn.disabled = true;
                 upBtn.textContent = 'Uploading…';
-                await uploadProductImage(r.id, f);
 
-                // After successful upload, refresh the product list quickly or append optimistic UI
-                // easiest: reload rows
-                await fetchProducts();
-                // Also update the gallery in-place (optional light refresh)
-                // You could re-query item images via product detail API:
-                // const fresh = await (await fetch(`${BASE}/product/${r.id}`, { headers: authHeader() })).json();
-                // document.getElementById('swal_images').innerHTML = buildImagesHTML(fresh.data);
+                // 1) Upload all selected files
+                const resp = await uploadProductImages(r.id, files);
 
+                // 2) Merge new images into the current product’s images
+                //    Adjust this depending on your API’s response shape.
+                //    Common patterns covered below:
+                const newImgs = normalizeImages(
+                  resp?.data?.images || resp?.data?.image || resp?.images || resp?.image || []
+                );
+
+                // r.image is what your table already uses; keep it the source of truth
+                const existing = normalizeImages(r.image);
+                // merge while avoiding duplicates by id+url
+                const key = (x) => `${x.id ?? 'noid'}|${x.url}`;
+                const mergedMap = new Map(existing.map(x => [key(x), x]));
+                newImgs.forEach(x => mergedMap.set(key(x), x));
+                r.image = Array.from(mergedMap.values());
+
+                // 3) Rebuild the gallery instantly
+                imgWrap.innerHTML = buildImagesHTML(r);
+
+                // 4) Clear selection + reset button text
+                fileEl.value = '';
                 upBtn.textContent = 'Upload';
                 upBtn.disabled = false;
                 Swal.showValidationMessage('');
@@ -622,14 +586,24 @@
     return res.json();
   }
 
-  async function uploadProductImage(productId, file) {
-    const url = `${BASE}/product/${productId}/images`; // adjust if needed
+  async function uploadProductImages(productId, files) {
+    // Endpoint shape you gave: /product/images/120
+    const url = `${BASE}/product/images/${productId}`;
+
     const fd = new FormData();
-    fd.append('image', file);
-    const res = await fetch(url, { method: 'POST', headers: { ...authHeader() }, body: fd });
+    for (const f of files) {
+      fd.append('files[]', f);       // <-- exactly as your backend expects
+    }
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { ...authHeader() },  // do NOT set Content-Type with FormData
+      body: fd
+    });
     if (!res.ok) throw new Error('Upload failed');
     return res.json();
   }
+
 
   // Build the image gallery HTML (supports images with ids or plain urls)
   function buildImagesHTML(r) {

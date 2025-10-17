@@ -87,6 +87,7 @@
             <th class="px-6 py-3 text-center">Unit</th>
             <th class="px-6 py-3 text-center">Validity</th>
             <th class="px-6 py-3 text-left">Industry</th>
+            <th class="px-6 py-3 text-left">User</th>
             <th class="px-6 py-3 text-center">Actions</th>
           </tr>
         </thead>
@@ -126,6 +127,7 @@
       <td class="px-6 py-4 text-center" data-field="unit"></td>
       <td class="px-6 py-4 text-center" data-field="validity"></td>
       <td class="px-6 py-4" data-field="industry"></td>
+      <td class="px-6 py-4" data-field="user_name"></td>
       <td class="px-6 py-4 text-center space-x-1">
         <!-- View -->
         <button class="viewBtn inline-flex items-center justify-center w-8 h-8 rounded-full
@@ -279,7 +281,7 @@
     if (!rows.length) {
       const tr  = document.createElement('tr');
       const td  = document.createElement('td');
-      td.colSpan = 10;                                  // ← span all table columns
+      td.colSpan = 11;                                  // ← span all table columns
       td.innerHTML = `
         <div class="empty-state">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="1.6">
@@ -328,6 +330,8 @@
       tr.querySelector('[data-field="unit"]').textContent        = r.unit        ?? '-';
       tr.querySelector('[data-field="validity"]').textContent    = r.validity    ?? '-';
       tr.querySelector('[data-field="industry"]').textContent    = r.industry?.name     ?? '-';
+      const userName = r.user?.name || r.user?.username || '-';
+      tr.querySelector('[data-field="user_name"]').textContent = userName;
 
       // tr.querySelector('.viewBtn')  .onclick = () => alert(`View #${r.id}`);
       // tr.querySelector('.updateBtn').onclick = () => alert(`Update #${r.id}`);
@@ -350,11 +354,66 @@
       };
 
       // Update product via SweetAlert form
+      // tr.querySelector('.updateBtn').onclick = () => {
+      //   Swal.fire({
+      //     title: `Update Product #${r.id}`,
+      //     html: `
+      //        <div style="text-align:left">
+      //         <label for="swal_name">Product Name</label>
+      //         <input id="swal_name" class="swal2-input" value="${r.product_name}">
+
+      //         <label for="swal_price">Selling Price</label>
+      //         <input id="swal_price" class="swal2-input" type="number" value="${r.selling_price}">
+
+      //         <label for="swal_offer">Offer Quantity</label>
+      //         <input id="swal_offer" class="swal2-input" type="number" value="${r.offer_quantity}">
+
+      //         <label for="swal_dim">Dimensions</label>
+      //         <input id="swal_dim" class="swal2-input" value="${r.dimensions || ''}">
+
+      //         <label for="swal_status">Status</label>
+      //         <select id="swal_status" class="swal2-input">
+      //           <option value="active" ${r.status==='active' ? 'selected' : ''}>Active</option>
+      //           <option value="in-active" ${r.status==='in-active' ? 'selected' : ''}>In-active</option>
+      //           <option value="sold" ${r.status==='sold' ? 'selected' : ''}>Sold</option>
+      //         </select>
+      //       </div>
+      //     `,
+      //     confirmButtonText: 'Update',
+      //     focusConfirm: false,
+      //     preConfirm: () => {
+      //       const data = {
+      //         product_name: document.getElementById('swal_name').value,
+      //         selling_price: parseFloat(document.getElementById('swal_price').value),
+      //         offer_quantity: parseInt(document.getElementById('swal_offer').value),
+      //         dimensions: document.getElementById('swal_dim').value,
+      //         status: document.getElementById('swal_status').value
+      //       };
+
+      //       return fetch(`<?php echo BASE_URL; ?>/product/update/${r.id}`, {
+      //         method: 'POST',
+      //         headers: {
+      //           'Content-Type': 'application/json',
+      //           'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      //         },
+      //         body: JSON.stringify(data)
+      //       }).then(res => {
+      //         if (!res.ok) throw new Error('Failed to update');
+      //         return res.json();
+      //       }).then(() => {
+      //         Swal.fire('Updated!', 'Product updated successfully.', 'success').then(() => location.reload());
+      //       }).catch(err => {
+      //         Swal.showValidationMessage(`Request failed: ${err}`);
+      //       });
+      //     }
+      //   });
+      // };
+      
       tr.querySelector('.updateBtn').onclick = () => {
         Swal.fire({
           title: `Update Product #${r.id}`,
           html: `
-             <div style="text-align:left">
+            <div style="text-align:left">
               <label for="swal_name">Product Name</label>
               <input id="swal_name" class="swal2-input" value="${r.product_name}">
 
@@ -373,37 +432,111 @@
                 <option value="in-active" ${r.status==='in-active' ? 'selected' : ''}>In-active</option>
                 <option value="sold" ${r.status==='sold' ? 'selected' : ''}>Sold</option>
               </select>
+
+              <hr class="my-3">
+
+              <div>
+                <div class="mb-2 font-medium">Images</div>
+                <div id="swal_images">${buildImagesHTML(r)}</div>
+
+                <div class="mt-3 flex items-center gap-2">
+                  <input type="file" id="swal_file" accept="image/*" />
+                  <button id="swal_upload_btn" class="swal2-styled">Upload</button>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">Max 5MB. JPG/PNG/WEBP/AVIF/GIF.</div>
+              </div>
             </div>
           `,
           confirmButtonText: 'Update',
           focusConfirm: false,
+
+          didOpen: () => {
+            // Hook delete buttons
+            const wrap = document.getElementById('swal_images');
+            wrap.addEventListener('click', async (e) => {
+              const btn = e.target.closest('.img-del-btn');
+              if (!btn || btn.disabled) return;
+              const imgId = btn.getAttribute('data-image-id');
+              try {
+                btn.disabled = true;
+                btn.textContent = '…';
+                await deleteProductImage(r.id, imgId);
+                // Remove the card from DOM
+                btn.closest('.relative').remove();
+                Swal.showValidationMessage(''); // clear any prior message
+              } catch (err) {
+                btn.disabled = false;
+                btn.textContent = '×';
+                Swal.showValidationMessage(`Delete failed: ${err.message || err}`);
+              }
+            });
+
+            // Hook upload button
+            const upBtn = document.getElementById('swal_upload_btn');
+            const file  = document.getElementById('swal_file');
+            upBtn.addEventListener('click', async () => {
+              const f = file.files?.[0];
+              if (!f) {
+                Swal.showValidationMessage('Please choose a file first.');
+                return;
+              }
+              try {
+                upBtn.disabled = true;
+                upBtn.textContent = 'Uploading…';
+                await uploadProductImage(r.id, f);
+
+                // After successful upload, refresh the product list quickly or append optimistic UI
+                // easiest: reload rows
+                await fetchProducts();
+                // Also update the gallery in-place (optional light refresh)
+                // You could re-query item images via product detail API:
+                // const fresh = await (await fetch(`${BASE}/product/${r.id}`, { headers: authHeader() })).json();
+                // document.getElementById('swal_images').innerHTML = buildImagesHTML(fresh.data);
+
+                upBtn.textContent = 'Upload';
+                upBtn.disabled = false;
+                Swal.showValidationMessage('');
+              } catch (err) {
+                upBtn.textContent = 'Upload';
+                upBtn.disabled = false;
+                Swal.showValidationMessage(`Upload failed: ${err.message || err}`);
+              }
+            });
+          },
+
           preConfirm: () => {
             const data = {
-              product_name: document.getElementById('swal_name').value,
+              product_name : document.getElementById('swal_name').value,
               selling_price: parseFloat(document.getElementById('swal_price').value),
               offer_quantity: parseInt(document.getElementById('swal_offer').value),
-              dimensions: document.getElementById('swal_dim').value,
-              status: document.getElementById('swal_status').value
+              dimensions   : document.getElementById('swal_dim').value,
+              status       : document.getElementById('swal_status').value
             };
 
-            return fetch(`<?php echo BASE_URL; ?>/product/update/${r.id}`, {
+            return fetch(`${BASE}/product/update/${r.id}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+                ...authHeader()
               },
               body: JSON.stringify(data)
-            }).then(res => {
+            })
+            .then(res => {
               if (!res.ok) throw new Error('Failed to update');
               return res.json();
-            }).then(() => {
-              Swal.fire('Updated!', 'Product updated successfully.', 'success').then(() => location.reload());
-            }).catch(err => {
-              Swal.showValidationMessage(`Request failed: ${err}`);
+            })
+            .catch(err => {
+              Swal.showValidationMessage(`Request failed: ${err.message || err}`);
             });
+          }
+        }).then((ok) => {
+          if (ok.isConfirmed) {
+            Swal.fire('Updated!', 'Product updated successfully.', 'success')
+              .then(() => fetchProducts()); // refresh table (faster than full reload)
           }
         });
       };
+
 
       // Delete product
       tr.querySelector('.deleteBtn').onclick = () => {
@@ -476,6 +609,67 @@
     }
   };
 
+  // 
+  function authHeader() {
+    const token = localStorage.getItem('authToken');
+    return token ? { 'Authorization': `Bearer ${token}` } : {};
+  }
+
+  // Delete one image by product + image id
+  async function deleteProductImage(productId, imageId) {
+    const url = `${BASE}/product/${productId}/images/${imageId}`; // adjust if your route differs
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: { ...authHeader() }
+    });
+    if (!res.ok) throw new Error('Delete failed');
+    return res.json();
+  }
+
+  // Upload one image file
+  async function uploadProductImage(productId, file) {
+    const url = `${BASE}/product/${productId}/images`; // adjust if your route differs
+    const fd = new FormData();
+    fd.append('image', file); // backend should expect 'image'
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { ...authHeader() }, // no Content-Type when using FormData
+      body: fd
+    });
+    if (!res.ok) throw new Error('Upload failed');
+    return res.json();
+  }
+
+  // Build the image gallery HTML (supports images with ids or plain urls)
+  function buildImagesHTML(r) {
+    // Prefer r.images [{id,url}], else fallback to r.image [url]
+    const items = Array.isArray(r.images) && r.images.length
+      ? r.images.map(it => ({ id: it.id, url: it.url }))
+      : (Array.isArray(r.image) ? r.image.map(u => ({ id: null, url: u })) : []);
+
+    if (!items.length) {
+      return `<div class="text-sm text-gray-500">No images yet.</div>`;
+    }
+
+    // Thumb grid
+    const cards = items.map((it, idx) => `
+      <div class="relative group border rounded-lg p-2">
+        <img src="${it.url}" alt="Image ${idx+1}" class="w-24 h-24 object-cover rounded">
+        <button
+          class="img-del-btn absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6
+                flex items-center justify-center shadow ${it.id ? 'opacity-0 group-hover:opacity-100' : 'opacity-60 cursor-not-allowed'}"
+          data-image-id="${it.id ?? ''}"
+          ${it.id ? '' : 'disabled'}
+          title="${it.id ? 'Delete image' : 'Cannot delete: no image id'}"
+        >×</button>
+      </div>
+    `).join('');
+
+    return `
+      <div class="grid grid-cols-4 gap-3">${cards}</div>
+    `;
+  }
+
   /* ────────────────────────── BOOTSTRAP ───────────────────────────── */
   (async () => {
     await buildCheckList({
@@ -499,6 +693,8 @@
 
     fetchProducts();                          // first load
   })();
+
+
 </script>
 
 

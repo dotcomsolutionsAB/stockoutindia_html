@@ -304,8 +304,8 @@
       const tr = tmpl.content.cloneNode(true);
 
       tr.querySelector('[data-field="image"]').src =
-        Array.isArray(r.image) && r.image.length ? r.image[0]
-                                                : '../uploads/placeholder.png';
+        (Array.isArray(r.image) && r.image.length) ? (r.image[0]?.url || r.image[0])   : '../uploads/placeholder.png';
+
       tr.querySelector('[data-field="product_name"]').textContent = r.product_name||'';
       tr.querySelector('[data-field="offer_quantity"]').textContent   = r.offer_quantity   ?? '-';
       tr.querySelector('[data-field="minimum_quantity"]').textContent = r.minimum_quantity ?? '-';
@@ -408,7 +408,7 @@
       //     }
       //   });
       // };
-      
+
       tr.querySelector('.updateBtn').onclick = () => {
         Swal.fire({
           title: `Update Product #${r.id}`,
@@ -615,43 +615,62 @@
     return token ? { 'Authorization': `Bearer ${token}` } : {};
   }
 
-  // Delete one image by product + image id
   async function deleteProductImage(productId, imageId) {
-    const url = `${BASE}/product/${productId}/images/${imageId}`; // adjust if your route differs
-    const res = await fetch(url, {
-      method: 'DELETE',
-      headers: { ...authHeader() }
-    });
+    const url = `${BASE}/product/${productId}/images/${imageId}`; // adjust if needed
+    const res = await fetch(url, { method: 'DELETE', headers: { ...authHeader() } });
     if (!res.ok) throw new Error('Delete failed');
     return res.json();
   }
 
-  // Upload one image file
   async function uploadProductImage(productId, file) {
-    const url = `${BASE}/product/${productId}/images`; // adjust if your route differs
+    const url = `${BASE}/product/${productId}/images`; // adjust if needed
     const fd = new FormData();
-    fd.append('image', file); // backend should expect 'image'
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { ...authHeader() }, // no Content-Type when using FormData
-      body: fd
-    });
+    fd.append('image', file);
+    const res = await fetch(url, { method: 'POST', headers: { ...authHeader() }, body: fd });
     if (!res.ok) throw new Error('Upload failed');
     return res.json();
   }
 
   // Build the image gallery HTML (supports images with ids or plain urls)
+  // function buildImagesHTML(r) {
+  //   // Prefer r.images [{id,url}], else fallback to r.image [url]
+  //   const items = Array.isArray(r.images) && r.images.length
+  //     ? r.images.map(it => ({ id: it.id, url: it.url }))
+  //     : (Array.isArray(r.image) ? r.image.map(u => ({ id: null, url: u })) : []);
+
+  //   if (!items.length) {
+  //     return `<div class="text-sm text-gray-500">No images yet.</div>`;
+  //   }
+
+  //   // Thumb grid
+  //   const cards = items.map((it, idx) => `
+  //     <div class="relative group border rounded-lg p-2">
+  //       <img src="${it.url}" alt="Image ${idx+1}" class="w-24 h-24 object-cover rounded">
+  //       <button
+  //         class="img-del-btn absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6
+  //               flex items-center justify-center shadow ${it.id ? 'opacity-0 group-hover:opacity-100' : 'opacity-60 cursor-not-allowed'}"
+  //         data-image-id="${it.id ?? ''}"
+  //         ${it.id ? '' : 'disabled'}
+  //         title="${it.id ? 'Delete image' : 'Cannot delete: no image id'}"
+  //       >×</button>
+  //     </div>
+  //   `).join('');
+
+  //   return `
+  //     <div class="grid grid-cols-4 gap-3">${cards}</div>
+  //   `;
+  // }
   function buildImagesHTML(r) {
-    // Prefer r.images [{id,url}], else fallback to r.image [url]
-    const items = Array.isArray(r.images) && r.images.length
-      ? r.images.map(it => ({ id: it.id, url: it.url }))
-      : (Array.isArray(r.image) ? r.image.map(u => ({ id: null, url: u })) : []);
+    // r.image is now an array of objects: [{id, url}]
+    // Keep a fallback for legacy arrays of strings just in case.
+    const items = Array.isArray(r.image) && r.image.length
+      ? r.image.map(it => ({ id: it?.id ?? null, url: it?.url ?? it }))
+      : [];
 
     if (!items.length) {
       return `<div class="text-sm text-gray-500">No images yet.</div>`;
     }
 
-    // Thumb grid
     const cards = items.map((it, idx) => `
       <div class="relative group border rounded-lg p-2">
         <img src="${it.url}" alt="Image ${idx+1}" class="w-24 h-24 object-cover rounded">
@@ -665,10 +684,9 @@
       </div>
     `).join('');
 
-    return `
-      <div class="grid grid-cols-4 gap-3">${cards}</div>
-    `;
+    return `<div class="grid grid-cols-4 gap-3">${cards}</div>`;
   }
+
 
   /* ────────────────────────── BOOTSTRAP ───────────────────────────── */
   (async () => {

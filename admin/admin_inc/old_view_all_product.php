@@ -37,6 +37,14 @@
         <div id="industryList" class="bg-gray-50 border border-gray-300 rounded-lg p-2
                       h-20 overflow-y-auto space-y-1"></div>
       </div>
+      <!-- Sub‑industry list -->
+      <div class="flex flex-col gap-1">
+        <!-- <span class="font-medium text-gray-700">Sub‑Industry</span> -->
+        <input id="subIndustrySearch" type="text" placeholder="Search Sub Industry" class="mb-1 w-full bg-gray-50 border border-gray-300 rounded-md p-2
+                      text-sm focus:ring-red-500 focus:border-red-500">
+        <div id="subIndustryList" class="bg-gray-50 border border-gray-300 rounded-lg p-2
+                      h-20 overflow-y-auto space-y-1"></div>
+      </div>
 
       <!-- User list (multi-select) -->
       <div class="flex flex-col gap-1">
@@ -87,6 +95,7 @@
             <th class="px-6 py-3 text-center">Unit</th>
             <th class="px-6 py-3 text-center">Validity</th>
             <th class="px-6 py-3 text-left">Industry</th>
+            <th class="px-6 py-3 text-left">Sub‑Industry</th>
             <th class="px-6 py-3 text-center">Actions</th>
           </tr>
         </thead>
@@ -126,6 +135,8 @@
       <td class="px-6 py-4 text-center" data-field="unit"></td>
       <td class="px-6 py-4 text-center" data-field="validity"></td>
       <td class="px-6 py-4" data-field="industry"></td>
+      <td class="px-6 py-4" data-field="sub_industry"></td>
+      <!-- Row template: swap the old single button cell with this -->
       <td class="px-6 py-4 text-center space-x-1">
         <!-- View -->
         <button class="viewBtn inline-flex items-center justify-center w-8 h-8 rounded-full
@@ -173,6 +184,7 @@
   const BASE     = `<?php echo BASE_URL; ?>`;
   const API_URL  = `${BASE}/admin/products`;
   const IDS_URL  = `${BASE}/industry`;
+  const SUB_URL  = `${BASE}/sub_industry`;
   const USERS_URL= `${BASE}/admin/users_with_products`;
 
   const pageSize = 10;                 // ← limit per page
@@ -240,6 +252,7 @@
       user          : csv('userChk')       || undefined,
       product_name  : q                    || undefined,
       industry      : csv('industryChk')   || undefined,
+      sub_industry  : csv('subChk')        || undefined,
       status        : status               || undefined,
       min_amount    : minP ? +minP : undefined,
       max_amount    : maxP ? +maxP : undefined,
@@ -279,7 +292,7 @@
     if (!rows.length) {
       const tr  = document.createElement('tr');
       const td  = document.createElement('td');
-      td.colSpan = 10;                                  // ← span all table columns
+      td.colSpan = 11;                                  // ← span all table columns
       td.innerHTML = `
         <div class="empty-state">
           <svg fill="none" viewBox="0 0 24 24" stroke-width="1.6">
@@ -328,6 +341,7 @@
       tr.querySelector('[data-field="unit"]').textContent        = r.unit        ?? '-';
       tr.querySelector('[data-field="validity"]').textContent    = r.validity    ?? '-';
       tr.querySelector('[data-field="industry"]').textContent    = r.industry?.name     ?? '-';
+      // tr.querySelector('[data-field="sub_industry"]').textContent= r.sub_industry?.name ?? '-';
 
       // tr.querySelector('.viewBtn')  .onclick = () => alert(`View #${r.id}`);
       // tr.querySelector('.updateBtn').onclick = () => alert(`Update #${r.id}`);
@@ -486,6 +500,13 @@
       labelSel: i=>i.name
     });
     await buildCheckList({
+      url     : SUB_URL,
+      wrapEl  : $('#subIndustryList'),
+      cls     : 'subChk',
+      valueSel: s=>s.id,
+      labelSel: s=>s.name
+    });
+    await buildCheckList({
       url     : USERS_URL,
       body    : {limit:100, offset:0},         // ← POST payload
       wrapEl  : $('#userList'),
@@ -495,6 +516,7 @@
     });
 
     attachSearch('#industrySearch','#industryList');
+    attachSearch('#subIndustrySearch','#subIndustryList');
     attachSearch('#userSearch','#userList');
 
     fetchProducts();                          // first load

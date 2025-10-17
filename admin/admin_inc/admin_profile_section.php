@@ -1,4 +1,4 @@
-<div id="profile" class="tab-content active">
+<div id="profile" class="tab-content">
     <h2 class="text-2xl font-semibold text-red-600 mb-6">Profile</h2>
     <form>
         <!-- Username and User ID -->

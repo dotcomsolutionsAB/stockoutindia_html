@@ -79,7 +79,7 @@
                     </aside> -->
                 </div>
             </div>
-        </main><!-- End .main -->
+        </main>
     <!-- End All products Pages -->
 
 <script>

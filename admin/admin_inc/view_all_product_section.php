@@ -409,16 +409,56 @@
           didOpen: () => {
             // Hook delete buttons
             const wrap = document.getElementById('swal_images');
+            // wrap.addEventListener('click', async (e) => {
+            //   const btn = e.target.closest('.img-del-btn');
+            //   if (!btn || btn.disabled) return;
+            //   const imgId = btn.getAttribute('data-image-id');
+            //   try {
+            //     btn.disabled = true;
+            //     btn.textContent = '…';
+            //     await deleteProductImage(r.id, imgId);
+            //     // Remove the card from DOM
+            //     btn.closest('.relative').remove();
+            //     Swal.showValidationMessage(''); // clear any prior message
+            //   } catch (err) {
+            //     btn.disabled = false;
+            //     btn.textContent = '×';
+            //     Swal.showValidationMessage(`Delete failed: ${err.message || err}`);
+            //   }
+            // });
+            
             wrap.addEventListener('click', async (e) => {
               const btn = e.target.closest('.img-del-btn');
               if (!btn || btn.disabled) return;
-              const imgId = btn.getAttribute('data-image-id');
+
+              const imgIdStr = btn.getAttribute('data-image-id');
+              if (!imgIdStr) return; // safety
+              const imgIdNum = Number(imgIdStr);
+
               try {
                 btn.disabled = true;
                 btn.textContent = '…';
-                await deleteProductImage(r.id, imgId);
-                // Remove the card from DOM
-                btn.closest('.relative').remove();
+                await deleteProductImage(r.id, imgIdNum);
+
+                // 1) Update in-memory product images so future merges don't resurrect it
+                r.image = Array.isArray(r.image) ? r.image.filter(it => {
+                  // it may be {id,url} or a legacy string; keep legacy strings
+                  const curId = (it && typeof it === 'object') ? it.id : null;
+                  return curId !== imgIdNum; // remove only the deleted one
+                }) : [];
+
+                // 2) Rebuild the gallery from the updated r.image
+                wrap.innerHTML = buildImagesHTML(r);
+
+                // 3) (Optional) update the table row thumbnail immediately
+                const rowThumb = tr.querySelector('[data-field="image"]'); // 'tr' is in outer scope
+                if (rowThumb) {
+                  rowThumb.src =
+                    (Array.isArray(r.image) && r.image.length)
+                      ? toAbs(r.image[0]?.url || r.image[0])
+                      : '../uploads/placeholder.png';
+                }
+
                 Swal.showValidationMessage(''); // clear any prior message
               } catch (err) {
                 btn.disabled = false;

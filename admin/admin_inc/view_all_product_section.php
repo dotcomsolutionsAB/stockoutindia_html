@@ -632,34 +632,6 @@
   }
 
   // Build the image gallery HTML (supports images with ids or plain urls)
-  // function buildImagesHTML(r) {
-  //   // Prefer r.images [{id,url}], else fallback to r.image [url]
-  //   const items = Array.isArray(r.images) && r.images.length
-  //     ? r.images.map(it => ({ id: it.id, url: it.url }))
-  //     : (Array.isArray(r.image) ? r.image.map(u => ({ id: null, url: u })) : []);
-
-  //   if (!items.length) {
-  //     return `<div class="text-sm text-gray-500">No images yet.</div>`;
-  //   }
-
-  //   // Thumb grid
-  //   const cards = items.map((it, idx) => `
-  //     <div class="relative group border rounded-lg p-2">
-  //       <img src="${it.url}" alt="Image ${idx+1}" class="w-24 h-24 object-cover rounded">
-  //       <button
-  //         class="img-del-btn absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6
-  //               flex items-center justify-center shadow ${it.id ? 'opacity-0 group-hover:opacity-100' : 'opacity-60 cursor-not-allowed'}"
-  //         data-image-id="${it.id ?? ''}"
-  //         ${it.id ? '' : 'disabled'}
-  //         title="${it.id ? 'Delete image' : 'Cannot delete: no image id'}"
-  //       >×</button>
-  //     </div>
-  //   `).join('');
-
-  //   return `
-  //     <div class="grid grid-cols-4 gap-3">${cards}</div>
-  //   `;
-  // }
   function buildImagesHTML(r) {
     // r.image is now an array of objects: [{id, url}]
     // Keep a fallback for legacy arrays of strings just in case.
@@ -686,8 +658,7 @@
 
     return `<div class="grid grid-cols-4 gap-3">${cards}</div>`;
   }
-
-
+  
   /* ────────────────────────── BOOTSTRAP ───────────────────────────── */
   (async () => {
     await buildCheckList({

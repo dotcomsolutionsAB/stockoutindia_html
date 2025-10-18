@@ -99,6 +99,10 @@
         .industry-card-title {
             font-size: 14px;
         }
+        .industry-card {
+            height: 175px;
+            width: 190px;
+        }
     }
 
  </style>

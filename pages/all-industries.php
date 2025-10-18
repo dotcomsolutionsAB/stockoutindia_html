@@ -16,19 +16,75 @@
             <div class="container">
                 <div class="row main-content">
                     <div class="col-lg-12">
-                        <nav class="toolbox sticky-header" data-sticky-options="{'mobile': true}">
-                            <!-- Filter and sorting options here -->
-                        </nav>
-
-                        <!-- Industries Grid -->
-                        <div class="row Subindustries-body" id="industryGrid">
-                            <!-- Industries showing here -->
+                        <div class="row" id="industryGrid">
+                            <!-- Industries will be dynamically inserted here -->
                         </div>
                     </div>
                 </div>
             </div>
         </main>
 <!-- End Home Pages -->
+ <style>
+    /* Card Layout */
+    .industry-card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .industry-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Industry Card Image */
+    .industry-card-image {
+        max-width: 80px;
+        max-height: 80px;
+        margin-bottom: 10px;
+        object-fit: contain;
+    }
+
+    /* Card Title */
+    .industry-card-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        #industryGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 cards per row on mobile */
+            gap: 15px;
+        }
+    }
+
+    @media (min-width: 769px) {
+        #industryGrid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 cards per row on larger screens */
+            gap: 20px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        #industryGrid {
+            grid-template-columns: repeat(2, 1fr); /* 2 cards per row on small mobile */
+        }
+    }
+
+ </style>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const industryGrid = document.getElementById("industryGrid");
@@ -61,7 +117,7 @@
             industryGrid.innerHTML = ""; // Clear previous industries from grid
 
             // Loop through each industry and create a card
-            data.forEach((ind, index) => {
+            data.forEach(ind => {
                 const col = document.createElement("div");
                 col.className = "col-6 col-sm-4 col-md-3 col-lg-2"; // Adjust grid for 5 items per row (large screen)
 
@@ -78,7 +134,7 @@
                     </div>
                 `;
 
-                industryGrid.appendChild(col);
+                industryGrid.appendChild(col); // Add the new card to the grid
             });
         }
     });

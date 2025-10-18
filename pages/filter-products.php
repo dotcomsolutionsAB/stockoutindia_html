@@ -14,7 +14,7 @@
 
     <div class="container">
         <section class="filter_products" id="filter_products">
-            <h3 id="sub-industry-name" class="text-center my-4 fw-bold text-dark"></h3>
+            <h3 id="industry-name" class="text-center my-4 fw-bold text-dark"></h3>
             <div class="row" id="product-list">
                 <!-- Dynamic product cards will appear here -->
             </div>
@@ -33,10 +33,10 @@
         const isGuest = !authToken;  // true when user is not logged in
 
         const urlParams = new URLSearchParams(window.location.search);
-        const subIndustryId = urlParams.get("sub_industry");
+        const IndustryId = urlParams.get("industry");
         // const isDisabled = !authToken;
 
-        if (!subIndustryId) return;
+        if (!IndustryId) return;
 
         const endpoint = authToken
             ? `${BASE_URL}/product/get_products`
@@ -45,17 +45,17 @@
             fetch(endpoint, {
                 method: "POST",
                 headers,
-                body: JSON.stringify({ sub_industry: subIndustryId })
+                body: JSON.stringify({ industry: IndustryId })
             })
             .then(res => res.json())
             .then(result => {
-                const nameHeading = document.getElementById("sub-industry-name");
+                const nameHeading = document.getElementById("industry-name");
                 const productContainer = document.getElementById("product-list");
 
                 if (result.success && result.data.length > 0) {
                     // ✅ Show sub-industry name
-                    const subIndustryName = result.data[0].sub_industry_details?.name || "";
-                    nameHeading.textContent = subIndustryName;
+                    const IndustryName = result.data[0].industry_details?.name || "";
+                    nameHeading.textContent = IndustryName;
 
                     productContainer.innerHTML = "";
 

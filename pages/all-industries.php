@@ -34,6 +34,8 @@
     }
     /* Card Layout */
     .industry-card {
+        height: 175px;
+        margin-top: 20px;
         background-color: #fff;
         border: 1px solid #ddd;
         border-radius: 10px;
@@ -79,9 +81,12 @@
 
     @media (min-width: 769px) {
         #industryGrid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr); /* 5 cards per row on larger screens */
+            display: flex;
+            grid-template-columns: repeat(5, 1fr);
             gap: 20px;
+            align-items: center;
+            /* justify-content: center; */
+            flex-wrap: wrap;
         }
     }
 
@@ -126,7 +131,7 @@
             // Loop through each industry and create a card
             data.forEach(ind => {
                 const col = document.createElement("div");
-                col.className = "col-6 col-sm-4 col-md-3 col-lg-2"; // Adjust grid for 5 items per row (large screen)
+                // col.className = "col-6 col-sm-4 col-md-3 col-lg-2"; // Adjust grid for 5 items per row (large screen)
 
                 col.innerHTML = `
                     <div class="industry-card">

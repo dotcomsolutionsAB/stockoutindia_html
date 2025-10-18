@@ -134,7 +134,7 @@
                 } else {
                     document.getElementById("product-list").innerHTML = `
                         <div class="col-12 text-center py-4 text-muted">
-                            No products found in this sub-industry.
+                            No products found in this Industry.
                         </div>`;
                 }
             })

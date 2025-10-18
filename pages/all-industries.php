@@ -35,6 +35,7 @@
     /* Card Layout */
     .industry-card {
         height: 175px;
+        width: 240px;
         margin-top: 20px;
         background-color: #fff;
         border: 1px solid #ddd;
@@ -85,7 +86,7 @@
             grid-template-columns: repeat(5, 1fr);
             gap: 20px;
             align-items: center;
-            /* justify-content: center; */
+            justify-content: center;
             flex-wrap: wrap;
         }
     }
@@ -93,6 +94,10 @@
     @media (max-width: 576px) {
         #industryGrid {
             grid-template-columns: repeat(2, 1fr); /* 2 cards per row on small mobile */
+            padding: 0px 20px;
+        }
+        .industry-card-title {
+            font-size: 14px;
         }
     }
 

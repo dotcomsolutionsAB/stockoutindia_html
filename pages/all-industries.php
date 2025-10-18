@@ -15,16 +15,23 @@
 
             <div class="container">
                 <div class="row main-content">
-                    <div class="col-lg-12">
+                    <!-- <div class="col-lg-12"> -->
                         <div class="row" id="industryGrid">
                             <!-- Industries will be dynamically inserted here -->
                         </div>
-                    </div>
+                    <!-- </div> -->
                 </div>
             </div>
         </main>
 <!-- End Home Pages -->
  <style>
+    .industry-card-link{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
     /* Card Layout */
     .industry-card {
         background-color: #fff;
@@ -123,7 +130,7 @@
 
                 col.innerHTML = `
                     <div class="industry-card">
-                        <a href="pages/filter-products?sub_industry=${ind.id}" class="industry-card-link">
+                        <a href="pages/filter-products?industry=${ind.id}" class="industry-card-link">
                             <figure>
                                 <img src="${ind.industry_image || 'uploads/placeholder.png'}" alt="${ind.name}" class="industry-card-image">
                             </figure>

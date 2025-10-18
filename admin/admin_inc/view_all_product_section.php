@@ -398,7 +398,7 @@
                   <button id="swal_upload_btn" class="swal2-styled">Upload</button>
                 </div>
                 <div class="text-xs text-gray-500 mt-1">
-                  You can select multiple files. Field name: <code>files[]</code>. Max 5MB each. JPG/PNG/WEBP/AVIF/GIF.
+                  You can select multiple files. Format: JPG/PNG/WEBP/AVIF/GIF.
                 </div>
               </div>
             </div>
@@ -408,25 +408,7 @@
 
           didOpen: () => {
             // Hook delete buttons
-            const wrap = document.getElementById('swal_images');
-            // wrap.addEventListener('click', async (e) => {
-            //   const btn = e.target.closest('.img-del-btn');
-            //   if (!btn || btn.disabled) return;
-            //   const imgId = btn.getAttribute('data-image-id');
-            //   try {
-            //     btn.disabled = true;
-            //     btn.textContent = '…';
-            //     await deleteProductImage(r.id, imgId);
-            //     // Remove the card from DOM
-            //     btn.closest('.relative').remove();
-            //     Swal.showValidationMessage(''); // clear any prior message
-            //   } catch (err) {
-            //     btn.disabled = false;
-            //     btn.textContent = '×';
-            //     Swal.showValidationMessage(`Delete failed: ${err.message || err}`);
-            //   }
-            // });
-            
+            const wrap = document.getElementById('swal_images');            
             wrap.addEventListener('click', async (e) => {
               const btn = e.target.closest('.img-del-btn');
               if (!btn || btn.disabled) return;

@@ -455,7 +455,7 @@
               if (confirmed.isConfirmed) {
                 try {
                   const delRes = await fetch(`<?php echo BASE_URL; ?>/product/delete_image`, {
-                    method: "POST",
+                    method: "DELETE",
                     headers: head,
                     body: JSON.stringify({ product_id: id, image_url: imgUrl })
                   });

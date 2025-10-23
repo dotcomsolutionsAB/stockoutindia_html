@@ -170,231 +170,6 @@
   }
 
 </style>
-<style>
-  .sox-select {
-    position: relative;
-    width: 100%;
-  }
-  .sox-select[aria-disabled="true"] {
-    opacity: .6;
-    pointer-events: none;
-  }
-  .sox-select-btn {
-    width: 100%;
-    text-align: left;
-    padding: 10px;
-    border: 1px solid #ddd;
-    background: #fff;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-  }
-  .sox-select-btn .sox-label {
-    color: #111;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .sox-caret {
-    font-size: 10px;
-    opacity: .7;
-  }
-  .sox-panel {
-    position: absolute;
-    z-index: 60;
-    left: 0; right: 0;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-shadow: 0 8px 24px rgba(0,0,0,.08);
-    margin-top: 6px;
-    padding: 8px;
-    display: none;
-  }
-  .sox-search {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid #e5e5e5;
-    border-radius: 6px;
-    margin-bottom: 8px;
-  }
-  .sox-list {
-    max-height: 240px;
-    overflow: auto;
-  }
-  .sox-option {
-    padding: 8px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  .sox-option:hover,
-  .sox-option[aria-current="true"] {
-    background: #f6f6f6;
-  }
-  .sox-empty {
-    padding: 10px;
-    color: #888;
-    font-size: 13px;
-  }
-</style>
-
-<script>
-  function enhanceSelect(selectEl, { placeholder = 'Select an option' } = {}) {
-    if (!selectEl || selectEl._enhanced) return; // prevent double init
-
-    // Hide the original select but keep it for form submission
-    selectEl.style.display = 'none';
-
-    // Wrapper
-    const wrap = document.createElement('div');
-    wrap.className = 'sox-select';
-    wrap.setAttribute('role', 'combobox');
-    wrap.setAttribute('aria-expanded', 'false');
-    wrap.setAttribute('aria-disabled', selectEl.disabled ? 'true' : 'false');
-
-    // Button
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'sox-select-btn';
-    const label = document.createElement('span');
-    label.className = 'sox-label';
-    label.textContent = selectEl.options[selectEl.selectedIndex]?.text || placeholder;
-    const caret = document.createElement('span');
-    caret.className = 'sox-caret';
-    caret.textContent = '▾';
-    btn.appendChild(label);
-    btn.appendChild(caret);
-
-    // Panel
-    const panel = document.createElement('div');
-    panel.className = 'sox-panel';
-    const search = document.createElement('input');
-    search.type = 'text';
-    search.className = 'sox-search';
-    search.placeholder = 'Type to search...';
-    const list = document.createElement('div');
-    list.className = 'sox-list';
-
-    panel.appendChild(search);
-    panel.appendChild(list);
-
-    // Insert in DOM
-    selectEl.parentNode.insertBefore(wrap, selectEl);
-    wrap.appendChild(selectEl);
-    wrap.appendChild(btn);
-    wrap.appendChild(panel);
-
-    // Build list from <select> options
-    let currentIndex = -1;
-    function buildList(filter = '') {
-      list.innerHTML = '';
-      const opts = Array.from(selectEl.options)
-        .filter(o => o.value !== '')
-        .filter(o => o.text.toLowerCase().includes(filter.toLowerCase()));
-
-      if (!opts.length) {
-        const empty = document.createElement('div');
-        empty.className = 'sox-empty';
-        empty.textContent = 'No matches';
-        list.appendChild(empty);
-        currentIndex = -1;
-        return;
-      }
-
-      opts.forEach((o, idx) => {
-        const opt = document.createElement('div');
-        opt.className = 'sox-option';
-        opt.setAttribute('data-value', o.value);
-        opt.textContent = o.text;
-        opt.addEventListener('click', () => selectValue(o.value, o.text));
-        if (o.value === selectEl.value) {
-          opt.setAttribute('aria-current', 'true');
-          currentIndex = idx;
-        }
-        list.appendChild(opt);
-      });
-    }
-
-    function openPanel() {
-      if (wrap.getAttribute('aria-disabled') === 'true') return;
-      panel.style.display = 'block';
-      wrap.setAttribute('aria-expanded', 'true');
-      search.value = '';
-      buildList();
-      setTimeout(() => search.focus(), 0);
-    }
-    function closePanel() {
-      panel.style.display = 'none';
-      wrap.setAttribute('aria-expanded', 'false');
-      currentIndex = -1;
-    }
-    function selectValue(value, text) {
-      if (selectEl.value !== value) {
-        selectEl.value = value;
-        label.textContent = text || placeholder;
-        // fire native change
-        const ev = new Event('change', { bubbles: true });
-        selectEl.dispatchEvent(ev);
-      } else {
-        label.textContent = text || placeholder;
-      }
-      closePanel();
-    }
-
-    // Keyboard navigation
-    function moveHighlight(dir) {
-      const options = Array.from(list.querySelectorAll('.sox-option'));
-      if (!options.length) return;
-      currentIndex = Math.max(0, Math.min(options.length - 1, currentIndex + dir));
-      options.forEach(o => o.removeAttribute('aria-current'));
-      options[currentIndex].setAttribute('aria-current', 'true');
-      options[currentIndex].scrollIntoView({ block: 'nearest' });
-    }
-
-    // Events
-    btn.addEventListener('click', () => {
-      const open = wrap.getAttribute('aria-expanded') === 'true';
-      open ? closePanel() : openPanel();
-    });
-    search.addEventListener('input', () => buildList(search.value));
-    search.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowDown') { e.preventDefault(); moveHighlight(1); }
-      if (e.key === 'ArrowUp')   { e.preventDefault(); moveHighlight(-1); }
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        const highlighted = list.querySelector('.sox-option[aria-current="true"]') || list.querySelector('.sox-option');
-        if (highlighted) {
-          const v = highlighted.getAttribute('data-value');
-          const t = highlighted.textContent;
-          selectValue(v, t);
-        }
-      }
-      if (e.key === 'Escape') closePanel();
-    });
-    document.addEventListener('click', (e) => {
-      if (!wrap.contains(e.target)) closePanel();
-    });
-
-    // API: refresh options & disabled state
-    function refresh() {
-      label.textContent = selectEl.options[selectEl.selectedIndex]?.text || placeholder;
-      buildList(search.value);
-    }
-    function setDisabled(disabled) {
-      selectEl.disabled = !!disabled;
-      wrap.setAttribute('aria-disabled', disabled ? 'true' : 'false');
-    }
-
-    // store API on element
-    selectEl._enhanced = { refresh, setDisabled };
-
-    // initial
-    refresh();
-  }
-</script>
 
 <script>
   document.addEventListener("DOMContentLoaded", async function () {
@@ -488,18 +263,7 @@
 
 
     // Load Units
-    // try {
-    //   const res = await fetch(`${stockout_base_url}/product/get_units`, {
-    //     headers: { Authorization: `Bearer ${stockout_token}` },
-    //   });
-    //   const units = (await res.json()).data || [];
-    //   unitSelect.innerHTML =
-    //     '<option value="">Select Unit</option>' +
-    //     units.map((u) => `<option value="${u}">${u}</option>`).join("");
-    // } catch {
-    //   unitSelect.innerHTML = '<option value="">Failed to load</option>';
-    // }
-     try {
+    try {
       const res = await fetch(`${stockout_base_url}/product/get_units`, {
         headers: { Authorization: `Bearer ${stockout_token}` },
       });
@@ -507,12 +271,8 @@
       unitSelect.innerHTML =
         '<option value="">Select Unit</option>' +
         units.map((u) => `<option value="${u}">${u}</option>`).join("");
-
-      // ✅ make searchable
-      enhanceSelect(unitSelect, { placeholder: 'Select Unit' });
     } catch {
       unitSelect.innerHTML = '<option value="">Failed to load</option>';
-      enhanceSelect(unitSelect, { placeholder: 'Select Unit' });
     }
 
     try {
@@ -572,39 +332,6 @@
     industryList.addEventListener("change", updateIndustrySelection);
 
     // Load States
-    // try {
-    //   const res = await fetch(`${stockout_base_url}/states`, {
-    //     headers: { Authorization: `Bearer ${stockout_token}` },
-    //   });
-    //   const states = (await res.json()).data || [];
-    //   stateSelect.innerHTML =
-    //     '<option value="">Select State</option>' +
-    //     states.map((s) => `<option value="${s.id}">${s.name}</option>`).join("");
-    // } catch {
-    //   stateSelect.innerHTML = '<option value="">Failed to load</option>';
-    // }
-    // // Load Cities
-    // try {
-    //   const res = await fetch(`${stockout_base_url}/cities`, {
-    //     headers: { Authorization: `Bearer ${stockout_token}` },
-    //   });
-    //   stockout_cities_data = (await res.json()).data || [];
-    // } catch {
-    //   console.error("❌ Cities fetch failed");
-    // }
-    // // State → City
-    // stateSelect.addEventListener("change", function () {
-    //   const selectedStateName = this.options[this.selectedIndex].text;
-    //   const filteredCities = stockout_cities_data.filter(
-    //     (c) => c.state_name === selectedStateName
-    //   );
-    //   citySelect.disabled = filteredCities.length === 0;
-    //   citySelect.innerHTML =
-    //     '<option value="">Select City</option>' +
-    //     filteredCities.map((c) => `<option value="${c.name}">${c.name}</option>`).join("");
-    // });
-
-    // ========== Load States ==========
     try {
       const res = await fetch(`${stockout_base_url}/states`, {
         headers: { Authorization: `Bearer ${stockout_token}` },
@@ -613,15 +340,11 @@
       stateSelect.innerHTML =
         '<option value="">Select State</option>' +
         states.map((s) => `<option value="${s.id}">${s.name}</option>`).join("");
-
-      // ✅ make searchable
-      enhanceSelect(stateSelect, { placeholder: 'Select State' });
     } catch {
       stateSelect.innerHTML = '<option value="">Failed to load</option>';
-      enhanceSelect(stateSelect, { placeholder: 'Select State' });
     }
 
-    // ========== Load Cities (all) ==========
+    // Load Cities
     try {
       const res = await fetch(`${stockout_base_url}/cities`, {
         headers: { Authorization: `Bearer ${stockout_token}` },
@@ -631,33 +354,17 @@
       console.error("❌ Cities fetch failed");
     }
 
-    // ========== State → City linkage ==========
+    // State → City
     stateSelect.addEventListener("change", function () {
-      const selectedStateName = this.options[this.selectedIndex]?.text;
+      const selectedStateName = this.options[this.selectedIndex].text;
       const filteredCities = stockout_cities_data.filter(
         (c) => c.state_name === selectedStateName
       );
-
       citySelect.disabled = filteredCities.length === 0;
       citySelect.innerHTML =
         '<option value="">Select City</option>' +
         filteredCities.map((c) => `<option value="${c.name}">${c.name}</option>`).join("");
-
-      // ✅ if first time, enhance; else just refresh & sync disabled
-      if (!citySelect._enhanced) {
-        enhanceSelect(citySelect, { placeholder: 'Select City' });
-      } else {
-        citySelect._enhanced.refresh();
-      }
-      citySelect._enhanced.setDisabled(citySelect.disabled);
     });
-
-    // In case you want the City control searchable even before a state is chosen:
-    if (!citySelect._enhanced) {
-      enhanceSelect(citySelect, { placeholder: 'Select City' });
-      citySelect._enhanced.setDisabled(true);
-    }
-    
 
     // Submit Handler
     document.getElementById("productFormStockout").addEventListener("submit", async function (e) {

@@ -6,36 +6,21 @@
   <?php include("inc_files/slider_section.php"); ?>
 
   <?php include("inc_files/home_page_products.php"); ?>
-<!-- 
-  <div class="banners-section mb-4">
-    <div class="row row-sm">
-      <div class="col-md-4">
-        <div class="banner banner1 appear-animate" data-animation-name="fadeIn" data-animation-delay="200"
-          style="background-color: #696f6f;">
-          <figure>
-            <img src="uploads/banner/banner1.jpg" alt="banner" width="640" height="640">
-          </figure>
-        </div>
-      </div>
-      <div class="col-md-8">
-        <div class="banner banner2 h-100"
-          style="background: #101010 no-repeat center/cover url(uploads/banner/banner2.jpg);">
-          <h4 class="text-light text-uppercase mb-0 appear-animate"
-                                data-animation-name="fadeInUpShorter" data-animation-delay="100">Get Ready</h4>
-                            <h2 class="d-inline-block align-middle text-uppercase m-b-3 appear-animate"
-                                data-animation-name="fadeInUpShorter" data-animation-delay="300">20% off</h2><a
-                                href="demo27-shop.html"
-                                class="btn btn-dark btn-lg align-middle m-b-3 appear-animate d-none d-sm-inline-block"
-                                data-animation-name="fadeInUpShorter" data-animation-delay="300">Shop All Sale</a>
-                            <h3 class="heading-border appear-animate" data-animation-name="fadeInUpShorter"
-                                data-animation-delay="500">BIKES</h3>
-        </div>
-      </div>
-    </div>
-  </div> -->
+
 
 </main>
 <!-- End Home Pages -->
+<style>
+  .like-pop {
+    animation: like-pop .35s ease-out;
+  }
+  @keyframes like-pop {
+    0%   { transform: scale(1);   }
+    40%  { transform: scale(1.35); }
+    100% { transform: scale(1);   }
+  }
+  .disabled-btn { pointer-events: none; opacity: .6; }
+</style>
 
 <script>
   const apiUrl = `<?php echo BASE_URL; ?>/get_products`;
@@ -109,8 +94,13 @@
             <div class="col-12 col-sm-6 p_card col-md-3 d-flex justify-content-center">
               <div class="product-card bg-white">
                   <div class="position-absolute top-0 end-0 m-2 d-flex flex-column gap-4 card_side_icon">
-                      <i class="fa-regular fa-heart text-danger" style="cursor: pointer;"></i>
-                      <i class="fa-solid fa-share text-danger" style="cursor: pointer;"></i>
+                      <i class="fa-regular fa-heart text-danger wishlist-btn" data-id="${product.id}"
+                        title="Add to wishlist" style="cursor:pointer;">
+                      </i>
+
+                      <i class="fa-solid fa-share text-danger share-btn" data-id="${product.id}"
+                        title="Copy share link" style="cursor:pointer;">
+                      </i>
                   </div>
                   <div class="image_box">
                       <a href="${productLink}">
@@ -180,7 +170,7 @@
 
   function handleCall(number) {
     const authToken = localStorage.getItem("authToken");
-    if (!authToken) {z
+    if (!authToken) {
       showLoginAlert();
       return;
     }
@@ -188,90 +178,166 @@
     window.location.href = `tel:${number}`;
   }
 
-function showLoginAlert() {
-  Swal.fire({
-    title: "Login Required",
-    text: "Please log in to contact the seller.",
-    icon: "warning",
-    confirmButtonText: "Login",
-    showCancelButton: true,
-    cancelButtonText: "Cancel",
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33"
-  }).then((result) => {
-    if (result.isConfirmed) {
-      window.location.href = "login"; // Replace with your login page
-    }
-  });
-}
+  function showLoginAlert() {
+    Swal.fire({
+      title: "Login Required",
+      text: "Please log in to contact the seller.",
+      icon: "warning",
+      confirmButtonText: "Login",
+      showCancelButton: true,
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "login"; // Replace with your login page
+      }
+    });
+  }
   // for wishlist and share
   document.addEventListener("click", async (e) => {
-    const authToken = localStorage.getItem("authToken");
-    const userId = localStorage.getItem("user_id");
+      const authToken = localStorage.getItem("authToken");
+      const userId = localStorage.getItem("user_id");
 
-    // ❤️ Wishlist Button
-    if (e.target.matches(".fa-heart")) {
-        const card = e.target.closest(".product-card");
-        const productId = card?.querySelector("a.updateProductBtn")?.dataset?.id || card?.querySelector("a")?.href?.split("id=")[1];
+      /* ❤️ Wishlist */
+    const heartEl = e.target.closest(".wishlist-btn");
+    if (heartEl) {
+      const productId = parseInt(heartEl.dataset.id || 0, 10);
 
-        if (!authToken || !userId || !productId) {
+      if (!authToken || !userId || !productId) {
         Swal.fire("Login First", "Please log in to use wishlist.", "warning");
         return;
-        }
+      }
 
-        try {
+      // optimistic UI: flip to filled + animate
+      const previousClasses = heartEl.className;
+      heartEl.classList.remove("fa-regular");
+      heartEl.classList.add("fa-solid", "like-pop");
+
+      try {
         const res = await fetch(`<?php echo BASE_URL; ?>/wishlist/add`, {
-            method: "POST",
-            headers: {
+          method: "POST",
+          headers: {
             "Authorization": `Bearer ${authToken}`,
             "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-            user_id: parseInt(userId),
-            product_id: parseInt(productId)
-            })
+          },
+          body: JSON.stringify({
+            user_id: parseInt(userId, 10),
+            product_id: productId
+          })
         });
 
         const result = await res.json();
 
         if (result.success) {
-            Toastify({
+          // keep solid; show toast
+          Toastify({
             text: "Added to wishlist ❤️",
             duration: 2000,
             gravity: "bottom",
             position: "center",
             backgroundColor: "#b30000"
-            }).showToast();
+          }).showToast();
         } else {
-            Swal.fire("Error", result.message || "Could not add to wishlist", "error");
+          // revert back to outline if API failed
+          heartEl.className = previousClasses;
+          Swal.fire("Error", result.message || "Could not add to wishlist", "error");
         }
-        } catch (err) {
+      } catch (err) {
+        // revert on network error
+        heartEl.className = previousClasses;
         Swal.fire("Error", "Request failed", "error");
-        }
+      } finally {
+        // remove the animation class after it plays
+        setTimeout(() => heartEl.classList.remove("like-pop"), 400);
+      }
+      return; // stop here; don’t run share handler
     }
 
-    // 📤 Share Button
-    if (e.target.matches(".fa-share")) {
-        const card = e.target.closest(".product-card");
-        const productId = card?.querySelector("a")?.href?.split("id=")[1];
+    /* 📤 Share */
+    const shareEl = e.target.closest(".share-btn");
+    if (shareEl) {
+      const productId = shareEl.dataset.id;
+      if (!productId) return;
 
-        if (!productId) return;
+      const shareUrl = `https://new.stockoutindia.com/pages/product_detail?id=${productId}`;
 
-        const shareUrl = `https://new.stockoutindia.com/pages/product_detail?id=${productId}`;
-
-        try {
+      try {
         await navigator.clipboard.writeText(shareUrl);
         Toastify({
-            text: "Copied link to clipboard 🔗",
-            duration: 2000,
-            gravity: "bottom",
-            position: "center",
-            backgroundColor: "#28a745"
+          text: "Copied link to clipboard 🔗",
+          duration: 2000,
+          gravity: "bottom",
+          position: "center",
+          backgroundColor: "#28a745"
         }).showToast();
-        } catch (err) {
+      } catch {
         Swal.fire("Oops!", "Clipboard not supported!", "error");
-        }
+      }
     }
+    
+    // ❤️ Wishlist Button
+    // if (e.target.matches(".fa-heart")) {
+    //     const card = e.target.closest(".product-card");
+    //     const productId = card?.querySelector("a.updateProductBtn")?.dataset?.id || card?.querySelector("a")?.href?.split("id=")[1];
+
+    //     if (!authToken || !userId || !productId) {
+    //     Swal.fire("Login First", "Please log in to use wishlist.", "warning");
+    //     return;
+    //     }
+
+    //     try {
+    //     const res = await fetch(`<?php echo BASE_URL; ?>/wishlist/add`, {
+    //         method: "POST",
+    //         headers: {
+    //         "Authorization": `Bearer ${authToken}`,
+    //         "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify({
+    //         user_id: parseInt(userId),
+    //         product_id: parseInt(productId)
+    //         })
+    //     });
+
+    //     const result = await res.json();
+
+    //     if (result.success) {
+    //         Toastify({
+    //         text: "Added to wishlist ❤️",
+    //         duration: 2000,
+    //         gravity: "bottom",
+    //         position: "center",
+    //         backgroundColor: "#b30000"
+    //         }).showToast();
+    //     } else {
+    //         Swal.fire("Error", result.message || "Could not add to wishlist", "error");
+    //     }
+    //     } catch (err) {
+    //     Swal.fire("Error", "Request failed", "error");
+    //     }
+    // }
+    // // 📤 Share Button
+    // if (e.target.matches(".fa-share")) {
+    //     const card = e.target.closest(".product-card");
+    //     const productId = card?.querySelector("a")?.href?.split("id=")[1];
+
+    //     if (!productId) return;
+
+    //     const shareUrl = `https://new.stockoutindia.com/pages/product_detail?id=${productId}`;
+
+    //     try {
+    //     await navigator.clipboard.writeText(shareUrl);
+    //     Toastify({
+    //         text: "Copied link to clipboard 🔗",
+    //         duration: 2000,
+    //         gravity: "bottom",
+    //         position: "center",
+    //         backgroundColor: "#28a745"
+    //     }).showToast();
+    //     } catch (err) {
+    //     Swal.fire("Oops!", "Clipboard not supported!", "error");
+    //     }
+    // }
   });
 
   fetchProducts(); // Call on page load

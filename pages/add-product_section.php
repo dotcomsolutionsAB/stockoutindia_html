@@ -486,19 +486,7 @@
 
     }
 
-
     // Load Units
-    // try {
-    //   const res = await fetch(`${stockout_base_url}/product/get_units`, {
-    //     headers: { Authorization: `Bearer ${stockout_token}` },
-    //   });
-    //   const units = (await res.json()).data || [];
-    //   unitSelect.innerHTML =
-    //     '<option value="">Select Unit</option>' +
-    //     units.map((u) => `<option value="${u}">${u}</option>`).join("");
-    // } catch {
-    //   unitSelect.innerHTML = '<option value="">Failed to load</option>';
-    // }
      try {
       const res = await fetch(`${stockout_base_url}/product/get_units`, {
         headers: { Authorization: `Bearer ${stockout_token}` },
@@ -570,39 +558,6 @@
 
     // Listen for changes
     industryList.addEventListener("change", updateIndustrySelection);
-
-    // Load States
-    // try {
-    //   const res = await fetch(`${stockout_base_url}/states`, {
-    //     headers: { Authorization: `Bearer ${stockout_token}` },
-    //   });
-    //   const states = (await res.json()).data || [];
-    //   stateSelect.innerHTML =
-    //     '<option value="">Select State</option>' +
-    //     states.map((s) => `<option value="${s.id}">${s.name}</option>`).join("");
-    // } catch {
-    //   stateSelect.innerHTML = '<option value="">Failed to load</option>';
-    // }
-    // // Load Cities
-    // try {
-    //   const res = await fetch(`${stockout_base_url}/cities`, {
-    //     headers: { Authorization: `Bearer ${stockout_token}` },
-    //   });
-    //   stockout_cities_data = (await res.json()).data || [];
-    // } catch {
-    //   console.error("❌ Cities fetch failed");
-    // }
-    // // State → City
-    // stateSelect.addEventListener("change", function () {
-    //   const selectedStateName = this.options[this.selectedIndex].text;
-    //   const filteredCities = stockout_cities_data.filter(
-    //     (c) => c.state_name === selectedStateName
-    //   );
-    //   citySelect.disabled = filteredCities.length === 0;
-    //   citySelect.innerHTML =
-    //     '<option value="">Select City</option>' +
-    //     filteredCities.map((c) => `<option value="${c.name}">${c.name}</option>`).join("");
-    // });
 
     // ========== Load States ==========
     try {

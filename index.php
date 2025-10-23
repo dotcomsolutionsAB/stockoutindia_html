@@ -10,18 +10,16 @@
 
 </main>
 <!-- End Home Pages -->
+
 <style>
-  .like-pop {
-    animation: like-pop .35s ease-out;
-  }
-  @keyframes like-pop {
-    0%   { transform: scale(1);   }
-    40%  { transform: scale(1.35); }
-    100% { transform: scale(1);   }
-  }
+  .like-pop { animation: like-pop .35s ease-out; }
+  @keyframes like-pop { 0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)} }
+
+  .unlike-pop { animation: unlike-pop .25s ease-in; }
+  @keyframes unlike-pop { 0%{transform:scale(1)}100%{transform:scale(.85)} }
+
   .disabled-btn { pointer-events: none; opacity: .6; }
 </style>
-
 <script>
   const apiUrl = `<?php echo BASE_URL; ?>/get_products`;
   // const token = localStorage.getItem("authtoken");
@@ -64,7 +62,6 @@
       alert("An error occurred while fetching products.");
     }
   }
-
   function renderProducts(products) {
     const container = document.getElementById("product-container");
     const authToken = localStorage.getItem("authToken");
@@ -157,7 +154,6 @@
     });
     container.innerHTML = html; 
   }
-
   function handleWhatsApp(number) {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
@@ -167,7 +163,6 @@
     if (!number) return;
     window.open(`https://wa.me/${number}?text=${encodeURIComponent('Hi')}`, '_blank');
   }
-
   function handleCall(number) {
     const authToken = localStorage.getItem("authToken");
     if (!authToken) {
@@ -177,7 +172,6 @@
     if (!number) return;
     window.location.href = `tel:${number}`;
   }
-
   function showLoginAlert() {
     Swal.fire({
       title: "Login Required",
@@ -194,27 +188,36 @@
       }
     });
   }
+
   // for wishlist and share
   document.addEventListener("click", async (e) => {
-      const authToken = localStorage.getItem("authToken");
-      const userId = localStorage.getItem("user_id");
+    const authToken = localStorage.getItem("authToken");
+    const userId = localStorage.getItem("user_id");
 
       /* ❤️ Wishlist */
     const heartEl = e.target.closest(".wishlist-btn");
-    if (heartEl) {
-      const productId = parseInt(heartEl.dataset.id || 0, 10);
+    if (!heartEl) return;
 
-      if (!authToken || !userId || !productId) {
-        Swal.fire("Login First", "Please log in to use wishlist.", "warning");
-        return;
-      }
+    const productId = parseInt(heartEl.dataset.id || 0, 10);
 
-      // optimistic UI: flip to filled + animate
-      const previousClasses = heartEl.className;
-      heartEl.classList.remove("fa-regular");
-      heartEl.classList.add("fa-solid", "like-pop");
+    if (!authToken || !userId || !productId) {
+      Swal.fire("Login First", "Please log in to use wishlist.", "warning");
+      return;
+    }
 
-      try {
+    // Guard: prevent rapid double-clicks while request in flight
+    if (heartEl.dataset.busy === "1") return;
+    heartEl.dataset.busy = "1";
+
+    const isCurrentlySolid = heartEl.classList.contains("fa-solid");
+
+    try {
+      if (!isCurrentlySolid) {
+        /* =============== ADD =============== */
+        // optimistic UI
+        heartEl.classList.remove("fa-regular");
+        heartEl.classList.add("fa-solid", "like-pop");
+
         const res = await fetch(`<?php echo BASE_URL; ?>/wishlist/add`, {
           method: "POST",
           headers: {
@@ -230,33 +233,76 @@
         const result = await res.json();
 
         if (result.success) {
-          // keep solid; show toast
           Toastify({
             text: "Added to wishlist ❤️",
-            duration: 2000,
+            duration: 1800,
             gravity: "bottom",
             position: "center",
             backgroundColor: "#b30000"
           }).showToast();
         } else {
-          // If it's already in wishlist — show quick info toast instead of error
+          // Revert if server says no (except “already exists”: keep solid if you prefer)
+          if ((result.message || "").toLowerCase().includes("already")) {
+            // keep it solid (no revert), show soft info
+            Toastify({
+              text: result.message || "Already in wishlist ❤️",
+              duration: 1500,
+              gravity: "bottom",
+              position: "center",
+              backgroundColor: "#ff9800"
+            }).showToast();
+          } else {
+            heartEl.classList.remove("fa-solid");
+            heartEl.classList.add("fa-regular");
+            Swal.fire("Error", result.message || "Could not add to wishlist", "error");
+          }
+        }
+        setTimeout(() => heartEl.classList.remove("like-pop"), 400);
+
+      } else {
+        /* =============== REMOVE =============== */
+        // optimistic UI
+        heartEl.classList.add("unlike-pop");
+
+        const res = await fetch(`<?php echo BASE_URL; ?>/wishlist/${productId}`, {
+          method: "DELETE",
+          headers: {
+            "Authorization": `Bearer ${authToken}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ user_id: parseInt(userId, 10) })
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          // turn back to outline
+          heartEl.classList.remove("fa-solid");
+          heartEl.classList.add("fa-regular");
           Toastify({
-            text: result.message || "Already in wishlist ❤️",
-            duration: 1500,            // auto close after 1.5s
+            text: "Removed from wishlist",
+            duration: 1500,
             gravity: "bottom",
             position: "center",
-            backgroundColor: "#ff9800" // warm orange = info
+            backgroundColor: "#28a745"
           }).showToast();
+        } else {
+          // keep it solid; removal failed
+          Swal.fire("Info", result.message || "Could not remove item", "info");
         }
-      } catch (err) {
-        // revert on network error
-        heartEl.className = previousClasses;
-        Swal.fire("Error", "Request failed", "error");
-      } finally {
-        // remove the animation class after it plays
-        setTimeout(() => heartEl.classList.remove("like-pop"), 400);
+
+        setTimeout(() => heartEl.classList.remove("unlike-pop"), 280);
       }
-      return; // stop here; don’t run share handler
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Request failed", "error");
+      // If we optimistically changed UI, try to revert to safe state:
+      if (!isCurrentlySolid) {
+        heartEl.classList.remove("fa-solid");
+        heartEl.classList.add("fa-regular");
+      }
+    } finally {
+      heartEl.dataset.busy = "0";
     }
 
     /* 📤 Share */
@@ -281,68 +327,6 @@
       }
     }
 
-    // ❤️ Wishlist Button
-    // if (e.target.matches(".fa-heart")) {
-    //     const card = e.target.closest(".product-card");
-    //     const productId = card?.querySelector("a.updateProductBtn")?.dataset?.id || card?.querySelector("a")?.href?.split("id=")[1];
-
-    //     if (!authToken || !userId || !productId) {
-    //     Swal.fire("Login First", "Please log in to use wishlist.", "warning");
-    //     return;
-    //     }
-
-    //     try {
-    //     const res = await fetch(`<?php echo BASE_URL; ?>/wishlist/add`, {
-    //         method: "POST",
-    //         headers: {
-    //         "Authorization": `Bearer ${authToken}`,
-    //         "Content-Type": "application/json"
-    //         },
-    //         body: JSON.stringify({
-    //         user_id: parseInt(userId),
-    //         product_id: parseInt(productId)
-    //         })
-    //     });
-
-    //     const result = await res.json();
-
-    //     if (result.success) {
-    //         Toastify({
-    //         text: "Added to wishlist ❤️",
-    //         duration: 2000,
-    //         gravity: "bottom",
-    //         position: "center",
-    //         backgroundColor: "#b30000"
-    //         }).showToast();
-    //     } else {
-    //         Swal.fire("Error", result.message || "Could not add to wishlist", "error");
-    //     }
-    //     } catch (err) {
-    //     Swal.fire("Error", "Request failed", "error");
-    //     }
-    // }
-    // // 📤 Share Button
-    // if (e.target.matches(".fa-share")) {
-    //     const card = e.target.closest(".product-card");
-    //     const productId = card?.querySelector("a")?.href?.split("id=")[1];
-
-    //     if (!productId) return;
-
-    //     const shareUrl = `https://new.stockoutindia.com/pages/product_detail?id=${productId}`;
-
-    //     try {
-    //     await navigator.clipboard.writeText(shareUrl);
-    //     Toastify({
-    //         text: "Copied link to clipboard 🔗",
-    //         duration: 2000,
-    //         gravity: "bottom",
-    //         position: "center",
-    //         backgroundColor: "#28a745"
-    //     }).showToast();
-    //     } catch (err) {
-    //     Swal.fire("Oops!", "Clipboard not supported!", "error");
-    //     }
-    // }
   });
 
   fetchProducts(); // Call on page load

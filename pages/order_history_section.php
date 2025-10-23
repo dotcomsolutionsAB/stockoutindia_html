@@ -34,7 +34,7 @@
             const p_name = product_details?.product_name || "-";
             const p_status = product_details?.status || "-";
             // NEW: image url (fallback to placeholder)
-            const p_image  = product_details?.image || "uploads/placeholder.png";
+            const p_image  = product_details?.image[0] || "uploads/placeholder.png";
 
             const card = document.createElement("div");
             card.className = "payment_card";

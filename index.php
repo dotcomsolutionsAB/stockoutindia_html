@@ -239,9 +239,14 @@
             backgroundColor: "#b30000"
           }).showToast();
         } else {
-          // revert back to outline if API failed
-          heartEl.className = previousClasses;
-          Swal.fire("Error", result.message || "Could not add to wishlist", "error");
+          // If it's already in wishlist — show quick info toast instead of error
+          Toastify({
+            text: result.message || "Already in wishlist ❤️",
+            duration: 1500,            // auto close after 1.5s
+            gravity: "bottom",
+            position: "center",
+            backgroundColor: "#ff9800" // warm orange = info
+          }).showToast();
         }
       } catch (err) {
         // revert on network error
@@ -260,7 +265,7 @@
       const productId = shareEl.dataset.id;
       if (!productId) return;
 
-      const shareUrl = `https://new.stockoutindia.com/pages/product_detail?id=${productId}`;
+      const shareUrl = `https://stockoutindia.com/pages/product_detail?id=${productId}`;
 
       try {
         await navigator.clipboard.writeText(shareUrl);
@@ -275,7 +280,7 @@
         Swal.fire("Oops!", "Clipboard not supported!", "error");
       }
     }
-    
+
     // ❤️ Wishlist Button
     // if (e.target.matches(".fa-heart")) {
     //     const card = e.target.closest(".product-card");

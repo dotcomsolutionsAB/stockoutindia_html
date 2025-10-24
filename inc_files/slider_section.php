@@ -6,6 +6,24 @@
     </div>
   </div>
 </section>
+<style>
+  /* ===== Reduce banner slider height ===== */
+  .slider_section_home .home-slide {
+    height: 420px;           /* desktop height */
+  }
+  .slider_section_home .home-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;        /* fills area neatly without distortion */
+  }
+
+  /* smaller on mobile */
+  @media (max-width: 768px) {
+    .slider_section_home .home-slide {
+      height: 220px;
+    }
+  }
+</style>
 
 <script>
   const BASEs_URL = "https://api.stockoutindia.com/api";

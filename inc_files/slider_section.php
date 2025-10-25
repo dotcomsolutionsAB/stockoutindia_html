@@ -14,7 +14,7 @@
   .slider_section_home .home-slide img {
     width: 100%;
     height: 100%;
-    object-fit: cover;        /* fills area neatly without distortion */
+    object-fit: contain;        /* fills area neatly without distortion */
     background:#ffffff;
   }
 

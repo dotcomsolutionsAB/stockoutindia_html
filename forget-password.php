@@ -82,7 +82,7 @@
             <div class="flex items-center justify-center space-x-2">
               <input type="text" id="generatedPassword" value="${result.data.password}" readonly
                 class="border border-gray-300 rounded px-3 py-2 w-48 text-center font-mono">
-              <button id="copyBtn" class="text-red-700 hover:text-red-900">
+              <button id="copyBtn" class="text-grey-700 hover:text-red-900">
                 <i class="fa-solid fa-copy"></i>
               </button>
             </div>
@@ -97,7 +97,7 @@
             title: 'Temporary Password Generated',
             html: passwordHTML,
             showConfirmButton: false,
-            timer: 15000, // 15 seconds
+            timer: 30000, // 30 seconds
             timerProgressBar: true,
             didOpen: () => {
               const copyBtn = document.getElementById('copyBtn');

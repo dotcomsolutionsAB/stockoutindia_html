@@ -103,11 +103,51 @@
               const copyBtn = document.getElementById('copyBtn');
               const passInput = document.getElementById('generatedPassword');
 
-              copyBtn.addEventListener('click', () => {
-                navigator.clipboard.writeText(passInput.value);
-                copyBtn.innerHTML = '<i class="fa-solid fa-check text-green-600"></i>';
+              async function copyToClipboard(text) {
+                // Try modern API when available & secure
+                if (navigator.clipboard && window.isSecureContext) {
+                  await navigator.clipboard.writeText(text);
+                  return true;
+                }
+                // Fallback for HTTP / older browsers
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.setAttribute('readonly', '');
+                ta.style.position = 'fixed';
+                ta.style.left = '-9999px';
+                document.body.appendChild(ta);
+                ta.select();
+                ta.setSelectionRange(0, ta.value.length);
+                const ok = document.execCommand('copy');
+                document.body.removeChild(ta);
+                return ok;
+              }
+
+              copyBtn.addEventListener('click', async (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                // Make sure the input's value is selected (helps iOS)
+                passInput.focus();
+                passInput.select();
+                passInput.setSelectionRange(0, passInput.value.length);
+
+                try {
+                  const ok = await copyToClipboard(passInput.value);
+                  copyBtn.innerHTML = ok
+                    ? '<i class="fa-solid fa-check text-green-600"></i>'
+                    : '<i class="fa-solid fa-triangle-exclamation text-yellow-600"></i>';
+                  // Optional: brief success tooltip
+                  copyBtn.title = ok ? 'Copied!' : 'Copy failed';
+                  setTimeout(() => (copyBtn.title = ''), 1500);
+                } catch {
+                  copyBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-yellow-600"></i>';
+                  copyBtn.title = 'Copy failed';
+                  setTimeout(() => (copyBtn.title = ''), 1500);
+                }
               });
-            },
+            }
+
             willClose: () => {
               Swal.fire({
                 icon: 'info',

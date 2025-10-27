@@ -44,142 +44,139 @@
   </div>
 
 <script>
-    document.getElementById('forgetPasswordForm').addEventListener('submit', async function (e) {
-      e.preventDefault();
+  document.getElementById('forgetPasswordForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-      const username = document.getElementById('email').value.trim();
+    const username = document.getElementById('email').value.trim();
 
-      try {
-        const response = await fetch('<?php echo BASE_URL; ?>/forget_password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username })
+    try {
+      const response = await fetch('<?php echo BASE_URL; ?>/forget_password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
+      });
+
+      const result = await response.json();
+
+      // ✅ CASE 1: Normal success (email sent)
+      if (result.success && result.message.includes('sent to your email')) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Email Sent',
+          text: 'A reset link has been sent to your email.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#b91c1c'
+        }).then(() => {
+          window.location.href = "login";
         });
+      }
 
-        const result = await response.json();
+      // ✅ CASE 2: Email failed, but password generated
+      else if (
+        result.success &&
+        result.message.includes('failed to send the email') &&
+        result.data && result.data.password
+      ) {
+        const passwordHTML = `
+          <div class="flex items-center justify-center space-x-2">
+            <input type="text" id="generatedPassword" readonly
+              class="border border-gray-300 rounded px-3 py-2 w-48 text-center font-mono">
+            <button type="button" id="copyBtn" class="text-gray-700 hover:text-red-900">
+              <i class="fa-solid fa-copy"></i>
+            </button>
+          </div>
+          <p class="text-sm text-gray-600 mt-3">
+            Please copy the password. This is auto-generated for security reasons.<br>
+            Change your password after login. Thank you.
+          </p>
+        `;
 
-        // ✅ CASE 1: Normal success (email sent)
-        if (result.success && result.message.includes('sent to your email')) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Email Sent',
-            text: 'A reset link has been sent to your email.',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#b91c1c'
-          }).then(() => {
-            window.location.href = "login";
-          });
-        }
+        Swal.fire({
+          icon: 'warning',
+          title: 'Temporary Password Generated',
+          html: passwordHTML,
+          showConfirmButton: false,
+          timer: 30000,
+          timerProgressBar: true,
+          didOpen: () => {
+            const copyBtn = document.getElementById('copyBtn');
+            const passInput = document.getElementById('generatedPassword');
 
-        // ✅ CASE 2: Email failed, but password generated
-        else if (
-          result.success &&
-          result.message.includes('failed to send the email') &&
-          result.data && result.data.password
-        ) {
-          // Create HTML with password and copy button
-          const passwordHTML = `
-            <div class="flex items-center justify-center space-x-2">
-              <input type="text" id="generatedPassword" value="${result.data.password}" readonly
-                class="border border-gray-300 rounded px-3 py-2 w-48 text-center font-mono">
-              <button id="copyBtn" class="text-grey-700 hover:text-red-900">
-                <i class="fa-solid fa-copy"></i>
-              </button>
-            </div>
-            <p class="text-sm text-gray-600 mt-3">
-              Please copy the password. This is auto-generated for security reasons.<br>
-              Change your password after login. Thank you.
-            </p>
-          `;
+            // Set the value here to avoid any quoting issues in HTML
+            passInput.value = result.data.password;
 
-          Swal.fire({
-            icon: 'warning',
-            title: 'Temporary Password Generated',
-            html: passwordHTML,
-            showConfirmButton: false,
-            timer: 30000, // 30 seconds
-            timerProgressBar: true,
-            didOpen: () => {
-              const copyBtn = document.getElementById('copyBtn');
-              const passInput = document.getElementById('generatedPassword');
-
-              async function copyToClipboard(text) {
-                // Try modern API when available & secure
-                if (navigator.clipboard && window.isSecureContext) {
-                  await navigator.clipboard.writeText(text);
-                  return true;
-                }
-                // Fallback for HTTP / older browsers
-                const ta = document.createElement('textarea');
-                ta.value = text;
-                ta.setAttribute('readonly', '');
-                ta.style.position = 'fixed';
-                ta.style.left = '-9999px';
-                document.body.appendChild(ta);
-                ta.select();
-                ta.setSelectionRange(0, ta.value.length);
-                const ok = document.execCommand('copy');
-                document.body.removeChild(ta);
-                return ok;
+            async function copyToClipboard(text) {
+              if (navigator.clipboard && window.isSecureContext) {
+                await navigator.clipboard.writeText(text);
+                return true;
               }
-
-              copyBtn.addEventListener('click', async (ev) => {
-                ev.preventDefault();
-                ev.stopPropagation();
-
-                // Make sure the input's value is selected (helps iOS)
-                passInput.focus();
-                passInput.select();
-                passInput.setSelectionRange(0, passInput.value.length);
-
-                try {
-                  const ok = await copyToClipboard(passInput.value);
-                  copyBtn.innerHTML = ok
-                    ? '<i class="fa-solid fa-check text-green-600"></i>'
-                    : '<i class="fa-solid fa-triangle-exclamation text-yellow-600"></i>';
-                  // Optional: brief success tooltip
-                  copyBtn.title = ok ? 'Copied!' : 'Copy failed';
-                  setTimeout(() => (copyBtn.title = ''), 1500);
-                } catch {
-                  copyBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-yellow-600"></i>';
-                  copyBtn.title = 'Copy failed';
-                  setTimeout(() => (copyBtn.title = ''), 1500);
-                }
-              });
+              const ta = document.createElement('textarea');
+              ta.value = text;
+              ta.setAttribute('readonly', '');
+              ta.style.position = 'fixed';
+              ta.style.left = '-9999px';
+              document.body.appendChild(ta);
+              ta.select();
+              ta.setSelectionRange(0, ta.value.length);
+              const ok = document.execCommand('copy');
+              document.body.removeChild(ta);
+              return ok;
             }
 
-            willClose: () => {
-              Swal.fire({
-                icon: 'info',
-                title: 'Session Expired',
-                text: 'Password box closed for security reasons. Please request again if needed.',
-                confirmButtonColor: '#b91c1c'
-              });
-            }
-          });
-        }
+            copyBtn.addEventListener('click', async (ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
 
-        // ❌ CASE 3: Any other failure
-        else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Failed',
-            text: result.message || 'Unable to send reset email.',
-            confirmButtonColor: '#b91c1c'
-          });
-        }
+              passInput.focus();
+              passInput.select();
+              passInput.setSelectionRange(0, passInput.value.length);
 
-      } catch (err) {
+              try {
+                const ok = await copyToClipboard(passInput.value);
+                copyBtn.innerHTML = ok
+                  ? '<i class="fa-solid fa-check text-green-600"></i>'
+                  : '<i class="fa-solid fa-triangle-exclamation text-yellow-600"></i>';
+                copyBtn.title = ok ? 'Copied!' : 'Copy failed';
+                setTimeout(() => (copyBtn.title = ''), 1500);
+              } catch {
+                copyBtn.innerHTML = '<i class="fa-solid fa-triangle-exclamation text-yellow-600"></i>';
+                copyBtn.title = 'Copy failed';
+                setTimeout(() => (copyBtn.title = ''), 1500);
+              }
+            });
+          },  /* <-- comma was missing here */
+
+          willClose: () => {
+            Swal.fire({
+              icon: 'info',
+              title: 'Session Expired',
+              text: 'Password box closed for security reasons. Please request again if needed.',
+              confirmButtonColor: '#b91c1c'
+            });
+          }
+        });
+      }
+
+      // ❌ CASE 3: Any other failure
+      else {
         Swal.fire({
           icon: 'error',
-          title: 'Error',
-          text: 'Something went wrong. Please try again later.',
+          title: 'Failed',
+          text: result.message || 'Unable to send reset email.',
           confirmButtonColor: '#b91c1c'
         });
       }
-    });
-</script>
 
+    } catch (err) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Something went wrong. Please try again later.',
+        confirmButtonColor: '#b91c1c'
+      });
+    }
+  });
+</script>
 
   <!-- <script>
     document.getElementById('forgetPasswordForm').addEventListener('submit', async function (e) {

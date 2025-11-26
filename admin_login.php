@@ -37,7 +37,7 @@
         </div>
 
         <form id="adminLoginForm">
-          <p class="text-sm text-gray-700 mb-4" id="impersonateText">
+          <p class="text-sm text-gray-700 mb-4" id="impersonateText" hidden>
             Logging in as selected user…
           </p>
 

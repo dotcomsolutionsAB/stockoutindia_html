@@ -1,6 +1,6 @@
 <div id="view-user" class="tab-content">
   <!-- ▼▼  TAB: View Product by User  ▼▼ -->
-  <h2 class="text-2xl font-semibold text-red-600 mb-6">View Product by User</h2>
+  <h2 class="text-2xl font-semibold text-red-600 mb-6">View User Details</h2>
 
   <!-- ░░ FILTER BAR ░░ -->
   <section class="bg-white shadow rounded-2xl p-3 flex flex-wrap gap-4 items-end border border-red-200">
@@ -90,7 +90,7 @@
       <!-- 🔥 New Logged In Column -->
       <td class="px-6 py-4 text-center" data-f="loggedin">
           <button class="loginBtn bg-red-500 hover:bg-red-400 text-white px-3 py-1 rounded-md text-xs">
-              Login as User
+              <i data-lucide="login"></i> Login as User
           </button>
       </td>
       <td class="px-6 py-4 text-center space-x-1">

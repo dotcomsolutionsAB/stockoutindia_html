@@ -90,7 +90,7 @@
       <!-- 🔥 New Logged In Column -->
       <td class="px-6 py-4 text-center" data-f="loggedin">
           <button class="loginBtn bg-red-500 hover:bg-red-400 text-white px-3 py-1 rounded-md text-xs">
-              <i data-lucide="login"></i> Login as User
+              Login as User
           </button>
       </td>
       <td class="px-6 py-4 text-center space-x-1">

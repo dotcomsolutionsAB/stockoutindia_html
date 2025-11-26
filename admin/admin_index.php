@@ -39,7 +39,7 @@
                 <?php include("admin_inc/view_all_product_section.php"); ?>  
                 
                 <!-- View Product by user Section -->
-                <?php include("admin_inc/view_product_by_user_section.php"); ?>
+                <?php include("admin_inc/view_user_section.php"); ?>
 
                 <!-- View order by users Section -->
                 <?php include("admin_inc/view_order_by_users_section.php"); ?>                

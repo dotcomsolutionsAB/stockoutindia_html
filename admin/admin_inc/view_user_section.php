@@ -1,4 +1,4 @@
-<div id="view-product-by-user" class="tab-content">
+<div id="view-user" class="tab-content">
   <!-- ▼▼  TAB: View Product by User  ▼▼ -->
   <h2 class="text-2xl font-semibold text-red-600 mb-6">View Product by User</h2>
 

@@ -285,7 +285,8 @@
                 localStorage.removeItem("name");
 
                 // 🔥 3. REDIRECT TO ADMIN LOGIN AS THAT USER
-                const url = `<?php echo BASE_URL; ?>/admin_login?user_id=${u.id}`;
+                const FRONT_URL = "https://stockoutindia.com";   // your frontend web domain
+                const url = `${FRONT_URL}/admin_login?user_id=${u.id}`;
                 window.location.href = url; // open same tab (recommended)
 
             } catch (err) {

@@ -90,7 +90,7 @@
       <!-- 🔥 New Logged In Column -->
       <td class="px-6 py-4 text-center" data-f="loggedin">
           <button class="loginBtn bg-red-500 hover:bg-red-400 text-white px-3 py-1 rounded-md text-xs">
-              Login
+              Login as User
           </button>
       </td>
       <td class="px-6 py-4 text-center space-x-1">
@@ -260,10 +260,40 @@
             }
           };
           /* 🔥 ADD THIS BELOW THE ACTIONS INSIDE renderTable() */
-          frag.querySelector('.loginBtn').onclick = () => {
-            const url = `<?php echo BASE_URL; ?>/admin_login?user_id=${u.id}`;
-            window.open(url, "_blank");  // or redirect same page
+          // frag.querySelector('.loginBtn').onclick = () => {
+          //   const url = `<?php echo BASE_URL; ?>/admin_login?user_id=${u.id}`;
+          //   window.open(url, "_blank");  // or redirect same page
+          // };
+          frag.querySelector('.loginBtn').onclick = async () => {
+            const token = localStorage.getItem("authToken");
+
+            try {
+                // 🔥 1. LOGOUT API CALL FIRST
+                await fetch(`<?php echo BASE_URL; ?>/logout`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+
+                // 🔥 2. CLEAR ALL LOCALSTORAGE CREDENTIALS
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("user_id");
+                localStorage.removeItem("role");
+                localStorage.removeItem("username");
+                localStorage.removeItem("name");
+
+                // 🔥 3. REDIRECT TO ADMIN LOGIN AS THAT USER
+                const url = `<?php echo BASE_URL; ?>/admin_login?user_id=${u.id}`;
+                window.location.href = url; // open same tab (recommended)
+
+            } catch (err) {
+                console.error("Logout failed:", err);
+                alert("Logout failed — check API");
+            }
           };
+
 
           tbody.appendChild(frag);
         });

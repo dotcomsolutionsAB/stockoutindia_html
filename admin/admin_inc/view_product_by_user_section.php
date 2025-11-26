@@ -286,8 +286,7 @@
 
                 // 🔥 3. REDIRECT TO ADMIN LOGIN AS THAT USER
                 const FRONT_URL = "https://stockoutindia.com";   // your frontend web domain
-                const url = `${FRONT_URL}/admin_login?user_id=${u.id}`;
-                window.location.href = url; // open same tab (recommended)
+                window.open(`${FRONT_URL}/admin_login?user_id=${u.id}`, "_blank");
 
             } catch (err) {
                 console.error("Logout failed:", err);

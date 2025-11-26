@@ -66,6 +66,8 @@
           <th class="px-6 py-3 text-left w-1/5">Name</th>
           <th class="px-6 py-3 text-left w-1/4">Email</th>
           <th class="px-6 py-3 text-left">Products</th>
+          <!-- 🔥 New Column -->
+          <th class="px-6 py-3 text-center w-28">Logged In</th>
           <th class="px-6 py-3 text-center w-32">Actions</th>
         </tr>
       </thead>
@@ -85,6 +87,12 @@
       <td class="px-6 py-4 font-medium text-gray-900" data-f="name"></td>
       <td class="px-6 py-4 break-all text-gray-700" data-f="email"></td>
       <td class="px-6 py-4" data-f="products"></td>
+      <!-- 🔥 New Logged In Column -->
+      <td class="px-6 py-4 text-center" data-f="loggedin">
+          <button class="loginBtn bg-red-500 hover:bg-red-400 text-white px-3 py-1 rounded-md text-xs">
+              Login
+          </button>
+      </td>
       <td class="px-6 py-4 text-center space-x-1">
         <button
           class="viewBtn w-8 h-8 rounded-full bg-red-500 hover:bg-red-400 text-white inline-flex items-center justify-center"
@@ -250,6 +258,11 @@
             if (confirm('Delete user ' + u.id + '?')) {
               alert('Delete API here');
             }
+          };
+          /* 🔥 ADD THIS BELOW THE ACTIONS INSIDE renderTable() */
+          frag.querySelector('.loginBtn').onclick = () => {
+            const url = `<?php echo BASE_URL; ?>/admin_login?user_id=${u.id}`;
+            window.open(url, "_blank");  // or redirect same page
           };
 
           tbody.appendChild(frag);

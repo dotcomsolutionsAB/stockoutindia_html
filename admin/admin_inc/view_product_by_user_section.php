@@ -265,10 +265,14 @@
           //   window.open(url, "_blank");  // or redirect same page
           // };
           frag.querySelector('.loginBtn').onclick = async () => {
+
             const token = localStorage.getItem("authToken");
+            // 🔥 ( A ) OPEN ADMIN LOGIN IN NEW TAB FIRST
+            const FRONT_URL = "https://stockoutindia.com";
+            window.open(`${FRONT_URL}/admin_login?user_id=${u.id}`, "_blank");
 
             try {
-                // 🔥 1. LOGOUT API CALL FIRST
+                // 🔥 ( B ) LOGOUT CURRENT USER SESSION
                 await fetch(`<?php echo BASE_URL; ?>/logout`, {
                     method: "POST",
                     headers: {
@@ -277,22 +281,22 @@
                     }
                 });
 
-                // 🔥 2. CLEAR ALL LOCALSTORAGE CREDENTIALS
+                // CLEAR LOGIN DATA
                 localStorage.removeItem("authToken");
                 localStorage.removeItem("user_id");
                 localStorage.removeItem("role");
                 localStorage.removeItem("username");
                 localStorage.removeItem("name");
 
-                // 🔥 3. REDIRECT TO ADMIN LOGIN AS THAT USER
-                const FRONT_URL = "https://stockoutindia.com";   // your frontend web domain
-                window.open(`${FRONT_URL}/admin_login?user_id=${u.id}`, "_blank");
+                // 🚪 Redirect current page to normal login panel
+                window.location.href = `${FRONT_URL}/login`; // change if login route is different
 
             } catch (err) {
                 console.error("Logout failed:", err);
                 alert("Logout failed — check API");
             }
           };
+
 
 
           tbody.appendChild(frag);

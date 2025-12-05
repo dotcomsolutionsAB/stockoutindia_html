@@ -3,7 +3,7 @@
 
     // Site base (frontend)
     define("SITE_URL", "https://stockoutindia.com/");
-
+    define("SITE_NAME", "Stockout India");
     // Contact details
     define("SUPPORT_PHONE", "9655504405");
     define("WHATSAPP_NUMBER", "918790489293");

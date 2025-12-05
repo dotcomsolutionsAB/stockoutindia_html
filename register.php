@@ -353,54 +353,6 @@
       }
     });
 
-    /* ─── REGISTER API call ──────────────────────────────────── */
-    // document.getElementById('registerForm').onsubmit = async e=>{
-    //   e.preventDefault();
-    //   const rawPhone = document.getElementById('phone').value.trim();
-
-    //   const payload = {
-    //     gstin        : gstInput.value.trim(),
-    //     phone        : `+91${rawPhone}`,
-    //     email        : document.getElementById('email').value.trim(),
-    //     password     : document.getElementById('pass').value,
-    //     google_id    : document.getElementById('g_id').value.trim(),
-    //     role         : "user",                       // ← default role
-    //     industry     : indSel.value,
-    //     // sub_industry : subSel.value
-    //   };
-
-    //   /* Optional extras */
-    //   const extras = {
-    //     name         : 'fullName',
-    //     company_name : 'companyName',
-    //     address      : 'address',
-    //     pincode      : 'pincode',
-    //     city         : 'citySelect',
-    //     state        : 'stateSelect'                 // already numeric id
-    //   };
-    //   Object.entries(extras).forEach(([k,id])=>{
-    //     const val=document.getElementById(id).value;
-    //     if(val) payload[k]=val;
-    //   });
-
-    //   try{
-    //     const res = await fetch(`${BASE}/register`,{
-    //       method :'POST',
-    //       headers:{'Content-Type':'application/json'},
-    //       body   : JSON.stringify(payload)
-    //     });
-    //     const json = await res.json();
-
-    //     if(json.success){
-    //       alert('Registration successful! Redirecting to login…');
-    //       location.href = 'login';               // ← redirect
-    //     }else{
-    //       throw new Error(json.message||'Registration failed');
-    //     }
-    //   }catch(err){
-    //     alert(`❌ ${err.message}`);
-    //   }
-    // };
   </script>
   <!-- Firebase App (Core) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>

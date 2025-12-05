@@ -86,8 +86,12 @@
                             <div class="ls-0 footer-question mb-3">
                                 <h6 class="mb-0 text-white">QUESTIONS?</h6>
                                 <h3 class="mb-0 text-primary">
-                                    <a href="tel:+918790489293">+91 8790489293</a>
+                                    <!-- <a href="tel:+918790489293">+91 8790489293</a> -->
+                                     <a href="tel:+919655504405">+91 9655504405</a>
                                 </h3>
+                                <p class="footer-desc text-white">
+                                    <a href="mailto:contact@stockoutindia.com">contact@stockoutindia.com</a>
+                                </p>
                                 <p class="footer-desc text-white">
                                     <strong>Address:</strong> 
                                     2nd floor S.A Trade Centre, Ranigunj X Roads, Secuderabad, Telangana 500003

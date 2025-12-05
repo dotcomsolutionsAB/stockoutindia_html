@@ -12,7 +12,7 @@
                                 <i class="fab fa-instagram text-white mr-4"></i>
                                 <div class="info-box-content">
                                     <h4 class="text-white line-height-1">Follow Us on Instagram</h4>
-                                    <a href="https://www.instagram.com/stockoutindia_?igsh=MTUwcTR2eDUxdHVobg==" target="blank_">
+                                    <a href="<?= INSTAGRAM_URL ?>" target="blank_">
 										<p class="line-height-1">stockoutindia_</p>
 									</a>
                                 </div>
@@ -41,7 +41,6 @@
                         
                     </div>
                 </div>
-
                 <!-- <div class="container">
                     <div class="widget-newsletter d-lg-flex align-items-center flex-wrap">
                         <div class="footer-left d-md-flex flex-wrap align-items-center mr-5">
@@ -73,7 +72,6 @@
                         </div>
                     </div>
                 </div> -->
-
             </div>
             <div class="container">
                 <div class="footer-middle">
@@ -87,14 +85,14 @@
                                 <h6 class="mb-0 text-white">QUESTIONS?</h6>
                                 <h3 class="mb-0 text-primary">
                                     <!-- <a href="tel:+918790489293">+91 8790489293</a> -->
-                                     <a href="tel:+91<?= SUPPORT_PHONE ?>">+91<?= SUPPORT_PHONE ?></a>
+                                     <a href="tel:+91<?= SUPPORT_PHONE ?>">+91 <?= SUPPORT_PHONE ?></a>
                                 </h3>
                                 <p class="footer-desc text-white">
                                     <a href="mailto:<?= SUPPORT_EMAIL ?>"><?= SUPPORT_EMAIL ?></a>
                                 </p>
                                 <p class="footer-desc text-white">
                                     <strong>Address:</strong> 
-                                    5-5-64 Ranigunj, Shop S-1, S A Trade Centre, MG Road, Secunderabad, Hyderabad- 500003, Telangana
+                                    <?= COMPANY_ADDRESS ?>
                                 </p>
                             </div>
                         </div><!-- End .col-lg-3 -->
@@ -139,14 +137,14 @@
                                 <h4 class="widget-title mb-3">Get the App</h4>
 
                                 <!-- Google Play -->
-                                <a href="https://play.google.com/store/apps/details?id=com.stockoutindia.official"
+                                <a href="<?= PLAYSTORE_URL ?>"
                                     target="_blank" rel="noopener" class="d-inline-block">
                                     <img src="uploads/appImage2.png" alt="Get it on Google Play"
                                         class="img-fluid" style="max-width: 165px;">
                                 </a>
 
                                 <!-- App Store -->
-                                <a href="https://apps.apple.com/us/app/stockout-india/id6744593799" target="_blank" rel="noopener" class="d-inline-block">
+                                <a href="<?= APPSTORE_URL ?>" target="_blank" rel="noopener" class="d-inline-block">
                                     <img src="uploads/appImage1.png"
                                         alt="Download on the App Store" class="img-fluid" style="max-width: 165px;">
                                 </a>

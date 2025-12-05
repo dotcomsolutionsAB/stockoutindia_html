@@ -1,6 +1,6 @@
         <footer class="footer font2">
             <div class="footer-top">
-            <a href="https://wa.me/918790489293" target="_blank" class="whatsapp-sticky" title="Chat on WhatsApp">
+            <a href="https://wa.me/<?= WHATSAPP_NUMBER ?>" target="_blank" class="whatsapp-sticky" title="Chat on WhatsApp">
                 <i class="fab fa-whatsapp"></i>
             </a>
             
@@ -87,14 +87,14 @@
                                 <h6 class="mb-0 text-white">QUESTIONS?</h6>
                                 <h3 class="mb-0 text-primary">
                                     <!-- <a href="tel:+918790489293">+91 8790489293</a> -->
-                                     <a href="tel:+919655504405">+91 9655504405</a>
+                                     <a href="tel:+91<?= SUPPORT_PHONE ?>">+91<?= SUPPORT_PHONE ?></a>
                                 </h3>
                                 <p class="footer-desc text-white">
-                                    <a href="mailto:contact@stockoutindia.com">contact@stockoutindia.com</a>
+                                    <a href="mailto:<?= SUPPORT_EMAIL ?>"><?= SUPPORT_EMAIL ?></a>
                                 </p>
                                 <p class="footer-desc text-white">
                                     <strong>Address:</strong> 
-                                    2nd floor S.A Trade Centre, Ranigunj X Roads, Secuderabad, Telangana 500003
+                                    5-5-64 Ranigunj, Shop S-1, S A Trade Centre, MG Road, Secunderabad, Hyderabad- 500003, Telangana
                                 </p>
                             </div>
                         </div><!-- End .col-lg-3 -->

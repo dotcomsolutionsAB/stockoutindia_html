@@ -92,7 +92,7 @@
         localStorage.removeItem("role");
         localStorage.removeItem("username");
         localStorage.removeItem("name");
-        window.location.href = "login";
+        window.location.href = "../login";
     }
 </script>
 

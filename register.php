@@ -8,7 +8,8 @@
   <!-- Tailwind & Feather -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/feather-icons"></script>
-
+  <!-- SweetAlert2 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="icon" type="image/x-icon" href="uploads/favicon/apple-touch-icon.png">
   <style>
     .mt0{
@@ -311,6 +312,9 @@
         .filter(Number.isInteger); // ensures integers only
       return ids.join(','); // "25,5,6"
     }
+    function hasAtLeastOneIndustrySelected() {
+      return document.querySelectorAll('.industryChk:checked').length > 0;
+    }
 
     /* ─── GST validation & auto-fill ─────────────────────────── */
     const gstInput=document.getElementById('gstin');
@@ -402,11 +406,9 @@
         // Hide password fields
         document.getElementById('passwordGroup').classList.add('hidden');
 
-        // alert('Google authenticated! Fill the remaining details to complete registration.');
-
       } catch (error) {
         console.error(error);
-        alert(`❌ Google Sign-in Failed: ${error.message}`);
+        Swal.fire('Oops', `Google Sign-in Failed: ${error.message}`, 'warning');        
       }
     };
 
@@ -421,8 +423,20 @@
 
     // Always check phone
     if (!document.getElementById('phone').value.trim()) {
-      alert('Phone number is required!');
+      Swal.fire('Oops', 'Phone number is required!', 'warning');
       return;
+    }
+
+    // ✅ Industry required (at least 1)
+    if (!hasAtLeastOneIndustrySelected()) {
+      Swal.fire('Oops', 'Please select at least one Industry.', 'warning');
+      // Optional: scroll to industry section and highlight
+      document.getElementById('industryGroup')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('industryGroup')?.classList.add('ring-2','ring-red-500','rounded-lg');
+      setTimeout(() => {
+        document.getElementById('industryGroup')?.classList.remove('ring-2','ring-red-500','rounded-lg');
+      }, 1500);
+      return; // ❌ stop API call
     }
 
     const rawPhone = document.getElementById('phone').value.trim();
@@ -480,11 +494,9 @@
 
     } catch (err) {
       console.error(err);
-      alert(`❌ ${err.message}`);
+      Swal.fire('Oops', `${err.message}`, 'warning');
     }
   };
-
-
   </script>
 
 </body>

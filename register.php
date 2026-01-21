@@ -72,17 +72,18 @@
             <textarea id="address" rows="3" placeholder="Complete Address"
                       class="w-full border border-gray-400 px-3 py-2 rounded-md resize-none mt-4"></textarea>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-              <input id="pincode" type="text" placeholder="Pincode"
+            <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4"> -->
+              <div class="mt-4">
+                <input id="pincode" type="text" placeholder="Pincode"
                      class="w-full border border-gray-400 px-3 py-2 rounded-md">
-              <select id="stateSelect"
+              <!-- <select id="stateSelect"
                       class="w-full border border-gray-400 px-3 py-2 rounded-md">
                 <option value="">Select State</option>
               </select>
               <select id="citySelect" disabled
                       class="w-full border border-gray-400 px-3 py-2 rounded-md">
                 <option value="">Select City</option>
-              </select>
+              </select> -->
             </div>
           </div>
 
@@ -263,29 +264,27 @@
     noGstChk.onchange = syncVis; syncVis();
 
     /* ─── Load states, cities, industries ─────────────────────── */
-    // const stateSel=document.getElementById('stateSelect');
-    // const citySel =document.getElementById('citySelect');
-    // const indSel  =document.getElementById('industrySelect');
-    // const subSel  =document.getElementById('subIndustrySelect');
 
     // let states=[],cities=[],industries=[],subsCache=[]
 
-    const stateSel=document.getElementById('stateSelect');
-    const citySel =document.getElementById('citySelect');
+    // const stateSel=document.getElementById('stateSelect');
+    // const citySel =document.getElementById('citySelect');
     const industryList = document.getElementById('industryList'); // <-- add this
 
-    let states=[],cities=[],industries=[];
+    // let states=[],cities=[],industries=[];
+    let industries=[];
 
     const fetchData = path => fetch(`${BASE}${path}`,
       {headers:{Authorization:`Bearer ${token}`}})
       .then(r=>r.json()).then(j=>j.data);
 
     (async()=>{
-      [states,cities,industries] = await Promise.all([
-        fetchData('/states'), fetchData('/cities'), fetchData('/industry')
-      ]);
-      states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
-        `<option value="${s.id}" data-name="${s.name}">${s.name}</option>`));
+      // [states,cities,industries] = await Promise.all([
+      //   fetchData('/states'), fetchData('/cities'), fetchData('/industry')
+      // ]);
+      // states.forEach(s=>stateSel.insertAdjacentHTML('beforeend',
+      //   `<option value="${s.id}" data-name="${s.name}">${s.name}</option>`));
+      industries = await fetchData('/industry');
       industries.forEach(i => {
         industryList.insertAdjacentHTML('beforeend', `
           <label class="flex items-center gap-2 border rounded-md p-2">
@@ -296,15 +295,15 @@
       });
     })();
 
-    stateSel.onchange = ()=>{
-      const stName = stateSel.selectedOptions[0]?.dataset.name || '';
-      citySel.innerHTML = '<option value="">Select City</option>';
-      if(!stName){citySel.disabled=true;return;}
-      cities.filter(c=>c.state_name===stName)
-            .forEach(c=>citySel.insertAdjacentHTML('beforeend',
-              `<option value="${c.name}">${c.name}</option>`));
-      citySel.disabled=false;
-    };
+    // stateSel.onchange = ()=>{
+    //   const stName = stateSel.selectedOptions[0]?.dataset.name || '';
+    //   citySel.innerHTML = '<option value="">Select City</option>';
+    //   if(!stName){citySel.disabled=true;return;}
+    //   cities.filter(c=>c.state_name===stName)
+    //         .forEach(c=>citySel.insertAdjacentHTML('beforeend',
+    //           `<option value="${c.name}">${c.name}</option>`));
+    //   citySel.disabled=false;
+    // };
     
     function getSelectedIndustryCsv() {
       const ids = Array.from(document.querySelectorAll('.industryChk:checked'))
@@ -342,11 +341,11 @@
           if(!document.getElementById('pincode').value)
             document.getElementById('pincode').value=d.pincode||'';
 
-          if(d.state){
-            const st=states.find(s=>s.name.toLowerCase()===d.state.toLowerCase());
-            if(st){stateSel.value=st.id; stateSel.onchange();}
-          }
-          setTimeout(()=>{ if(d.city) citySel.value=d.city; },60);
+          // if(d.state){
+          //   const st=states.find(s=>s.name.toLowerCase()===d.state.toLowerCase());
+          //   if(st){stateSel.value=st.id; stateSel.onchange();}
+          // }
+          // setTimeout(()=>{ if(d.city) citySel.value=d.city; },60);
 
           gstMsg.textContent='GSTIN verified & auto-filled';
           gstMsg.className='text-sm mt-1 h-5 text-green-600';
@@ -412,91 +411,91 @@
       }
     };
 
-  document.getElementById('registerForm').onsubmit = async (e) => {
-    e.preventDefault();
+    document.getElementById('registerForm').onsubmit = async (e) => {
+      e.preventDefault();
 
-    const noGst = document.getElementById('noGstChk').checked;
+      const noGst = document.getElementById('noGstChk').checked;
 
-    // 🔥 Check for Google ID token (from localStorage or variable)
-    const idToken = googleIdToken || localStorage.getItem('G_id');
-    const isGoogleSignup = idToken && idToken.trim() !== '';
+      // 🔥 Check for Google ID token (from localStorage or variable)
+      const idToken = googleIdToken || localStorage.getItem('G_id');
+      const isGoogleSignup = idToken && idToken.trim() !== '';
 
-    // Always check phone
-    if (!document.getElementById('phone').value.trim()) {
-      Swal.fire('Oops', 'Phone number is required!', 'warning');
-      return;
-    }
-
-    // ✅ Industry required (at least 1)
-    if (!hasAtLeastOneIndustrySelected()) {
-      Swal.fire('Oops', 'Please select at least one Industry.', 'warning');
-      // Optional: scroll to industry section and highlight
-      document.getElementById('industryGroup')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      document.getElementById('industryGroup')?.classList.add('ring-2','ring-red-500','rounded-lg');
-      setTimeout(() => {
-        document.getElementById('industryGroup')?.classList.remove('ring-2','ring-red-500','rounded-lg');
-      }, 1500);
-      return; // ❌ stop API call
-    }
-
-    const rawPhone = document.getElementById('phone').value.trim();
-    const payload = {
-      role         : "user",
-      phone        : `+91${rawPhone}`,
-      name         : document.getElementById('fullName').value.trim(),
-      company_name : document.getElementById('companyName').value.trim(),
-      address      : document.getElementById('address').value.trim(),
-      pincode      : document.getElementById('pincode').value.trim(),
-      city         : document.getElementById('citySelect').value,
-      state        : parseInt(document.getElementById('stateSelect').value) || null,
-      gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
-      industry     : getSelectedIndustryCsv(), // <-- "25,5,6"
-      // sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null,
-      email        : document.getElementById('email').value.trim()
-    };
-
-    if (isGoogleSignup) {
-      payload.idToken = document.getElementById('idToken').value.trim();
-      // Password fields are skipped
-    } else {
-      payload.password = document.getElementById('pass').value;
-      payload.idToken = document.getElementById('idToken').value.trim(); // Normal signup
-    }
-
-    try {
-      const res = await fetch(`${BASE}/register`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
-      const json = await res.json();
-
-      if (json.success) {
-        const data = json.data || {};
-
-        if (data.token) {
-            localStorage.setItem('authToken', data.token);
-            localStorage.setItem('user_id', data.user_id);
-            localStorage.setItem('name', data.name);
-            localStorage.setItem('role', data.role);
-            localStorage.setItem('username', data.username);
-
-            // Redirect to index if token exists
-            location.href = 'index';
-        } else {
-            // No token means no auth, redirect to login
-            location.href = 'login';
-        }
-      } else {
-          throw new Error(json.message || 'Registration failed');
+      // Always check phone
+      if (!document.getElementById('phone').value.trim()) {
+        Swal.fire('Oops', 'Phone number is required!', 'warning');
+        return;
       }
 
+      // ✅ Industry required (at least 1)
+      if (!hasAtLeastOneIndustrySelected()) {
+        Swal.fire('Oops', 'Please select at least one Industry.', 'warning');
+        // Optional: scroll to industry section and highlight
+        document.getElementById('industryGroup')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('industryGroup')?.classList.add('ring-2','ring-red-500','rounded-lg');
+        setTimeout(() => {
+          document.getElementById('industryGroup')?.classList.remove('ring-2','ring-red-500','rounded-lg');
+        }, 1500);
+        return; // ❌ stop API call
+      }
 
-    } catch (err) {
-      console.error(err);
-      Swal.fire('Oops', `${err.message}`, 'warning');
-    }
-  };
+      const rawPhone = document.getElementById('phone').value.trim();
+      const payload = {
+        role         : "user",
+        phone        : `+91${rawPhone}`,
+        name         : document.getElementById('fullName').value.trim(),
+        company_name : document.getElementById('companyName').value.trim(),
+        address      : document.getElementById('address').value.trim(),
+        pincode      : document.getElementById('pincode').value.trim(),
+        // city         : document.getElementById('citySelect').value,
+        // state        : parseInt(document.getElementById('stateSelect').value) || null,
+        gstin        : noGst ? null : (document.getElementById('gstin').value.trim() || null),
+        industry     : getSelectedIndustryCsv(), // <-- "25,5,6"
+        // sub_industry : parseInt(document.getElementById('subIndustrySelect').value) || null,
+        email        : document.getElementById('email').value.trim()
+      };
+
+      if (isGoogleSignup) {
+        payload.idToken = document.getElementById('idToken').value.trim();
+        // Password fields are skipped
+      } else {
+        payload.password = document.getElementById('pass').value;
+        payload.idToken = document.getElementById('idToken').value.trim(); // Normal signup
+      }
+
+      try {
+        const res = await fetch(`${BASE}/register`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+
+        if (json.success) {
+          const data = json.data || {};
+
+          if (data.token) {
+              localStorage.setItem('authToken', data.token);
+              localStorage.setItem('user_id', data.user_id);
+              localStorage.setItem('name', data.name);
+              localStorage.setItem('role', data.role);
+              localStorage.setItem('username', data.username);
+
+              // Redirect to index if token exists
+              location.href = 'index';
+          } else {
+              // No token means no auth, redirect to login
+              location.href = 'login';
+          }
+        } else {
+            throw new Error(json.message || 'Registration failed');
+        }
+
+
+      } catch (err) {
+        console.error(err);
+        Swal.fire('Oops', `${err.message}`, 'warning');
+      }
+    };
   </script>
 
 </body>

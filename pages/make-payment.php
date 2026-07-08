@@ -26,7 +26,7 @@
                         <label for="comment_input">Comment:</label>
                         <textarea id="comment_input" rows="4" placeholder="Enter comment..."></textarea>
                     </div>
-                    <h2>Total: ₹999</h2>
+                    <h2>Total: ₹499</h2>
                 </div>
                 <!-- Coupon Section -->
                 <div class="coupon_section mb-4">
@@ -66,7 +66,7 @@
     const cancelCouponBtn = document.getElementById("cancel_coupon_btn");
     const discountInfo = document.getElementById("discount_info");
 
-    let productPrice = 999;
+    let productPrice = 499;
     let finalAmount = productPrice;
     let originalOrderId = "";
     let razorpay_order_id = "";

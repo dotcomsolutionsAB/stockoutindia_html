@@ -5,8 +5,12 @@
             <div class="footer-promo">
                 <div class="container">
                     <div class="footer-promo-grid">
-                        <img src="uploads/why-choose-stockout.png" alt="Why businesses choose StockOut">
-                        <img src="uploads/sell-deadstock-plans.png" alt="Sell your deadstock. Connect with buyers across India.">
+                        <div class="footer-promo-item">
+                            <img src="uploads/why-choose-stockout.png" alt="Why businesses choose StockOut">
+                        </div>
+                        <div class="footer-promo-item">
+                            <img src="uploads/sell-deadstock-plans.png" alt="Sell your deadstock. Connect with buyers across India.">
+                        </div>
                     </div>
                 </div>
             </div>

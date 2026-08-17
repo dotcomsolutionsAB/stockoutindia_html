@@ -2,6 +2,14 @@
             <a href="https://wa.me/<?= WHATSAPP_NUMBER ?>" target="_blank" class="whatsapp-sticky" title="Chat on WhatsApp">
                 <i class="fab fa-whatsapp"></i>
             </a>
+            <div class="footer-promo">
+                <div class="container">
+                    <div class="footer-promo-grid">
+                        <img src="uploads/why-choose-stockout.png" alt="Why businesses choose StockOut">
+                        <img src="uploads/sell-deadstock-plans.png" alt="Sell your deadstock. Connect with buyers across India.">
+                    </div>
+                </div>
+            </div>
             <div class="container">
                 <div class="footer-middle">
                     <div class="row">

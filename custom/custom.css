@@ -972,6 +972,36 @@
   }
 /* End Whatsapp */
 
+  /* Footer promo images */
+  .footer-promo {
+      background: #fff;
+      padding: 36px 0;
+  }
+  .footer-promo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: stretch;
+  }
+  .footer-promo-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  }
+  @media (max-width: 767px) {
+      .footer-promo {
+          padding: 20px 0;
+      }
+      .footer-promo-grid {
+          grid-template-columns: 1fr;
+          gap: 16px;
+      }
+  }
+
   /* Footer Instagram icon */
   .footer-social {
       display: flex;

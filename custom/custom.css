@@ -973,51 +973,52 @@
 /* End Whatsapp */
 
   /* Footer promo images */
-  .footer-promo {
+  .footer .footer-promo {
       background: transparent;
-      padding: 24px 0 8px;
+      padding: 16px 0 0;
   }
-  .footer-promo-grid {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
+  .footer .footer-promo-grid {
+      display: flex !important;
+      flex-direction: row !important;
+      flex-wrap: nowrap !important;
       justify-content: center;
       align-items: flex-start;
-      gap: 20px;
+      gap: 16px;
   }
-  .footer-promo-item {
-      flex: 0 1 360px;
-      max-width: 360px;
-      width: 100%;
+  .footer .footer-promo-item {
+      flex: 0 0 220px !important;
+      width: 220px !important;
+      max-width: 220px !important;
   }
-  .footer-promo-item img {
-      width: 100%;
-      height: auto;
-      max-height: 420px;
-      object-fit: contain;
+  .footer .footer-promo-item img {
+      width: 220px !important;
+      max-width: 220px !important;
+      height: auto !important;
+      max-height: 260px !important;
+      object-fit: contain !important;
       object-position: top;
-      display: block;
+      display: block !important;
       margin: 0 auto;
-      border-radius: 10px;
+      border-radius: 8px;
       background: #fff;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.16);
   }
-  @media (max-width: 767px) {
-      .footer-promo {
-          padding: 16px 0 4px;
+  @media (max-width: 575px) {
+      .footer .footer-promo {
+          padding: 12px 0 0;
       }
-      .footer-promo-grid {
-          flex-direction: column;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 14px;
+      .footer .footer-promo-grid {
+          gap: 10px;
       }
-      .footer-promo-item {
-          flex: 1 1 auto;
-          max-width: 380px;
+      .footer .footer-promo-item {
+          flex: 1 1 0 !important;
+          width: auto !important;
+          max-width: 48% !important;
       }
-      .footer-promo-item img {
-          max-height: 400px;
+      .footer .footer-promo-item img {
+          width: 100% !important;
+          max-width: 100% !important;
+          max-height: 200px !important;
       }
   }
 

@@ -972,6 +972,92 @@
   }
 /* End Whatsapp */
 
+  /* Footer Instagram icon */
+  .footer-social {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+  }
+  .footer-social-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #be1312;
+      color: #fff;
+      font-size: 18px;
+      text-decoration: none;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .footer-social-icon:hover {
+      background: #8e0000;
+      color: #fff;
+      transform: translateY(-2px);
+  }
+
+  /* About Us page */
+  .about_us_page {
+      color: #333;
+      line-height: 1.7;
+  }
+  .about_us_page p {
+      margin-bottom: 16px;
+      font-size: 16px;
+  }
+  .about-mission {
+      background: #f8f1f1;
+      border-left: 4px solid #be1312;
+      padding: 18px 22px;
+      margin: 28px 0;
+  }
+  .about-mission h4 {
+      color: #be1312;
+      margin-bottom: 8px;
+      font-weight: 700;
+  }
+  .about-mission p {
+      margin-bottom: 0;
+      font-size: 18px;
+      font-weight: 500;
+  }
+  .about-stats {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+  }
+  .about-stat-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 22px 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+  .about-stat-card h3 {
+      color: #be1312;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+  }
+  .about-stat-card p {
+      margin-bottom: 0;
+      font-size: 14px;
+      color: #555;
+  }
+  @media (max-width: 991px) {
+      .about-stats {
+          grid-template-columns: repeat(2, 1fr);
+      }
+  }
+  @media (max-width: 575px) {
+      .about-stats {
+          grid-template-columns: 1fr;
+      }
+  }
+
   /* Add Product Popup */
   
 

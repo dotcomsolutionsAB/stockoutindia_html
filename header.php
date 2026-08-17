@@ -84,6 +84,9 @@
                                 <li>
                                     <a href="pages/all-industries">Industries</a>
                                 </li>
+                                <li>
+                                    <a href="pages/about-us">About Us</a>
+                                </li>
                             </ul>
                         </nav>
                     </div>

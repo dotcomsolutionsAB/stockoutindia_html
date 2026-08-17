@@ -2,7 +2,7 @@
             <a href="https://wa.me/<?= WHATSAPP_NUMBER ?>" target="_blank" class="whatsapp-sticky" title="Chat on WhatsApp">
                 <i class="fab fa-whatsapp"></i>
             </a>
-            <div class="footer-promo">
+            <!-- <div class="footer-promo">
                 <div class="container">
                     <div class="footer-promo-grid">
                         <div class="footer-promo-item">
@@ -13,7 +13,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="container">
                 <div class="footer-middle">
                     <div class="row">

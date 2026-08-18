@@ -972,53 +972,37 @@
   }
 /* End Whatsapp */
 
-  /* Footer promo images */
-  .footer .footer-promo {
-      background: transparent;
-      padding: 16px 0 0;
-  }
-  .footer .footer-promo-grid {
-      display: flex !important;
-      flex-direction: row !important;
-      flex-wrap: nowrap !important;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 16px;
-  }
-  .footer .footer-promo-item {
-      flex: 0 0 220px !important;
-      width: 220px !important;
-      max-width: 220px !important;
-  }
-  .footer .footer-promo-item img {
-      width: 220px !important;
-      max-width: 220px !important;
-      height: auto !important;
-      max-height: 260px !important;
-      object-fit: contain !important;
-      object-position: top;
-      display: block !important;
-      margin: 0 auto;
-      border-radius: 8px;
+  /* Promo images just above footer */
+  .footer-promo {
       background: #fff;
-      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.16);
+      padding: 28px 0 32px;
+  }
+  .footer-promo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: start;
+  }
+  .footer-promo-item img {
+      width: 100%;
+      height: auto;
+      max-height: 320px;
+      object-fit: contain;
+      object-position: top;
+      display: block;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
   @media (max-width: 575px) {
-      .footer .footer-promo {
-          padding: 12px 0 0;
+      .footer-promo {
+          padding: 16px 0 20px;
       }
-      .footer .footer-promo-grid {
-          gap: 10px;
+      .footer-promo-grid {
+          gap: 12px;
       }
-      .footer .footer-promo-item {
-          flex: 1 1 0 !important;
-          width: auto !important;
-          max-width: 48% !important;
-      }
-      .footer .footer-promo-item img {
-          width: 100% !important;
-          max-width: 100% !important;
-          max-height: 200px !important;
+      .footer-promo-item img {
+          max-height: 220px;
       }
   }
 

@@ -331,13 +331,20 @@
         `<option value="${city.name}" ${city.name == product.city ? 'selected' : ''}>${city.name}</option>`
       ).join('');
 
-      // ✅ Build image previews
-      const imageHtml = product.image?.map((img, index) => `
-        <div class="image-thumb">
-          <img src="${img}" alt="product image ${index}" />
-          <i class="fa fa-trash delete-img-icon" data-img="${img}" data-id="${productId}"></i>
-        </div>
-      `).join('') || `<p style="color:#999;">No images available.</p>`;
+      // ✅ Build image previews (supports URL strings or {id, url} objects)
+      const imageHtml = product.image?.map((img, index) => {
+        const imgUrl = (img && typeof img === 'object') ? (img.url || '') : img;
+        const uploadId = (img && typeof img === 'object' && img.id)
+          ? img.id
+          : (product.image_ids?.[index] || '');
+        if (!imgUrl) return '';
+        return `
+          <div class="image-thumb">
+            <img src="${imgUrl}" alt="product image ${index}" />
+            <i class="fa fa-trash delete-img-icon" data-upload-id="${uploadId}" data-id="${productId}"></i>
+          </div>
+        `;
+      }).join('') || `<p style="color:#999;">No images available.</p>`;
 
       // ✅ Show SweetAlert with full form
       Swal.fire({
@@ -441,11 +448,19 @@
             }
           });
 
-          // 🗑 Handle image delete
+          // 🗑 Handle image delete — use /product/{product_id}/images/{upload_id}
           document.querySelectorAll(".delete-img-icon").forEach(icon => {
-            icon.addEventListener("click", async () => {
-              const imgUrl = icon.dataset.img;
+            icon.addEventListener("click", async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+
+              const uploadId = icon.dataset.uploadId;
               const id = icon.dataset.id;
+
+              if (!uploadId) {
+                Swal.fire("Failed", "Image ID is missing.", "error");
+                return;
+              }
 
               const confirmed = await Swal.fire({
                 title: "Delete Image?",
@@ -457,10 +472,9 @@
 
               if (confirmed.isConfirmed) {
                 try {
-                  const delRes = await fetch(`<?php echo BASE_URL; ?>/product/delete_image`, {
+                  const delRes = await fetch(`<?php echo BASE_URL; ?>/product/${id}/images/${uploadId}`, {
                     method: "DELETE",
-                    headers: head,
-                    body: JSON.stringify({ product_id: id, image_url: imgUrl })
+                    headers: head
                   });
                   const delResult = await delRes.json();
                   if (delResult.success) {

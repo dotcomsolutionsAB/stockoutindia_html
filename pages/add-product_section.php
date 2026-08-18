@@ -92,6 +92,9 @@
   </form>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script src="configs/image-upload.js"></script>
+
 <style>
   .image-modal-overlay {
     position: fixed;
@@ -412,47 +415,53 @@
 
     let stockout_industry_data = [];
     let stockout_cities_data = [];
+    let selectedImageFiles = [];
 
     // Image upload - custom trigger
     document.getElementById("customUploadBox").addEventListener("click", () => {
       document.getElementById("stockout_image_upload").click();
     });
 
-    // Show selected file name(s)
-    document.getElementById("stockout_image_upload").addEventListener("change", function () {
+    function renderImagePreviews(files) {
       const fileNameDisplay = document.getElementById("fileNamePreview");
-      const files = Array.from(this.files);
-      fileNameDisplay.innerHTML = ""; // Clear previous previews
+      fileNameDisplay.innerHTML = "";
 
-      if (files.length > 0) {
-        files.forEach(file => {
-          const reader = new FileReader();
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "image-preview-wrapper";
 
-          reader.onload = function (e) {
-            const wrapper = document.createElement("div");
-            wrapper.className = "image-preview-wrapper";
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.alt = file.name;
+          img.className = "image-preview-img";
+          img.addEventListener("click", () => {
+            showImagePreviewModal(e.target.result, file.name);
+          });
 
-            const img = document.createElement("img");
-            img.src = e.target.result;
-            img.alt = file.name;
-            img.className = "image-preview-img";
+          const label = document.createElement("div");
+          label.className = "image-preview-name";
+          label.textContent = file.name;
 
-            // 👇 Add click event to open full preview modal
-            img.addEventListener("click", () => {
-              showImagePreviewModal(e.target.result, file.name);
-            });
+          wrapper.appendChild(img);
+          wrapper.appendChild(label);
+          fileNameDisplay.appendChild(wrapper);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
-            const label = document.createElement("div");
-            label.className = "image-preview-name";
-            label.textContent = file.name;
-
-            wrapper.appendChild(img);
-            wrapper.appendChild(label);
-            fileNameDisplay.appendChild(wrapper);
-          };
-
-          reader.readAsDataURL(file);
-        });
+    // Show selected file name(s)
+    document.getElementById("stockout_image_upload").addEventListener("change", async function () {
+      try {
+        selectedImageFiles = await normalizeImageFiles(this.files);
+        renderImagePreviews(selectedImageFiles);
+      } catch (err) {
+        console.error("Image processing failed:", err);
+        alert("Could not process the selected image. Please try again.");
+        this.value = "";
+        selectedImageFiles = [];
       }
     });
 
@@ -674,14 +683,9 @@
           const productId = res.data.id;
 
           // ✅ Upload image now
-          const fileInput = document.getElementById("stockout_image_upload");
-          const files = fileInput.files;
-
-          if (files.length > 0) {
+          if (selectedImageFiles.length > 0) {
             const formData = new FormData();
-            for (let i = 0; i < files.length; i++) {
-              formData.append("files[]", files[i]); // ✅ Correct key name
-            }
+            appendImageFilesToFormData(formData, selectedImageFiles);
 
             const imageUpload = await fetch(`${stockout_base_url}/product/images/${productId}`, {
               method: "POST",

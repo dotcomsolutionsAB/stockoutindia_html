@@ -16,6 +16,9 @@
 </main>
 <!-- End Home Pages -->
 
+<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+<script src="configs/image-upload.js"></script>
+
 <script>
   // const BASE_URL = "";
   // const authToken = localStorage.getItem("authtoken");
@@ -535,13 +538,11 @@
 
               // ✅ Step 2: Upload images if selected
               const fileInput = document.getElementById("upload_images_input");
-              const files = fileInput.files;
+              const normalizedFiles = await normalizeImageFiles(fileInput.files);
 
-              if (files.length > 0) {
+              if (normalizedFiles.length > 0) {
                 const formData = new FormData();
-                for (let i = 0; i < files.length; i++) {
-                  formData.append("files[]", files[i]);
-                }
+                appendImageFilesToFormData(formData, normalizedFiles);
 
                 const imageUpload = await fetch(`<?php echo BASE_URL; ?>/product/images/${productId}`, {
                   method: "POST",

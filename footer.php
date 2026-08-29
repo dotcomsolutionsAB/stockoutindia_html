@@ -2,11 +2,11 @@
             <!-- Two Pictures: Explanation + Why Business Use -->
             <div class="footer-promo">
                 <div class="container">
-                    <div class="row footer-promo-grid">
-                        <div class="col-6 footer-promo-item">
+                    <div class="footer-promo-grid">
+                        <div class="footer-promo-item">
                             <img src="uploads/sell-deadstock-plans.png" alt="Sell your deadstock — Standard and Premium listing plans">
                         </div>
-                        <div class="col-6 footer-promo-item">
+                        <div class="footer-promo-item">
                             <img src="uploads/why-choose-stockout.png" alt="Why businesses choose StockOut">
                         </div>
                     </div>

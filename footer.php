@@ -1,11 +1,13 @@
+
+            <!-- Two Pictures: Explanation + Why Business Use -->
             <div class="footer-promo">
                 <div class="container">
                     <div class="footer-promo-grid">
                         <div class="footer-promo-item">
-                            <img src="uploads/why-choose-stockout.png" alt="Why businesses choose StockOut">
+                            <img src="uploads/sell-deadstock-plans.png" alt="Sell your deadstock — Standard and Premium listing plans">
                         </div>
                         <div class="footer-promo-item">
-                            <img src="uploads/sell-deadstock-plans.png" alt="Sell your deadstock. Connect with buyers across India.">
+                            <img src="uploads/why-choose-stockout.png" alt="Why businesses choose StockOut">
                         </div>
                     </div>
                 </div>

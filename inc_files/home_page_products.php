@@ -1,6 +1,7 @@
 <section class="popular-products">
     <div class="container">
-      <div class="container py-4appear-animate" data-animation-name="fadeInUpShorter" data-animation-delay="200">
+      <h2 class="section-title appear-animate" data-animation-name="fadeInUpShorter" data-animation-delay="200">All Products</h2>
+      <div class="container py-4 appear-animate" data-animation-name="fadeInUpShorter" data-animation-delay="200">
         <div id="product-container" class="row gy-4">
 
         </div>

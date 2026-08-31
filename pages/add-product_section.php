@@ -667,17 +667,44 @@
       //   return;
       // }
 
+      if (!stockout_token) {
+        alert("Please login again to list a product.");
+        window.location.href = "login";
+        return;
+      }
+
+      const submitBtn = form.querySelector('button[type="submit"]');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Submitting...";
+      }
+
       try {
         const response = await fetch(`${stockout_base_url}/product`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Accept: "application/json",
             Authorization: `Bearer ${stockout_token}`,
           },
           body: JSON.stringify(body),
         });
 
-        const res = await response.json();
+        let res;
+        try {
+          res = await response.json();
+        } catch (_) {
+          throw new Error(`Server error (${response.status}). Please try again.`);
+        }
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            alert("Session expired. Please login again.");
+            window.location.href = "login";
+            return;
+          }
+          throw new Error(res.message || `Request failed (${response.status})`);
+        }
 
         if (res.success && res.data?.id) {
           const productId = res.data.id;
@@ -687,35 +714,58 @@
             const formData = new FormData();
             appendImageFilesToFormData(formData, selectedImageFiles);
 
-            const imageUpload = await fetch(`${stockout_base_url}/product/images/${productId}`, {
-              method: "POST",
-              headers: {
-                Authorization: `Bearer ${stockout_token}`, // ✅ only this, no content-type!
-              },
-              body: formData,
-            });
+            let imageUpload;
+            try {
+              imageUpload = await fetch(`${stockout_base_url}/product/images/${productId}`, {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                  Authorization: `Bearer ${stockout_token}`,
+                },
+                body: formData,
+              });
+            } catch (uploadErr) {
+              alert("⚠️ Product saved, but image upload failed (network). You can add images later from My Products.");
+              window.location.href = `pages/make-payment?product_id=${productId}`;
+              return;
+            }
 
-            const imageRes = await imageUpload.json();
+            let imageRes;
+            try {
+              imageRes = await imageUpload.json();
+            } catch (_) {
+              alert("⚠️ Product saved, but image upload failed. You can add images later from My Products.");
+              window.location.href = `pages/make-payment?product_id=${productId}`;
+              return;
+            }
+
             console.log("Image Upload Response:", imageRes);
 
             if (imageRes.success) {
-              // alert("✅ Product & Image uploaded successfully!");
               window.location.href = `pages/make-payment?product_id=${productId}`;
-              // window.location.reload();
             } else {
-              alert("⚠️ Product added but image upload failed: " + imageRes.message);
+              alert("⚠️ Product added but image upload failed: " + (imageRes.message || "Unknown error"));
               window.location.href = `pages/make-payment?product_id=${productId}`;
             }
           } else {
             alert("✅ Product added (No image uploaded)");
-            // window.location.reload();
             window.location.href = `pages/make-payment?product_id=${productId}`;
           }
         } else {
-          alert("❌ Error: " + res.message);
+          alert("❌ Error: " + (res.message || "Could not create product"));
         }
       } catch (err) {
-        alert("❌ Submission failed: " + err.message);
+        const msg = err && err.message ? err.message : String(err);
+        if (/failed to fetch|networkerror|load failed/i.test(msg)) {
+          alert("❌ Submission failed: Network error. Please check your connection and try again. If you selected a camera photo, try a smaller image or Wi‑Fi.");
+        } else {
+          alert("❌ Submission failed: " + msg);
+        }
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit";
+        }
       }
     });
 

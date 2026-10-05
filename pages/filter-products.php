@@ -34,9 +34,15 @@
 
         const urlParams = new URLSearchParams(window.location.search);
         const IndustryId = urlParams.get("industry");
+        const searchTerm = (urlParams.get("search") || "").trim();
+        const brandName = (urlParams.get("brand") || searchTerm).trim();
         // const isDisabled = !authToken;
 
-        if (!IndustryId) return;
+        if (!IndustryId && !searchTerm) return;
+
+        const requestBody = IndustryId
+            ? { industry: IndustryId }
+            : { search: searchTerm, limit: 100, offset: 0 };
 
         const endpoint = authToken
             ? `${BASE_URL}/product/get_products`
@@ -45,7 +51,7 @@
             fetch(endpoint, {
                 method: "POST",
                 headers,
-                body: JSON.stringify({ industry: IndustryId })
+                body: JSON.stringify(requestBody)
             })
             .then(res => res.json())
             .then(result => {
@@ -53,9 +59,9 @@
                 const productContainer = document.getElementById("product-list");
 
                 if (result.success && result.data.length > 0) {
-                    // ✅ Show sub-industry name
+                    // ✅ Show brand or sub-industry name
                     const IndustryName = result.data[0].industry_details?.name || "";
-                    nameHeading.textContent = IndustryName;
+                    nameHeading.textContent = IndustryId ? IndustryName : `${brandName} Products`;
 
                     productContainer.innerHTML = "";
 
@@ -134,7 +140,7 @@
                 } else {
                     document.getElementById("product-list").innerHTML = `
                         <div class="col-12 text-center py-4 text-muted">
-                            No products found in this Industry.
+                            ${IndustryId ? "No products found in this Industry." : `No ${brandName.replace(/[<>&"]/g, "")} products available right now.`}
                         </div>`;
                 }
             })

@@ -1,14 +1,14 @@
 <?php
 $brands = [
-  ['file' => 'jockey.png',        'name' => 'Jockey'],
-  ['file' => 'livpure-smart.png', 'name' => 'Livpure Smart'],
-  ['file' => 'nasher-miles.png',  'name' => 'Nasher Miles'],
-  ['file' => 'hrx.png',           'name' => 'HRX'],
-  ['file' => 'uppercase.png',     'name' => 'Uppercase'],
-  ['file' => 'snitch.png',        'name' => 'Snitch'],
-  ['file' => 'lancer-shoes.png',  'name' => 'Lancer Shoes'],
-  ['file' => 'egoss.png',         'name' => 'Egoss'],
-  ['file' => 'depo.png',          'name' => 'Depo'],
+  ['file' => 'jockey.png',        'name' => 'Jockey', 'search' => 'Jockey'],
+  ['file' => 'livpure-smart.png', 'name' => 'Livpure Smart', 'search' => 'Livpure'],
+  ['file' => 'nasher-miles.png',  'name' => 'Nasher Miles', 'search' => 'Nasher Miles'],
+  ['file' => 'hrx.png',           'name' => 'HRX', 'search' => 'HRX'],
+  ['file' => 'uppercase.png',     'name' => 'Uppercase', 'search' => 'Uppercase'],
+  ['file' => 'snitch.png',        'name' => 'Snitch', 'search' => 'Snitch'],
+  ['file' => 'lancer-shoes.png',  'name' => 'Lancer Shoes', 'search' => 'Lancer'],
+  ['file' => 'egoss.png',         'name' => 'Egoss', 'search' => 'Egoss'],
+  ['file' => 'depo.png',          'name' => 'Depo', 'search' => 'Depo'],
 ];
 ?>
 <section class="brands-section">
@@ -19,9 +19,9 @@ $brands = [
     <div class="brands-track">
       <?php foreach ([false, true] as $isClone): ?>
         <?php foreach ($brands as $brand): ?>
-          <div class="brand-tile"<?= $isClone ? ' aria-hidden="true"' : '' ?>>
+          <a class="brand-tile" href="pages/filter-products?search=<?= urlencode($brand['search']) ?>&amp;brand=<?= urlencode($brand['name']) ?>" title="<?= $brand['name'] ?> products"<?= $isClone ? ' aria-hidden="true" tabindex="-1"' : '' ?>>
             <img src="uploads/brands/<?= $brand['file'] ?>" alt="<?= $isClone ? '' : $brand['name'] ?>" loading="lazy" width="600" height="300">
-          </div>
+          </a>
         <?php endforeach; ?>
       <?php endforeach; ?>
     </div>

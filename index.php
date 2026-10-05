@@ -5,6 +5,8 @@
 
   <?php include("inc_files/slider_section.php"); ?>
 
+  <?php include("inc_files/brands_section.php"); ?>
+
   <?php include("inc_files/home_page_products.php"); ?>
 
   <?php include("inc_files/listing_icons_section.php"); ?>

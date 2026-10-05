@@ -55,8 +55,8 @@
     <!-- Toastify JS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-    <link rel="stylesheet" href="custom/custom.css">
-    <link rel="stylesheet" href="custom/responsive.css">
+    <link rel="stylesheet" href="custom/custom.css?v=<?= filemtime(__DIR__ . '/custom/custom.css') ?>">
+    <link rel="stylesheet" href="custom/responsive.css?v=<?= filemtime(__DIR__ . '/custom/responsive.css') ?>">
 </head>
 
 <body>
